@@ -8,130 +8,90 @@
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth;scroll-snap-type:y mandatory;overflow-x:hidden}
-body{font-family:'Inter',sans-serif;background:#08081a;color:#f0f0f8;overflow-x:hidden}
+body{font-family:'Inter',sans-serif;background:#0a0e1a;color:#eef0f6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
 
-/* ==================== BASE SLIDES ==================== */
+/* ===== SLIDES ===== */
 .slide{
   min-height:100vh;display:flex;flex-direction:column;
   align-items:center;justify-content:center;
   padding:60px 40px;position:relative;
   scroll-snap-align:start;overflow:hidden;
 }
+.slide>*{position:relative;z-index:3;}
 
-/* ==================== ANIMATED MESH BACKGROUND ==================== */
-.mesh-bg{
-  position:absolute;inset:0;z-index:0;overflow:hidden;
-}
-.mesh-bg canvas{position:absolute;inset:0;width:100%;height:100%;}
+/* ===== BACKGROUND SYSTEM ===== */
+/* Each slide gets a canvas gradient bg that stays BEHIND content */
+.slide-bg{position:absolute;inset:0;z-index:0;overflow:hidden;}
+.slide-bg canvas{position:absolute;inset:0;width:100%;height:100%;}
 
-/* Grain overlay */
-.slide::after{
+/* Subtle grid pattern overlay */
+.slide::before{
   content:'';position:absolute;inset:0;z-index:1;pointer-events:none;
-  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
-  opacity:.7;
-}
-.slide>*:not(.mesh-bg){position:relative;z-index:2;}
-
-/* ==================== AURORA STRIPES ==================== */
-.aurora{
-  position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:0;
-}
-.aurora-stripe{
-  position:absolute;width:200%;height:180px;
-  filter:blur(80px);opacity:.07;
-  animation:auroraFlow 20s ease-in-out infinite;
-}
-@keyframes auroraFlow{
-  0%,100%{transform:translateX(-30%) rotate(-6deg) scaleY(1);}
-  33%{transform:translateX(10%) rotate(-3deg) scaleY(1.4);}
-  66%{transform:translateX(-15%) rotate(-8deg) scaleY(.8);}
+  background-image:
+    linear-gradient(rgba(255,255,255,.012) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.012) 1px, transparent 1px);
+  background-size:60px 60px;
 }
 
-/* ==================== FLOATING ORBS ==================== */
-.orb{
-  position:absolute;border-radius:50%;
-  filter:blur(90px);pointer-events:none;
-  animation:orbFloat 22s ease-in-out infinite;
-}
-@keyframes orbFloat{
-  0%,100%{transform:translate(0,0) scale(1);}
-  25%{transform:translate(35px,-45px) scale(1.12);}
-  50%{transform:translate(-25px,30px) scale(.92);}
-  75%{transform:translate(45px,35px) scale(1.06);}
+/* Noise texture */
+.slide::after{
+  content:'';position:absolute;inset:0;z-index:2;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
 }
 
-/* ==================== PARTICLES ==================== */
-.particles{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:1;}
-.particle{
-  position:absolute;border-radius:50%;
-  animation:particleRise linear infinite;opacity:0;
-}
-@keyframes particleRise{
-  0%{transform:translateY(100vh) scale(0);opacity:0;}
-  6%{opacity:.6;transform:translateY(94vh) scale(1);}
-  90%{opacity:.15;}
-  100%{transform:translateY(-5vh) scale(.3);opacity:0;}
-}
-
-/* ==================== LIGHT BEAMS ==================== */
-.light-beams{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:0;}
-.beam{
-  position:absolute;width:2px;height:100%;
-  background:linear-gradient(to bottom,transparent,rgba(255,230,0,.04),transparent);
-  animation:beamPulse 8s ease-in-out infinite;
-}
-@keyframes beamPulse{
-  0%,100%{opacity:0;transform:scaleY(.3);}
-  50%{opacity:1;transform:scaleY(1);}
-}
-
-/* ==================== STAR FIELD ==================== */
-.star-field{position:absolute;inset:0;pointer-events:none;z-index:0;}
+/* ===== STARS — tiny, subtle, scattered ===== */
+.stars{position:absolute;inset:0;z-index:1;pointer-events:none;}
 .star{
   position:absolute;background:#fff;border-radius:50%;
-  animation:starTwinkle ease-in-out infinite;
+  animation:twinkle ease-in-out infinite alternate;
 }
-@keyframes starTwinkle{
-  0%,100%{opacity:.1;transform:scale(.8);}
-  50%{opacity:.8;transform:scale(1.2);}
-}
-
-/* ==================== SHOOTING STARS ==================== */
-.shooting-star{
-  position:absolute;height:1px;pointer-events:none;z-index:1;
-  background:linear-gradient(90deg,transparent,rgba(255,230,0,.7),transparent);
-  animation:shootStar 4s linear infinite;opacity:0;
-}
-@keyframes shootStar{
-  0%{transform:translateX(-200px) translateY(0) rotate(-30deg);opacity:0;}
-  4%{opacity:1;}25%{opacity:0;}
-  100%{transform:translateX(calc(100vw + 300px)) translateY(250px) rotate(-30deg);opacity:0;}
+@keyframes twinkle{
+  0%{opacity:.05;transform:scale(.6);}
+  100%{opacity:.5;transform:scale(1);}
 }
 
-/* ==================== CONFETTI ==================== */
-.confetti-box{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:1;}
-.confetti{position:absolute;top:-20px;animation:confettiFall linear infinite;}
-@keyframes confettiFall{
-  0%{transform:translateY(-20px) rotateX(0) rotateZ(0);opacity:1;}
-  100%{transform:translateY(100vh) rotateX(1080deg) rotateZ(540deg);opacity:0;}
+/* ===== FLOATING MOTES — small, slow, edge-only ===== */
+.motes{position:absolute;inset:0;z-index:1;pointer-events:none;overflow:hidden;}
+.mote{
+  position:absolute;border-radius:50%;opacity:0;
+  animation:moteFloat linear infinite;
+}
+@keyframes moteFloat{
+  0%{transform:translateY(0) translateX(0) scale(.5);opacity:0;}
+  10%{opacity:.35;}
+  90%{opacity:.1;}
+  100%{transform:translateY(-100vh) translateX(40px) scale(.2);opacity:0;}
 }
 
-/* ==================== GLOW RINGS ==================== */
-.glow-ring{
+/* ===== AURORA — very subtle color bands ===== */
+.aurora{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
+.aurora-band{
+  position:absolute;width:180%;height:120px;left:-40%;
+  filter:blur(100px);opacity:.04;
+  animation:auroraDrift 25s ease-in-out infinite;
+}
+@keyframes auroraDrift{
+  0%,100%{transform:translateX(-10%) rotate(-4deg) scaleY(1);}
+  50%{transform:translateX(8%) rotate(-2deg) scaleY(1.3);}
+}
+
+/* ===== GLOW ACCENTS — positioned at edges, never center ===== */
+.glow{
   position:absolute;border-radius:50%;
-  border:1px solid rgba(52,131,250,.04);
-  top:50%;left:50%;transform:translate(-50%,-50%);
-  animation:ringPulse 8s ease-in-out infinite;pointer-events:none;z-index:0;
+  filter:blur(120px);pointer-events:none;z-index:0;
 }
-.glow-ring:nth-child(1){width:320px;height:320px;}
-.glow-ring:nth-child(2){width:520px;height:520px;animation-delay:2s;border-color:rgba(255,230,0,.03);}
-.glow-ring:nth-child(3){width:720px;height:720px;animation-delay:4s;}
-@keyframes ringPulse{0%,100%{opacity:.25;transform:translate(-50%,-50%) scale(1);}50%{opacity:.55;transform:translate(-50%,-50%) scale(1.06);}}
 
-/* ==================== NAV ==================== */
+/* ===== PROGRESS BAR ===== */
+.progress{
+  position:fixed;top:0;left:0;height:3px;z-index:9999;
+  background:linear-gradient(90deg,#FFE600,#3483FA,#00A650,#7B61FF);
+  box-shadow:0 0 20px rgba(255,230,0,.4);transition:width .25s;
+}
+
+/* ===== NAV DOTS ===== */
 .nav-dots{
-  position:fixed;right:22px;top:50%;transform:translateY(-50%);
-  display:flex;flex-direction:column;gap:10px;z-index:1000;
+  position:fixed;right:24px;top:50%;transform:translateY(-50%);
+  display:flex;flex-direction:column;gap:10px;z-index:9999;
 }
 .nav-dot{
   width:10px;height:10px;border-radius:50%;
@@ -141,13 +101,13 @@ body{font-family:'Inter',sans-serif;background:#08081a;color:#f0f0f8;overflow-x:
 }
 .nav-dot:hover,.nav-dot.active{
   background:#FFE600;border-color:#FFE600;
-  transform:scale(1.6);box-shadow:0 0 18px rgba(255,230,0,.45);
+  transform:scale(1.6);box-shadow:0 0 16px rgba(255,230,0,.4);
 }
 .nav-dot::after{
   content:attr(data-label);
-  position:absolute;right:26px;top:50%;transform:translateY(-50%);
-  background:rgba(8,8,26,.95);backdrop-filter:blur(12px);
-  color:#f0f0f8;padding:7px 16px;border-radius:10px;
+  position:absolute;right:24px;top:50%;transform:translateY(-50%);
+  background:rgba(10,14,26,.95);backdrop-filter:blur(16px);
+  color:#eef0f6;padding:7px 16px;border-radius:10px;
   font-size:11px;font-weight:700;white-space:nowrap;
   opacity:0;pointer-events:none;transition:opacity .3s;
   border:1px solid rgba(255,255,255,.08);
@@ -156,398 +116,377 @@ body{font-family:'Inter',sans-serif;background:#08081a;color:#f0f0f8;overflow-x:
 
 .nav-arrows{
   position:fixed;bottom:28px;left:50%;transform:translateX(-50%);
-  display:flex;gap:10px;z-index:1000;
+  display:flex;gap:10px;z-index:9999;
 }
 .nav-arrow{
-  width:46px;height:46px;border-radius:50%;
+  width:44px;height:44px;border-radius:50%;
   background:rgba(255,255,255,.04);backdrop-filter:blur(20px);
-  border:1px solid rgba(255,255,255,.07);color:#f0f0f8;
-  font-size:18px;cursor:pointer;
+  border:1px solid rgba(255,255,255,.07);color:#eef0f6;
+  font-size:16px;cursor:pointer;
   display:flex;align-items:center;justify-content:center;
   transition:all .4s cubic-bezier(.175,.885,.32,1.275);
 }
 .nav-arrow:hover{
-  background:#FFE600;color:#08081a;border-color:#FFE600;
-  transform:scale(1.15);box-shadow:0 0 28px rgba(255,230,0,.35);
+  background:#FFE600;color:#0a0e1a;border-color:#FFE600;
+  transform:scale(1.15);box-shadow:0 0 25px rgba(255,230,0,.35);
 }
 
-.progress-bar{
-  position:fixed;top:0;left:0;height:3px;z-index:2000;
-  background:linear-gradient(90deg,#FFE600,#3483FA,#00A650,#7B61FF,#FF6B35);
-  transition:width .3s;box-shadow:0 0 18px rgba(255,230,0,.5);
+/* ===== REVEAL SYSTEM ===== */
+.rv{opacity:0;transform:translateY(40px);transition:all 1s cubic-bezier(.22,.61,.36,1);}
+.rv.vis{opacity:1;transform:translateY(0);}
+.rv-s{opacity:0;transform:scale(.9);transition:all 1s cubic-bezier(.22,.61,.36,1);}
+.rv-s.vis{opacity:1;transform:scale(1);}
+.d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}
+.d4{transition-delay:.4s}.d5{transition-delay:.5s}.d6{transition-delay:.6s}
+.d7{transition-delay:.7s}.d8{transition-delay:.8s}
+
+/* ===== MAGNETIC HOVER ===== */
+.mag{transition:transform .35s cubic-bezier(.175,.885,.32,1.275);}
+.mag:hover{transform:translateY(-7px) scale(1.02);}
+
+/* ===== SHARED TEXT STYLES ===== */
+.sec-title{
+  text-align:center;font-size:clamp(26px,4vw,48px);
+  font-weight:900;margin-bottom:12px;letter-spacing:-1.5px;line-height:1.15;
 }
+.sec-sub{
+  text-align:center;color:rgba(238,240,246,.4);font-size:clamp(13px,1.4vw,16px);
+  margin-bottom:40px;max-width:580px;line-height:1.7;
+}
+.yellow{color:#FFE600;}.blue{color:#3483FA;}.green{color:#00A650;}
+.orange{color:#FF6B35;}.purple{color:#7B61FF;}.red{color:#F23D4F;}
 
-/* ==================== REVEALS ==================== */
-.reveal{opacity:0;transform:translateY(45px);transition:all 1.1s cubic-bezier(.25,.46,.45,.94);}
-.reveal.visible{opacity:1;transform:translateY(0);}
-.reveal-scale{opacity:0;transform:scale(.88);transition:all 1.1s cubic-bezier(.25,.46,.45,.94);}
-.reveal-scale.visible{opacity:1;transform:scale(1);}
-.s1{transition-delay:.1s}.s2{transition-delay:.2s}.s3{transition-delay:.3s}
-.s4{transition-delay:.4s}.s5{transition-delay:.5s}.s6{transition-delay:.6s}
-
-.magnetic{transition:transform .3s cubic-bezier(.175,.885,.32,1.275);}
-.magnetic:hover{transform:translateY(-8px) scale(1.03);}
-
-/* ==================== PORTADA ==================== */
-.portada-content{text-align:center;max-width:900px;}
+/* =====================================================
+   SLIDE 1 — PORTADA
+   ===================================================== */
+.s-portada .portada-wrap{text-align:center;max-width:850px;}
 .portada-tag{
-  display:inline-block;padding:9px 30px;
-  background:rgba(255,230,0,.05);border:1px solid rgba(255,230,0,.12);
-  border-radius:50px;font-size:12px;font-weight:800;
-  color:#FFE600;letter-spacing:5px;margin-bottom:30px;
-  animation:tagEnter 1s .2s backwards;
+  display:inline-block;padding:8px 26px;
+  background:rgba(255,230,0,.04);border:1px solid rgba(255,230,0,.1);
+  border-radius:50px;font-size:11px;font-weight:800;
+  color:#FFE600;letter-spacing:5px;margin-bottom:28px;
+  animation:fadeDown .8s .2s backwards;
 }
-@keyframes tagEnter{from{opacity:0;transform:translateY(-25px) scale(.9);}}
-.portada-emoji{
-  font-size:72px;display:block;margin-bottom:22px;
-  animation:emojiPop 1s .5s backwards;
+@keyframes fadeDown{from{opacity:0;transform:translateY(-20px);}}
+.portada-icon{
+  font-size:64px;display:block;margin-bottom:18px;
+  animation:iconPop 1s .5s backwards;
 }
-@keyframes emojiPop{from{opacity:0;transform:scale(0) rotate(-180deg);}}
-.portada-title{
-  font-size:clamp(36px,6.5vw,78px);font-weight:900;
-  line-height:1.05;margin-bottom:22px;letter-spacing:-3px;
-  animation:titleUp 1.2s .7s backwards;
+@keyframes iconPop{from{opacity:0;transform:scale(0) rotate(-90deg);}}
+.portada-h1{
+  font-size:clamp(38px,7vw,82px);font-weight:900;
+  line-height:1.04;margin-bottom:22px;letter-spacing:-3px;
+  animation:slideUp 1.1s .7s backwards;
 }
-@keyframes titleUp{from{opacity:0;transform:translateY(50px);filter:blur(12px);}}
-.portada-title .glow-yellow{
-  color:#FFE600;
-  text-shadow:0 0 50px rgba(255,230,0,.2),0 0 120px rgba(255,230,0,.08);
+@keyframes slideUp{from{opacity:0;transform:translateY(40px);filter:blur(8px);}}
+.portada-h1 .gy{
+  background:linear-gradient(135deg,#FFE600 0%,#FFC800 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  filter:drop-shadow(0 0 30px rgba(255,230,0,.15));
 }
-.portada-title .glow-blue{
-  color:#3483FA;
-  text-shadow:0 0 50px rgba(52,131,250,.2),0 0 120px rgba(52,131,250,.08);
+.portada-h1 .gb{
+  background:linear-gradient(135deg,#3483FA 0%,#6CA6FF 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  filter:drop-shadow(0 0 30px rgba(52,131,250,.15));
 }
 .portada-sub{
-  font-size:clamp(14px,1.7vw,19px);color:rgba(240,240,248,.45);
-  font-weight:400;margin-bottom:40px;max-width:620px;
+  font-size:clamp(14px,1.6vw,18px);color:rgba(238,240,246,.5);
+  font-weight:400;margin-bottom:38px;max-width:620px;
   margin-left:auto;margin-right:auto;line-height:1.7;
-  animation:titleUp 1s 1s backwards;
+  animation:slideUp 1s 1s backwards;
 }
-.portada-pills{
-  display:flex;flex-wrap:wrap;justify-content:center;gap:10px;
-  animation:titleUp 1s 1.3s backwards;
-}
+.pills{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;animation:slideUp 1s 1.2s backwards;}
 .pill{
-  padding:10px 20px;border-radius:50px;font-weight:700;font-size:13px;
-  display:flex;align-items:center;gap:8px;backdrop-filter:blur(12px);
+  padding:10px 20px;border-radius:50px;font-weight:700;font-size:12.5px;
+  display:flex;align-items:center;gap:7px;
   transition:all .4s cubic-bezier(.175,.885,.32,1.275);
+  backdrop-filter:blur(8px);
 }
-.pill:hover{transform:translateY(-4px) scale(1.06);}
-.pill-y{background:rgba(255,230,0,.06);color:#FFE600;border:1px solid rgba(255,230,0,.14);}
-.pill-b{background:rgba(52,131,250,.06);color:#3483FA;border:1px solid rgba(52,131,250,.14);}
-.pill-g{background:rgba(0,166,80,.06);color:#00A650;border:1px solid rgba(0,166,80,.14);}
-.pill-o{background:rgba(255,107,53,.06);color:#FF6B35;border:1px solid rgba(255,107,53,.14);}
-.pill-p{background:rgba(123,97,255,.06);color:#7B61FF;border:1px solid rgba(123,97,255,.14);}
+.pill:hover{transform:translateY(-3px) scale(1.05);}
+.pl-y{background:rgba(255,230,0,.05);color:#FFE600;border:1px solid rgba(255,230,0,.12);}
+.pl-b{background:rgba(52,131,250,.05);color:#3483FA;border:1px solid rgba(52,131,250,.12);}
+.pl-g{background:rgba(0,166,80,.05);color:#00A650;border:1px solid rgba(0,166,80,.12);}
+.pl-o{background:rgba(255,107,53,.05);color:#FF6B35;border:1px solid rgba(255,107,53,.12);}
+.pl-p{background:rgba(123,97,255,.05);color:#7B61FF;border:1px solid rgba(123,97,255,.12);}
 
-.scroll-hint{
-  position:absolute;bottom:38px;left:50%;transform:translateX(-50%);
+.scroll-cue{
+  position:absolute;bottom:36px;left:50%;transform:translateX(-50%);
   display:flex;flex-direction:column;align-items:center;gap:8px;
-  animation:tagEnter 1s 2s backwards;
+  animation:fadeDown .8s 2s backwards;
 }
-.scroll-mouse{
-  width:24px;height:38px;border:2px solid rgba(255,255,255,.15);
-  border-radius:12px;position:relative;
-}
+.scroll-mouse{width:22px;height:36px;border:2px solid rgba(255,255,255,.15);border-radius:11px;position:relative;}
 .scroll-mouse::after{
   content:'';position:absolute;top:6px;left:50%;transform:translateX(-50%);
-  width:3px;height:8px;background:#FFE600;border-radius:3px;
-  animation:wheel 2s ease-in-out infinite;
+  width:3px;height:7px;background:#FFE600;border-radius:3px;
+  animation:scrollDot 2s ease-in-out infinite;
 }
-@keyframes wheel{0%{transform:translateX(-50%) translateY(0);opacity:1;}100%{transform:translateX(-50%) translateY(14px);opacity:0;}}
-.scroll-label{font-size:10px;color:rgba(255,255,255,.18);font-weight:700;letter-spacing:3px;}
+@keyframes scrollDot{0%{opacity:1;transform:translateX(-50%) translateY(0);}100%{opacity:0;transform:translateX(-50%) translateY(12px);}}
+.scroll-label{font-size:9px;color:rgba(255,255,255,.18);font-weight:800;letter-spacing:3px;}
 
-/* ==================== SLIDE 2: PROPÓSITO ==================== */
-.proposito-content{text-align:center;max-width:820px;}
-.proposito-quote{
-  font-size:clamp(22px,3.5vw,42px);font-weight:700;
-  line-height:1.4;color:rgba(240,240,248,.85);margin-bottom:20px;letter-spacing:-.5px;
+/* =====================================================
+   SLIDE 2 — PROPÓSITO
+   ===================================================== */
+.s-proposito .prop-wrap{text-align:center;max-width:780px;}
+.prop-quote{
+  font-size:clamp(20px,3.2vw,40px);font-weight:700;
+  line-height:1.4;color:rgba(238,240,246,.88);margin-bottom:16px;letter-spacing:-.5px;
 }
-.proposito-quote .em{color:#FFE600;font-style:italic;}
-.proposito-quote .em-b{color:#3483FA;}
-.proposito-divider{
-  width:80px;height:3px;margin:24px auto;
-  background:linear-gradient(90deg,#FFE600,#3483FA);border-radius:10px;
+.prop-quote .em{
+  background:linear-gradient(135deg,#FFE600,#FFA800);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  font-style:italic;
 }
-.proposito-after{
-  font-size:clamp(15px,2vw,22px);color:rgba(240,240,248,.4);
-  line-height:1.7;max-width:640px;margin:0 auto;
+.prop-quote .em-b{color:#5DA3FF;}
+.prop-line{width:70px;height:3px;margin:22px auto;background:linear-gradient(90deg,#FFE600,#3483FA);border-radius:10px;}
+.prop-body{
+  font-size:clamp(14px,1.8vw,19px);color:rgba(238,240,246,.45);
+  line-height:1.8;max-width:640px;margin:0 auto;
 }
-.proposito-after strong{color:rgba(240,240,248,.7);}
+.prop-body strong{color:rgba(238,240,246,.75);}
 
-/* ==================== SLIDE 3: REALIDAD ==================== */
-.realidad-content{text-align:center;max-width:950px;}
-.realidad-title{
-  font-size:clamp(24px,3.8vw,46px);font-weight:900;
-  line-height:1.2;margin-bottom:16px;letter-spacing:-1.5px;
+/* =====================================================
+   SLIDE 3 — LA REALIDAD
+   ===================================================== */
+.s-realidad .real-wrap{text-align:center;max-width:920px;margin-bottom:32px;}
+.real-sub{
+  font-size:clamp(13px,1.4vw,16px);color:rgba(238,240,246,.38);
+  line-height:1.8;margin-bottom:0;max-width:620px;margin-left:auto;margin-right:auto;
 }
-.realidad-title .red{color:#F23D4F;text-shadow:0 0 30px rgba(242,61,79,.12);}
-.realidad-sub{
-  font-size:clamp(13px,1.5vw,17px);color:rgba(240,240,248,.35);
-  line-height:1.8;margin-bottom:36px;max-width:650px;margin-left:auto;margin-right:auto;
-}
-
 .pain-grid{
-  display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
-  gap:16px;max-width:1000px;width:100%;
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:14px;max-width:1000px;width:100%;
 }
 .pain-card{
-  background:linear-gradient(145deg,rgba(242,61,79,.03),rgba(255,255,255,.01));
-  border:1px solid rgba(242,61,79,.08);
-  border-radius:22px;padding:28px 20px;text-align:center;
+  background:linear-gradient(160deg,rgba(255,255,255,.025),rgba(255,255,255,.008));
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:20px;padding:26px 20px;text-align:center;
   transition:all .5s cubic-bezier(.175,.885,.32,1.275);
-  backdrop-filter:blur(12px);position:relative;overflow:hidden;
+  position:relative;overflow:hidden;
 }
-.pain-card::before{
+.pain-card::after{
   content:'';position:absolute;top:0;left:0;right:0;height:2px;
   background:linear-gradient(90deg,transparent,rgba(242,61,79,.35),transparent);
   opacity:0;transition:opacity .4s;
 }
-.pain-card:hover{transform:translateY(-10px);border-color:rgba(242,61,79,.2);background:linear-gradient(145deg,rgba(242,61,79,.06),rgba(255,255,255,.02));}
-.pain-card:hover::before{opacity:1;}
-.pain-icon{font-size:36px;margin-bottom:12px;display:block;}
-.pain-text{font-weight:500;font-size:13px;line-height:1.75;color:rgba(240,240,248,.5);}
-.pain-text .hl{color:#F23D4F;font-weight:800;}
-
-/* ==================== SLIDE 4: LA VISIÓN ==================== */
-.vision-content{text-align:center;max-width:1000px;}
-.vision-icon{font-size:80px;margin-bottom:24px;display:block;animation:iconFloat 4s ease-in-out infinite;}
-@keyframes iconFloat{0%,100%{transform:translateY(0) rotate(0);}50%{transform:translateY(-14px) rotate(3deg);}}
-.vision-title{
-  font-size:clamp(26px,4.2vw,54px);font-weight:900;
-  margin-bottom:20px;letter-spacing:-2px;line-height:1.15;
+.pain-card:hover{
+  transform:translateY(-8px);
+  border-color:rgba(242,61,79,.18);
+  background:linear-gradient(160deg,rgba(242,61,79,.04),rgba(255,255,255,.012));
 }
-.vision-title .green{color:#00A650;text-shadow:0 0 40px rgba(0,166,80,.15);}
-.vision-desc{
-  font-size:clamp(14px,1.5vw,17px);color:rgba(240,240,248,.4);
-  max-width:680px;margin:0 auto 36px;line-height:1.8;
-}
+.pain-card:hover::after{opacity:1;}
+.pain-ico{font-size:32px;margin-bottom:10px;display:block;}
+.pain-txt{font-weight:500;font-size:13px;line-height:1.75;color:rgba(238,240,246,.5);}
+.pain-txt .hl{color:#F23D4F;font-weight:700;}
 
-.pillars-grid{
+/* =====================================================
+   SLIDE 4 — LA VISIÓN
+   ===================================================== */
+.s-vision .vis-wrap{text-align:center;max-width:960px;}
+.vis-icon{font-size:72px;display:block;margin-bottom:20px;animation:iconFloat 5s ease-in-out infinite;}
+@keyframes iconFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
+.vis-desc{
+  font-size:clamp(13px,1.4vw,16px);color:rgba(238,240,246,.42);
+  max-width:660px;margin:0 auto 34px;line-height:1.8;
+}
+.pillars{
   display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-  gap:16px;max-width:900px;width:100%;
+  gap:14px;max-width:880px;width:100%;
 }
-.pillar-card{
-  padding:26px;border-radius:22px;
-  background:linear-gradient(145deg,rgba(255,255,255,.02),rgba(255,255,255,.005));
+.pillar{
+  padding:24px;border-radius:20px;text-align:left;
+  background:linear-gradient(160deg,rgba(255,255,255,.025),rgba(255,255,255,.008));
   border:1px solid rgba(255,255,255,.06);
-  backdrop-filter:blur(12px);text-align:left;
-  transition:all .5s cubic-bezier(.175,.885,.32,1.275);
   position:relative;overflow:hidden;
+  transition:all .5s cubic-bezier(.175,.885,.32,1.275);
 }
-.pillar-card::before{
+.pillar::after{
   content:'';position:absolute;top:0;left:0;right:0;height:3px;
-  border-radius:22px 22px 0 0;opacity:.5;transition:opacity .3s;
+  border-radius:20px 20px 0 0;opacity:.5;transition:opacity .3s;
 }
-.pillar-card:hover{transform:translateY(-8px);background:linear-gradient(145deg,rgba(255,255,255,.035),rgba(255,255,255,.01));}
-.pillar-card:hover::before{opacity:1;}
-.pc-blue::before{background:linear-gradient(90deg,#3483FA,transparent);}
-.pc-blue:hover{border-color:rgba(52,131,250,.2);box-shadow:0 20px 50px rgba(52,131,250,.04);}
-.pc-purple::before{background:linear-gradient(90deg,#7B61FF,transparent);}
-.pc-purple:hover{border-color:rgba(123,97,255,.2);box-shadow:0 20px 50px rgba(123,97,255,.04);}
-.pc-yellow::before{background:linear-gradient(90deg,#FFE600,transparent);}
-.pc-yellow:hover{border-color:rgba(255,230,0,.2);box-shadow:0 20px 50px rgba(255,230,0,.04);}
-
-.pc-top{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
-.pc-badge{
-  width:44px;height:44px;border-radius:14px;
+.pillar:hover{transform:translateY(-7px);background:linear-gradient(160deg,rgba(255,255,255,.04),rgba(255,255,255,.015));}
+.pillar:hover::after{opacity:1;}
+.pillar.p-b::after{background:linear-gradient(90deg,#3483FA,transparent);}
+.pillar.p-b:hover{border-color:rgba(52,131,250,.18);}
+.pillar.p-p::after{background:linear-gradient(90deg,#7B61FF,transparent);}
+.pillar.p-p:hover{border-color:rgba(123,97,255,.18);}
+.pillar.p-y::after{background:linear-gradient(90deg,#FFE600,transparent);}
+.pillar.p-y:hover{border-color:rgba(255,230,0,.18);}
+.p-top{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
+.p-badge{
+  width:42px;height:42px;border-radius:12px;
   display:flex;align-items:center;justify-content:center;
-  font-size:18px;font-weight:900;color:#fff;
+  font-size:16px;font-weight:900;color:#fff;flex-shrink:0;
 }
-.pc-title{font-weight:800;font-size:15px;}
-.pc-desc{font-size:12.5px;color:rgba(240,240,248,.4);line-height:1.75;}
+.p-name{font-weight:800;font-size:15px;}
+.p-desc{font-size:12.5px;color:rgba(238,240,246,.42);line-height:1.75;}
+.p-desc b{color:rgba(238,240,246,.7);}
 
-/* ==================== SLIDE 5: MÉTRICAS ==================== */
-.section-title{
-  text-align:center;font-size:clamp(24px,3.5vw,44px);
-  font-weight:900;margin-bottom:14px;letter-spacing:-1.5px;line-height:1.2;
-}
-.section-sub{
-  text-align:center;color:rgba(240,240,248,.3);font-size:15px;
-  margin-bottom:40px;max-width:600px;line-height:1.65;
-}
-
-.metricas-grid{
+/* =====================================================
+   SLIDE 5 — MÉTRICAS
+   ===================================================== */
+.met-grid{
   display:grid;grid-template-columns:repeat(auto-fit,minmax(195px,1fr));
-  gap:14px;max-width:1100px;width:100%;
+  gap:14px;max-width:1080px;width:100%;
 }
-.metrica-card{
-  background:linear-gradient(155deg,rgba(255,255,255,.02),rgba(255,255,255,.005));
+.met-card{
+  background:linear-gradient(160deg,rgba(255,255,255,.025),rgba(255,255,255,.008));
   border:1px solid rgba(255,255,255,.05);
-  border-radius:22px;padding:26px 18px;text-align:center;
+  border-radius:20px;padding:24px 18px;text-align:center;
   position:relative;overflow:hidden;
   transition:all .5s cubic-bezier(.175,.885,.32,1.275);
-  backdrop-filter:blur(12px);
 }
-.metrica-card::before{
+.met-card::after{
   content:'';position:absolute;top:0;left:0;right:0;height:3px;
-  border-radius:22px 22px 0 0;opacity:.5;
+  border-radius:20px 20px 0 0;opacity:.5;transition:opacity .3s;
 }
-.metrica-card:hover{background:linear-gradient(155deg,rgba(255,255,255,.04),rgba(255,255,255,.01));transform:translateY(-8px);}
-.metrica-card:hover::before{opacity:1;}
-.mc-y::before{background:linear-gradient(90deg,#FFE600,transparent);}
-.mc-y:hover{border-color:rgba(255,230,0,.2);box-shadow:0 20px 50px rgba(255,230,0,.04);}
-.mc-b::before{background:linear-gradient(90deg,#3483FA,transparent);}
-.mc-b:hover{border-color:rgba(52,131,250,.2);box-shadow:0 20px 50px rgba(52,131,250,.04);}
-.mc-g::before{background:linear-gradient(90deg,#00A650,transparent);}
-.mc-g:hover{border-color:rgba(0,166,80,.2);box-shadow:0 20px 50px rgba(0,166,80,.04);}
-.mc-o::before{background:linear-gradient(90deg,#FF6B35,transparent);}
-.mc-o:hover{border-color:rgba(255,107,53,.2);box-shadow:0 20px 50px rgba(255,107,53,.04);}
-.mc-p::before{background:linear-gradient(90deg,#7B61FF,transparent);}
-.mc-p:hover{border-color:rgba(123,97,255,.2);box-shadow:0 20px 50px rgba(123,97,255,.04);}
+.met-card:hover{transform:translateY(-8px);background:linear-gradient(160deg,rgba(255,255,255,.04),rgba(255,255,255,.012));}
+.met-card:hover::after{opacity:1;}
+.mc-y::after{background:linear-gradient(90deg,#FFE600,transparent);}.mc-y:hover{border-color:rgba(255,230,0,.18);}
+.mc-b::after{background:linear-gradient(90deg,#3483FA,transparent);}.mc-b:hover{border-color:rgba(52,131,250,.18);}
+.mc-g::after{background:linear-gradient(90deg,#00A650,transparent);}.mc-g:hover{border-color:rgba(0,166,80,.18);}
+.mc-o::after{background:linear-gradient(90deg,#FF6B35,transparent);}.mc-o:hover{border-color:rgba(255,107,53,.18);}
+.mc-p::after{background:linear-gradient(90deg,#7B61FF,transparent);}.mc-p:hover{border-color:rgba(123,97,255,.18);}
+.mc-ico{font-size:30px;margin-bottom:8px;display:block;}
+.mc-name{font-weight:800;font-size:14px;margin-bottom:5px;}
+.mc-purpose{font-size:9.5px;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;opacity:.5;}
+.mc-body{font-size:11px;color:rgba(238,240,246,.4);line-height:1.7;}
+.mc-body strong{font-weight:700;}
 
-.mc-emoji{font-size:34px;margin-bottom:10px;display:block;}
-.mc-name{font-weight:800;font-size:14px;margin-bottom:6px;}
-.mc-purpose{font-size:11px;font-weight:700;margin-bottom:8px;letter-spacing:.5px;}
-.mc-desc{font-size:11px;color:rgba(240,240,248,.38);line-height:1.7;}
-.mc-desc strong{font-weight:700;}
-.mc-desc .y{color:#FFE600;}.mc-desc .b{color:#3483FA;}.mc-desc .g{color:#00A650;}.mc-desc .o{color:#FF6B35;}.mc-desc .p{color:#7B61FF;}
-
-/* ==================== SLIDE 6: CICLO ==================== */
-.cycle-container{max-width:1100px;width:100%;}
-.cycle-flow{
-  display:flex;align-items:flex-start;justify-content:center;
-  gap:0;flex-wrap:wrap;margin-bottom:38px;
-}
-.cycle-step{text-align:center;padding:16px;flex:1;min-width:145px;}
-.cycle-circle{
-  width:78px;height:78px;border-radius:20px;
+/* =====================================================
+   SLIDE 6 — EL CICLO
+   ===================================================== */
+.cycle-wrap{max-width:1050px;width:100%;}
+.cycle-flow{display:flex;align-items:flex-start;justify-content:center;flex-wrap:wrap;margin-bottom:36px;}
+.cy-step{text-align:center;padding:14px;flex:1;min-width:140px;}
+.cy-circ{
+  width:74px;height:74px;border-radius:18px;
   display:flex;align-items:center;justify-content:center;
-  font-size:30px;margin:0 auto 12px;
-  transition:all .5s cubic-bezier(.175,.885,.32,1.275);
+  font-size:28px;margin:0 auto 10px;
+  transition:all .45s cubic-bezier(.175,.885,.32,1.275);
 }
-.cycle-circle:hover{transform:translateY(-6px) scale(1.08);}
-.cc1{background:rgba(255,230,0,.07);border:1.5px solid rgba(255,230,0,.2);}
-.cc2{background:rgba(52,131,250,.07);border:1.5px solid rgba(52,131,250,.2);}
-.cc3{background:rgba(0,166,80,.07);border:1.5px solid rgba(0,166,80,.2);}
-.cc4{background:rgba(123,97,255,.07);border:1.5px solid rgba(123,97,255,.2);}
-.cycle-label{font-weight:800;font-size:12.5px;margin-bottom:4px;}
-.cycle-sub{font-size:10.5px;color:rgba(240,240,248,.3);line-height:1.55;max-width:150px;margin:0 auto;}
-.cycle-arrow{
-  font-size:20px;color:rgba(255,255,255,.1);flex-shrink:0;margin-top:26px;
-  animation:arrowPulse 2s ease-in-out infinite;
+.cy-circ:hover{transform:translateY(-5px) scale(1.08);}
+.cc1{background:rgba(255,230,0,.06);border:1.5px solid rgba(255,230,0,.15);}
+.cc2{background:rgba(52,131,250,.06);border:1.5px solid rgba(52,131,250,.15);}
+.cc3{background:rgba(0,166,80,.06);border:1.5px solid rgba(0,166,80,.15);}
+.cc4{background:rgba(123,97,255,.06);border:1.5px solid rgba(123,97,255,.15);}
+.cy-label{font-weight:800;font-size:12.5px;margin-bottom:3px;}
+.cy-sub{font-size:10.5px;color:rgba(238,240,246,.32);line-height:1.55;max-width:145px;margin:0 auto;}
+.cy-arrow{
+  font-size:18px;color:rgba(255,255,255,.08);flex-shrink:0;margin-top:24px;
+  animation:arrPulse 2.5s ease-in-out infinite;
 }
-@keyframes arrowPulse{0%,100%{opacity:.1;transform:translateX(0);}50%{opacity:.35;transform:translateX(6px);}}
+@keyframes arrPulse{0%,100%{opacity:.08;transform:translateX(0);}50%{opacity:.3;transform:translateX(5px);}}
 
 .rhythm-row{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;}
-.rhythm-card{
-  padding:16px 22px;
-  background:linear-gradient(145deg,rgba(255,255,255,.015),rgba(255,255,255,.005));
-  border:1px solid rgba(255,255,255,.05);border-radius:16px;
-  text-align:center;min-width:130px;backdrop-filter:blur(12px);
+.rhythm{
+  padding:16px 22px;border-radius:16px;text-align:center;min-width:130px;
+  background:linear-gradient(160deg,rgba(255,255,255,.02),rgba(255,255,255,.006));
+  border:1px solid rgba(255,255,255,.05);
   transition:all .4s cubic-bezier(.175,.885,.32,1.275);
 }
-.rhythm-card:hover{border-color:rgba(255,230,0,.15);transform:translateY(-4px);}
-.rhythm-icon{font-size:24px;margin-bottom:6px;}
-.rhythm-label{font-weight:800;font-size:11.5px;margin-bottom:3px;}
-.rhythm-desc{font-size:10px;color:rgba(240,240,248,.3);line-height:1.5;}
+.rhythm:hover{border-color:rgba(255,255,255,.1);transform:translateY(-4px);}
+.rhy-ico{font-size:22px;margin-bottom:5px;}
+.rhy-label{font-weight:800;font-size:11.5px;margin-bottom:2px;}
+.rhy-desc{font-size:10px;color:rgba(238,240,246,.3);line-height:1.5;}
 
-/* ==================== SLIDE 7: IMPACTO ==================== */
+/* =====================================================
+   SLIDE 7 — IMPACTO
+   ===================================================== */
 .impact-grid{
-  display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
-  gap:18px;max-width:950px;width:100%;margin-bottom:36px;
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));
+  gap:16px;max-width:900px;width:100%;margin-bottom:34px;
 }
-.impact-card{
-  text-align:center;padding:28px 18px;border-radius:24px;
-  background:linear-gradient(155deg,rgba(255,255,255,.02),rgba(255,255,255,.005));
+.imp-card{
+  text-align:center;padding:26px 16px;border-radius:22px;
+  background:linear-gradient(160deg,rgba(255,255,255,.025),rgba(255,255,255,.008));
   border:1px solid rgba(255,255,255,.05);
   transition:all .5s cubic-bezier(.175,.885,.32,1.275);
-  backdrop-filter:blur(12px);position:relative;overflow:hidden;
+  position:relative;overflow:hidden;
 }
-.impact-card::before{content:'';position:absolute;inset:0;border-radius:24px;opacity:0;transition:opacity .4s;}
-.impact-card:hover::before{opacity:1;}
-.ic1::before{background:radial-gradient(ellipse at center,rgba(255,230,0,.04),transparent 70%);}
-.ic1:hover{border-color:rgba(255,230,0,.25);}
-.ic2::before{background:radial-gradient(ellipse at center,rgba(52,131,250,.04),transparent 70%);}
-.ic2:hover{border-color:rgba(52,131,250,.25);}
-.ic3::before{background:radial-gradient(ellipse at center,rgba(0,166,80,.04),transparent 70%);}
-.ic3:hover{border-color:rgba(0,166,80,.25);}
-.ic4::before{background:radial-gradient(ellipse at center,rgba(123,97,255,.04),transparent 70%);}
-.ic4:hover{border-color:rgba(123,97,255,.25);}
+.imp-card::before{content:'';position:absolute;inset:0;border-radius:22px;opacity:0;transition:opacity .4s;}
+.imp-card:hover::before{opacity:1;}
+.ic1::before{background:radial-gradient(ellipse at center,rgba(255,230,0,.035),transparent 70%);}.ic1:hover{border-color:rgba(255,230,0,.2);}
+.ic2::before{background:radial-gradient(ellipse at center,rgba(52,131,250,.035),transparent 70%);}.ic2:hover{border-color:rgba(52,131,250,.2);}
+.ic3::before{background:radial-gradient(ellipse at center,rgba(0,166,80,.035),transparent 70%);}.ic3:hover{border-color:rgba(0,166,80,.2);}
+.ic4::before{background:radial-gradient(ellipse at center,rgba(123,97,255,.035),transparent 70%);}.ic4:hover{border-color:rgba(123,97,255,.2);}
+.imp-ico{font-size:28px;margin-bottom:6px;position:relative;z-index:1;}
+.imp-num{font-size:clamp(32px,4.5vw,50px);font-weight:900;letter-spacing:-2px;position:relative;z-index:1;}
+.imp-num.ny{color:#FFE600;text-shadow:0 0 25px rgba(255,230,0,.1);}
+.imp-num.nb{color:#3483FA;text-shadow:0 0 25px rgba(52,131,250,.1);}
+.imp-num.ng{color:#00A650;text-shadow:0 0 25px rgba(0,166,80,.1);}
+.imp-num.np{color:#7B61FF;text-shadow:0 0 25px rgba(123,97,255,.1);}
+.imp-label{font-size:10px;color:rgba(238,240,246,.35);font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-top:4px;position:relative;z-index:1;}
 
-.impact-icon{font-size:30px;margin-bottom:8px;position:relative;z-index:1;}
-.impact-number{
-  font-size:clamp(34px,4.5vw,52px);font-weight:900;letter-spacing:-2px;position:relative;z-index:1;
-}
-.impact-number.yellow{color:#FFE600;text-shadow:0 0 30px rgba(255,230,0,.1);}
-.impact-number.blue{color:#3483FA;text-shadow:0 0 30px rgba(52,131,250,.1);}
-.impact-number.green{color:#00A650;text-shadow:0 0 30px rgba(0,166,80,.1);}
-.impact-number.purple{color:#7B61FF;text-shadow:0 0 30px rgba(123,97,255,.1);}
-.impact-label{font-size:10px;color:rgba(240,240,248,.35);font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-top:5px;position:relative;z-index:1;}
+.ben-row{display:flex;justify-content:center;gap:26px;flex-wrap:wrap;}
+.ben{text-align:center;max-width:140px;transition:transform .3s;}
+.ben:hover{transform:translateY(-4px);}
+.ben-ico{font-size:24px;margin-bottom:4px;}
+.ben-title{font-size:11px;font-weight:800;margin-bottom:2px;}
+.ben-desc{font-size:9.5px;color:rgba(238,240,246,.3);line-height:1.55;}
 
-.benefits-row{display:flex;justify-content:center;gap:28px;flex-wrap:wrap;}
-.benefit{text-align:center;max-width:150px;transition:transform .3s;}
-.benefit:hover{transform:translateY(-5px);}
-.benefit-emoji{font-size:26px;margin-bottom:5px;}
-.benefit-title{font-size:11.5px;font-weight:800;margin-bottom:3px;}
-.benefit-desc{font-size:10px;color:rgba(240,240,248,.3);line-height:1.55;}
-
-/* ==================== SLIDE 8: CIERRE ==================== */
-.cierre-content{text-align:center;max-width:750px;}
-.cierre-emoji{font-size:70px;margin-bottom:20px;display:block;animation:emojiPop 1s backwards;}
-.cierre-title{
+/* =====================================================
+   SLIDE 8 — CIERRE
+   ===================================================== */
+.s-cierre .cierre-wrap{text-align:center;max-width:720px;}
+.cierre-ico{font-size:64px;display:block;margin-bottom:18px;animation:iconPop 1s backwards;}
+.cierre-h2{
   font-size:clamp(26px,4.5vw,52px);font-weight:900;
-  margin-bottom:16px;line-height:1.2;letter-spacing:-1.5px;
+  margin-bottom:16px;line-height:1.18;letter-spacing:-1.5px;
 }
 .cierre-glow{
   background:linear-gradient(135deg,#FFE600,#3483FA,#00A650);
+  background-size:200% 200%;
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  background-clip:text;background-size:200% 200%;
-  animation:gradientShift 4s ease-in-out infinite;
+  animation:gradShift 5s ease-in-out infinite;
 }
-@keyframes gradientShift{0%{background-position:0% 50%;}50%{background-position:100% 50%;}100%{background-position:0% 50%;}}
-.cierre-desc{
-  font-size:clamp(14px,1.5vw,17px);color:rgba(240,240,248,.4);
-  line-height:1.75;margin-bottom:32px;
+@keyframes gradShift{0%{background-position:0% 50%;}50%{background-position:100% 50%;}100%{background-position:0% 50%;}}
+.cierre-p{
+  font-size:clamp(13px,1.5vw,16px);color:rgba(238,240,246,.42);
+  line-height:1.8;margin-bottom:28px;
 }
-.cierre-desc strong{color:rgba(240,240,248,.7);}
-.cierre-divider{
-  width:80px;height:3px;margin:0 auto 30px;
-  background:linear-gradient(90deg,#FFE600,#3483FA,#00A650);border-radius:10px;
-}
-.next-steps{
-  display:flex;flex-wrap:wrap;justify-content:center;gap:12px;
-  margin-bottom:34px;max-width:680px;
-}
-.next-step{
-  padding:12px 22px;border-radius:14px;
-  background:linear-gradient(145deg,rgba(255,255,255,.02),rgba(255,255,255,.005));
+.cierre-p strong{color:rgba(238,240,246,.7);}
+.cierre-div{width:70px;height:3px;margin:0 auto 28px;background:linear-gradient(90deg,#FFE600,#3483FA,#00A650);border-radius:10px;}
+
+.next-row{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-bottom:30px;}
+.nxt{
+  padding:11px 20px;border-radius:14px;
+  background:linear-gradient(160deg,rgba(255,255,255,.02),rgba(255,255,255,.006));
   border:1px solid rgba(255,255,255,.06);
-  font-size:13px;font-weight:700;color:rgba(240,240,248,.6);
-  display:flex;align-items:center;gap:8px;
+  font-size:12.5px;font-weight:700;color:rgba(238,240,246,.6);
+  display:flex;align-items:center;gap:7px;
   transition:all .4s cubic-bezier(.175,.885,.32,1.275);
 }
-.next-step:hover{border-color:rgba(255,230,0,.2);transform:translateY(-3px);}
-.step-num{
-  width:26px;height:26px;border-radius:50%;
-  background:rgba(255,230,0,.08);color:#FFE600;
-  font-size:11px;font-weight:900;
+.nxt:hover{border-color:rgba(255,230,0,.18);transform:translateY(-3px);}
+.nxt-n{
+  width:24px;height:24px;border-radius:50%;flex-shrink:0;
+  background:rgba(255,230,0,.07);color:#FFE600;
+  font-size:10px;font-weight:900;
   display:flex;align-items:center;justify-content:center;
 }
-.cierre-author{font-size:14px;color:rgba(240,240,248,.45);font-weight:600;margin-bottom:6px;}
-.cierre-sub{font-size:11px;color:rgba(240,240,248,.18);font-weight:700;letter-spacing:3px;}
-@keyframes heartbeat{0%,100%{transform:scale(1);}15%{transform:scale(1.3);}30%{transform:scale(1);}45%{transform:scale(1.2);}}
-.heart-beat{display:inline-block;animation:heartbeat 1.5s ease-in-out infinite;}
+.cierre-author{font-size:13px;color:rgba(238,240,246,.4);font-weight:600;margin-bottom:5px;}
+.cierre-sub{font-size:10px;color:rgba(238,240,246,.18);font-weight:700;letter-spacing:3px;}
+@keyframes heartbeat{0%,100%{transform:scale(1);}15%{transform:scale(1.3);}30%{transform:scale(1);}45%{transform:scale(1.15);}}
+.hb{display:inline-block;animation:heartbeat 1.5s ease-in-out infinite;}
 
-/* ==================== RESPONSIVE ==================== */
+/* ===== RESPONSIVE ===== */
 @media(max-width:768px){
   .slide{padding:40px 20px;}
   .nav-dots{right:8px;gap:6px;}.nav-dot{width:7px;height:7px;}.nav-dot::after{display:none;}
-  .pain-grid,.metricas-grid,.pillars-grid{grid-template-columns:1fr;}
+  .pain-grid,.met-grid,.pillars{grid-template-columns:1fr;}
   .cycle-flow{flex-direction:column;align-items:center;}
-  .cycle-arrow{transform:rotate(90deg);margin-top:0;}
+  .cy-arrow{transform:rotate(90deg);margin-top:0;}
   .impact-grid{grid-template-columns:1fr 1fr;}
   .rhythm-row{flex-direction:column;align-items:center;}
-  .nav-arrows{bottom:14px;}
-  .scroll-hint{bottom:24px;}
+  .scroll-cue{bottom:22px;}
 }
 @media(max-width:480px){.impact-grid{grid-template-columns:1fr;}}
 </style>
 </head>
 <body>
 
-<div class="progress-bar" id="progressBar"></div>
+<div class="progress" id="progressBar"></div>
 
-<nav class="nav-dots" id="navDots">
+<nav class="nav-dots">
   <div class="nav-dot active" data-slide="0" data-label="Inicio"></div>
   <div class="nav-dot" data-slide="1" data-label="Propósito"></div>
   <div class="nav-dot" data-slide="2" data-label="La Realidad"></div>
@@ -563,557 +502,388 @@ body{font-family:'Inter',sans-serif;background:#08081a;color:#f0f0f8;overflow-x:
   <button class="nav-arrow" id="nextBtn">▼</button>
 </div>
 
-<!-- ====================== SLIDE 1: PORTADA ====================== -->
-<section class="slide" id="slide-0">
-  <div class="mesh-bg"><canvas id="meshCanvas0"></canvas></div>
-  <div class="particles" id="p0"></div>
-  <div class="confetti-box" id="cf0"></div>
-  <div class="glow-ring"></div><div class="glow-ring"></div><div class="glow-ring"></div>
-  <div class="star-field" id="sf0"></div>
-  <div class="orb" style="width:480px;height:480px;background:#3483FA;top:12%;left:3%;"></div>
-  <div class="orb" style="width:380px;height:380px;background:#FFE600;bottom:12%;right:3%;animation-delay:5s;"></div>
-  <div class="orb" style="width:280px;height:280px;background:#7B61FF;top:55%;left:48%;animation-delay:10s;"></div>
-  <div class="shooting-star" style="top:18%;left:0;animation-delay:1s;width:120px;"></div>
-  <div class="shooting-star" style="top:48%;left:0;animation-delay:5s;width:160px;"></div>
+<!-- ========== SLIDE 1: PORTADA ========== -->
+<section class="slide s-portada" id="slide-0">
+  <div class="slide-bg"><canvas id="bg0"></canvas></div>
+  <div class="stars" id="st0"></div>
+  <div class="motes" id="mo0"></div>
 
-  <div class="portada-content">
+  <div class="portada-wrap">
     <div class="portada-tag">✦ PROPUESTA ESTRATÉGICA ✦</div>
-    <span class="portada-emoji">🔥</span>
-    <h1 class="portada-title">
-      Referentes con<br>
-      <span class="glow-yellow">Propó</span><span class="glow-blue">sito</span>
-    </h1>
+    <span class="portada-icon">🔥</span>
+    <h1 class="portada-h1">Referentes con<br><span class="gy">Propó</span><span class="gb">sito</span></h1>
     <p class="portada-sub">No buscamos cumplir por cumplir. Buscamos referentes que indaguen, propongan y lideren con visión. Futuros líderes que le encuentren un significado real a cada métrica.</p>
-    <div class="portada-pills">
-      <span class="pill pill-y">⚡ Productividad</span>
-      <span class="pill pill-b">⭐ NPS</span>
-      <span class="pill pill-g">🎯 Adhesión Meli</span>
-      <span class="pill pill-o">🔄 TDI</span>
-      <span class="pill pill-p">🤖 QI</span>
+    <div class="pills">
+      <span class="pill pl-y">⚡ Productividad</span>
+      <span class="pill pl-b">⭐ NPS</span>
+      <span class="pill pl-g">🎯 Adhesión Meli</span>
+      <span class="pill pl-o">🔄 TDI</span>
+      <span class="pill pl-p">🤖 QI</span>
     </div>
   </div>
-  <div class="scroll-hint">
-    <div class="scroll-mouse"></div>
-    <span class="scroll-label">SCROLL</span>
-  </div>
+  <div class="scroll-cue"><div class="scroll-mouse"></div><span class="scroll-label">SCROLL</span></div>
 </section>
 
-<!-- ====================== SLIDE 2: PROPÓSITO ====================== -->
-<section class="slide" id="slide-1">
-  <div class="mesh-bg"><canvas id="meshCanvas1"></canvas></div>
-  <div class="star-field" id="sf1"></div>
-  <div class="floating-hearts" id="h1"></div>
-  <div class="orb" style="width:350px;height:350px;background:#FFE600;top:18%;right:18%;"></div>
-  <div class="orb" style="width:280px;height:280px;background:#00A650;bottom:20%;left:12%;animation-delay:4s;"></div>
-  <div class="light-beams" id="lb1"></div>
+<!-- ========== SLIDE 2: PROPÓSITO ========== -->
+<section class="slide s-proposito" id="slide-1">
+  <div class="slide-bg"><canvas id="bg1"></canvas></div>
+  <div class="stars" id="st1"></div>
+  <div class="motes" id="mo1"></div>
 
-  <div class="proposito-content">
-    <span class="reveal" style="font-size:52px;display:block;margin-bottom:22px;">🧭</span>
-    <p class="proposito-quote reveal s1">
-      No queremos referentes que<br>
-      <span class="em">actualicen un tablero</span>
-    </p>
-    <div class="proposito-divider reveal s2"></div>
-    <p class="proposito-quote reveal s3" style="font-size:clamp(18px,2.5vw,30px);color:rgba(240,240,248,.5);margin-top:16px;">
+  <div class="prop-wrap">
+    <span class="rv" style="font-size:48px;display:block;margin-bottom:20px;">🧭</span>
+    <p class="prop-quote rv d1">No queremos referentes que<br><span class="em">actualicen un tablero</span></p>
+    <div class="prop-line rv d2"></div>
+    <p class="prop-quote rv d3" style="font-size:clamp(17px,2.3vw,28px);color:rgba(238,240,246,.55);margin-top:14px;">
       Queremos personas que <span class="em-b">se pregunten por qué</span>,<br>
       que busquen el patrón detrás del número<br>
       y que <span class="em">propongan lo que nadie ha propuesto</span>
     </p>
-    <p class="proposito-after reveal s4" style="margin-top:30px;">
+    <p class="prop-body rv d4" style="margin-top:26px;">
       El objetivo no es el cumplimiento. Es construir <strong>representantes que quieran una métrica</strong>, que se apasionen por ella, que la hagan suya y que desde ahí <strong>se forjen como líderes</strong>.
     </p>
   </div>
 </section>
 
-<!-- ====================== SLIDE 3: LA REALIDAD ====================== -->
-<section class="slide" id="slide-2">
-  <div class="mesh-bg"><canvas id="meshCanvas2"></canvas></div>
-  <div class="star-field" id="sf2"></div>
-  <div class="orb" style="width:340px;height:340px;background:#F23D4F;top:8%;left:5%;opacity:.1;"></div>
-  <div class="aurora"><div class="aurora-stripe" style="top:20%;background:#F23D4F;animation-delay:0s;"></div><div class="aurora-stripe" style="top:55%;background:#FF6B35;animation-delay:5s;"></div></div>
+<!-- ========== SLIDE 3: LA REALIDAD ========== -->
+<section class="slide s-realidad" id="slide-2">
+  <div class="slide-bg"><canvas id="bg2"></canvas></div>
+  <div class="stars" id="st2"></div>
 
-  <div class="realidad-content">
-    <span class="reveal" style="font-size:48px;display:block;margin-bottom:18px;">🪞</span>
-    <h2 class="realidad-title reveal s1">
-      Hoy tenemos referentes, pero<br><span class="red">sin propósito real</span>
-    </h2>
-    <p class="realidad-sub reveal s2">
-      No es un problema de personas, es un problema de estructura. No hay un marco que les permita indagar, proponer y liderar con impacto.
-    </p>
+  <div class="real-wrap">
+    <span class="rv" style="font-size:44px;display:block;margin-bottom:16px;">🪞</span>
+    <h2 class="sec-title rv d1">Hoy tenemos referentes, pero<br><span class="red">sin propósito real</span></h2>
+    <p class="real-sub rv d2">No es un problema de personas, es un problema de estructura. No hay un marco que les permita indagar, proponer y liderar con impacto.</p>
   </div>
 
   <div class="pain-grid">
-    <div class="pain-card reveal s1 magnetic">
-      <span class="pain-icon">🔄</span>
-      <p class="pain-text">Rotación cada 3 meses: <span class="hl">justo cuando entienden la métrica, cambian</span>. No se genera profundidad.</p>
+    <div class="pain-card rv d1 mag">
+      <span class="pain-ico">🔄</span>
+      <p class="pain-txt">Rotación cada 3 meses: <span class="hl">justo cuando entienden la métrica, cambian</span>. No hay profundidad.</p>
     </div>
-    <div class="pain-card reveal s2 magnetic">
-      <span class="pain-icon">📋</span>
-      <p class="pain-text">Se percibe como un <span class="hl">"update" más</span>: actualizar números, no indagar patrones ni proponer estrategias.</p>
+    <div class="pain-card rv d2 mag">
+      <span class="pain-ico">📋</span>
+      <p class="pain-txt">Se percibe como un <span class="hl">"update" más</span>: actualizar números, no indagar patrones ni proponer estrategias.</p>
     </div>
-    <div class="pain-card reveal s3 magnetic">
-      <span class="pain-icon">📊</span>
-      <p class="pain-text">Alta <span class="hl">dispersión entre equipos</span>: unos cumplen, otros no, y nadie analiza qué hacen diferente los mejores.</p>
+    <div class="pain-card rv d3 mag">
+      <span class="pain-ico">📊</span>
+      <p class="pain-txt">Alta <span class="hl">dispersión entre equipos</span>: unos cumplen, otros no, y nadie analiza qué hacen diferente los mejores.</p>
     </div>
-    <div class="pain-card reveal s4 magnetic">
-      <span class="pain-icon">🌱</span>
-      <p class="pain-text">Talento con hambre de crecer que <span class="hl">no tiene un espacio estructurado</span> para desarrollarse como líder.</p>
+    <div class="pain-card rv d4 mag">
+      <span class="pain-ico">🌱</span>
+      <p class="pain-txt">Talento con hambre de crecer que <span class="hl">no tiene espacio estructurado</span> para desarrollarse como líder.</p>
     </div>
   </div>
 </section>
 
-<!-- ====================== SLIDE 4: LA VISIÓN ====================== -->
-<section class="slide" id="slide-3">
-  <div class="mesh-bg"><canvas id="meshCanvas3"></canvas></div>
-  <div class="star-field" id="sf3"></div>
-  <div class="floating-hearts" id="h2"></div>
-  <div class="orb" style="width:420px;height:420px;background:#00A650;top:12%;left:8%;"></div>
-  <div class="orb" style="width:320px;height:320px;background:#FFE600;bottom:12%;right:8%;animation-delay:3s;"></div>
-  <div class="aurora"><div class="aurora-stripe" style="top:30%;background:#00A650;animation-delay:2s;"></div><div class="aurora-stripe" style="top:65%;background:#3483FA;animation-delay:7s;"></div></div>
+<!-- ========== SLIDE 4: LA VISIÓN ========== -->
+<section class="slide s-vision" id="slide-3">
+  <div class="slide-bg"><canvas id="bg3"></canvas></div>
+  <div class="stars" id="st3"></div>
+  <div class="motes" id="mo3"></div>
 
-  <div class="vision-content">
-    <span class="vision-icon reveal">💡</span>
-    <h2 class="vision-title reveal s1">Referentes que <span class="green">lideran</span>,<br>no que reportan</h2>
-    <p class="vision-desc reveal s2">
-      Un programa donde cada referente elige su métrica por pasión, la hace suya, investiga patrones, propone estrategias de valor y se construye como líder desde la acción diaria.
-    </p>
+  <div class="vis-wrap">
+    <span class="vis-icon rv">💡</span>
+    <h2 class="sec-title rv d1">Referentes que <span class="green">lideran</span>,<br>no que reportan</h2>
+    <p class="vis-desc rv d2">Un programa donde cada referente elige su métrica por pasión, la hace suya, investiga patrones, propone estrategias de valor y se construye como líder desde la acción.</p>
 
-    <div class="pillars-grid">
-      <div class="pillar-card pc-blue reveal s3 magnetic">
-        <div class="pc-top">
-          <div class="pc-badge" style="background:rgba(52,131,250,.15);border:1.5px solid rgba(52,131,250,.3);color:#3483FA;">L1</div>
-          <div class="pc-title" style="color:#3483FA;">Referente Líder</div>
+    <div class="pillars">
+      <div class="pillar p-b rv d3 mag">
+        <div class="p-top">
+          <div class="p-badge" style="background:rgba(52,131,250,.12);border:1.5px solid rgba(52,131,250,.25);color:#3483FA;">L1</div>
+          <div class="p-name blue">Referente Líder</div>
         </div>
-        <div class="pc-desc">No es quien "actualiza", es quien <strong style="color:rgba(240,240,248,.65);">indaga, descubre y propone</strong>. Lidera muestreos, detecta por qué pasan las cosas y busca la raíz de cada resultado.</div>
+        <div class="p-desc">No es quien "actualiza", es quien <b>indaga, descubre y propone</b>. Lidera muestreos, detecta por qué pasan las cosas y busca la raíz de cada resultado.</div>
       </div>
-      <div class="pillar-card pc-purple reveal s4 magnetic">
-        <div class="pc-top">
-          <div class="pc-badge" style="background:rgba(123,97,255,.15);border:1.5px solid rgba(123,97,255,.3);color:#7B61FF;">L2</div>
-          <div class="pc-title" style="color:#7B61FF;">Referente Soporte</div>
+      <div class="pillar p-p rv d4 mag">
+        <div class="p-top">
+          <div class="p-badge" style="background:rgba(123,97,255,.12);border:1.5px solid rgba(123,97,255,.25);color:#7B61FF;">L2</div>
+          <div class="p-name purple">Referente Soporte</div>
         </div>
-        <div class="pc-desc">Co-lidera el análisis, <strong style="color:rgba(240,240,248,.65);">aporta perspectiva desde otro ángulo</strong> y está preparado para tomar el liderazgo. Juntos multiplican impacto.</div>
+        <div class="p-desc">Co-lidera el análisis, <b>aporta perspectiva desde otro ángulo</b> y está preparado para tomar el liderazgo. Juntos multiplican impacto.</div>
       </div>
-      <div class="pillar-card pc-yellow reveal s5 magnetic">
-        <div class="pc-top">
-          <div class="pc-badge" style="background:rgba(255,230,0,.15);border:1.5px solid rgba(255,230,0,.3);color:#FFE600;">🔥</div>
-          <div class="pc-title" style="color:#FFE600;">Forjar Líderes</div>
+      <div class="pillar p-y rv d5 mag">
+        <div class="p-top">
+          <div class="p-badge" style="background:rgba(255,230,0,.12);border:1.5px solid rgba(255,230,0,.25);color:#FFE600;">🔥</div>
+          <div class="p-name yellow">Forjar Líderes</div>
         </div>
-        <div class="pc-desc">Aprenden a <strong style="color:rgba(240,240,248,.65);">presentar, analizar, seguir y decidir</strong>. No es trabajo extra: es la oportunidad de construirse como el líder que quieren ser.</div>
+        <div class="p-desc">Aprenden a <b>presentar, analizar, seguir y decidir</b>. No es trabajo extra: es la oportunidad de construirse como el líder que quieren ser.</div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ====================== SLIDE 5: LAS 5 MÉTRICAS ====================== -->
-<section class="slide" id="slide-4">
-  <div class="mesh-bg"><canvas id="meshCanvas4"></canvas></div>
-  <div class="particles" id="p4"></div>
-  <div class="star-field" id="sf4"></div>
-  <div class="orb" style="width:320px;height:320px;background:#3483FA;top:8%;right:8%;"></div>
-  <div class="orb" style="width:280px;height:280px;background:#00A650;bottom:12%;left:8%;animation-delay:4s;"></div>
-  <div class="aurora"><div class="aurora-stripe" style="top:15%;background:#FFE600;animation-delay:1s;"></div></div>
+<!-- ========== SLIDE 5: MÉTRICAS ========== -->
+<section class="slide s-metricas" id="slide-4">
+  <div class="slide-bg"><canvas id="bg4"></canvas></div>
+  <div class="stars" id="st4"></div>
+  <div class="motes" id="mo4"></div>
 
-  <h2 class="section-title reveal">5 métricas, un <span style="color:#FFE600;">propósito mayor</span> por cada una</h2>
-  <p class="section-sub reveal s1">No se trata de cumplir el número. Se trata de entender por qué pasa lo que pasa y proponer lo que nadie ha propuesto.</p>
+  <h2 class="sec-title rv">5 métricas, un <span class="yellow">propósito mayor</span></h2>
+  <p class="sec-sub rv d1">No se trata de cumplir el número. Se trata de entender por qué pasa lo que pasa.</p>
 
-  <div class="metricas-grid">
-    <div class="metrica-card mc-y reveal s1 magnetic">
-      <span class="mc-emoji">⚡</span>
-      <div class="mc-name" style="color:#FFE600;">Productividad</div>
-      <div class="mc-purpose" style="color:rgba(255,230,0,.6);">PROPÓSITO: QUE EL BONO POTENCIALICE, NO LIMITE</div>
-      <div class="mc-desc">Indagar patrones en reps <strong class="y">Q3-Q4</strong>. Analizar TMC por proceso. Detectar si el dolor es de equipo, canal o persona. <strong class="g">Benchmark</strong> de los mejores tiempos.</div>
+  <div class="met-grid">
+    <div class="met-card mc-y rv d1 mag">
+      <span class="mc-ico">⚡</span>
+      <div class="mc-name yellow">Productividad</div>
+      <div class="mc-purpose yellow">Que el bono potencialice, no limite</div>
+      <div class="mc-body">Patrones en reps <strong class="yellow">Q3-Q4</strong>. TMC por proceso. Benchmark de los mejores. Reducir dispersión equipo a equipo.</div>
     </div>
-    <div class="metrica-card mc-b reveal s2 magnetic">
-      <span class="mc-emoji">⭐</span>
-      <div class="mc-name" style="color:#3483FA;">NPS</div>
-      <div class="mc-purpose" style="color:rgba(52,131,250,.6);">PROPÓSITO: SALIR DE LA CAJA Y CERRAR BRECHAS</div>
-      <div class="mc-desc">Liderar <strong class="b">Meli Promo + Dash NPS</strong>. Analizar qué hacen diferente los equipos con mejor NPS. Reducir detractores, <strong class="g">multiplicar promotores</strong>.</div>
+    <div class="met-card mc-b rv d2 mag">
+      <span class="mc-ico">⭐</span>
+      <div class="mc-name blue">NPS</div>
+      <div class="mc-purpose blue">Salir de la caja y cerrar brechas</div>
+      <div class="mc-body"><strong class="blue">Meli Promo + Dash NPS</strong>. Qué hacen diferente los mejores equipos. Reducir detractores, multiplicar promotores.</div>
     </div>
-    <div class="metrica-card mc-g reveal s3 magnetic">
-      <span class="mc-emoji">🎯</span>
-      <div class="mc-name" style="color:#00A650;">Adhesión Meli</div>
-      <div class="mc-purpose" style="color:rgba(0,166,80,.6);">PROPÓSITO: CALIDAD ESTÁNDAR EN CADA CASO</div>
-      <div class="mc-desc">Referentes estrella crean <strong class="g">templates y grabaciones</strong>. Shadowings para potenciar bienvenida, exploración, argumentación y cierre. Meta: <strong>todos Q1-Q2</strong>.</div>
+    <div class="met-card mc-g rv d3 mag">
+      <span class="mc-ico">🎯</span>
+      <div class="mc-name green">Adhesión Meli</div>
+      <div class="mc-purpose green">Calidad estándar en cada caso</div>
+      <div class="mc-body">Referentes estrella: <strong class="green">templates, grabaciones, shadowings</strong>. Potenciar bienvenida, exploración, argumentación y cierre.</div>
     </div>
-    <div class="metrica-card mc-o reveal s4 magnetic">
-      <span class="mc-emoji">🔄</span>
-      <div class="mc-name" style="color:#FF6B35;">TDI</div>
-      <div class="mc-purpose" style="color:rgba(255,107,53,.6);">PROPÓSITO: LA MILLA EXTRA QUE PREVIENE</div>
-      <div class="mc-desc">No solo cumplir: mantener el <strong class="o">menor % posible</strong>. Comentarios complementarios, preguntas extra para prevenir marcaciones. Benchmark entre equipos.</div>
+    <div class="met-card mc-o rv d4 mag">
+      <span class="mc-ico">🔄</span>
+      <div class="mc-name orange">TDI</div>
+      <div class="mc-purpose orange">La milla extra que previene</div>
+      <div class="mc-body">Menor % posible sostenido. <strong class="orange">Comentarios y preguntas complementarias</strong> para prevenir marcaciones incorrectas.</div>
     </div>
-    <div class="metrica-card mc-p reveal s5 magnetic">
-      <span class="mc-emoji">🤖</span>
-      <div class="mc-name" style="color:#7B61FF;">QI</div>
-      <div class="mc-purpose" style="color:rgba(123,97,255,.6);">PROPÓSITO: POTENCIAR LA IA DESDE LA OPERACIÓN</div>
-      <div class="mc-desc">Notebooks de reputación. Insights que <strong class="p">potencien herramientas de IA</strong>. Detectar dolores actuales y convertirlos en oportunidades de mejora.</div>
+    <div class="met-card mc-p rv d5 mag">
+      <span class="mc-ico">🤖</span>
+      <div class="mc-name purple">QI</div>
+      <div class="mc-purpose purple">Potenciar la IA desde la operación</div>
+      <div class="mc-body">Notebooks de reputación. <strong class="purple">Insights que potencien herramientas de IA</strong>. Dolores → oportunidades.</div>
     </div>
   </div>
 </section>
 
-<!-- ====================== SLIDE 6: EL CICLO ====================== -->
-<section class="slide" id="slide-5">
-  <div class="mesh-bg"><canvas id="meshCanvas5"></canvas></div>
-  <div class="star-field" id="sf5"></div>
-  <div class="orb" style="width:340px;height:340px;background:#3483FA;top:8%;right:8%;"></div>
-  <div class="orb" style="width:280px;height:280px;background:#FFE600;bottom:12%;left:8%;animation-delay:4s;"></div>
-  <div class="light-beams" id="lb5"></div>
+<!-- ========== SLIDE 6: EL CICLO ========== -->
+<section class="slide s-ciclo" id="slide-5">
+  <div class="slide-bg"><canvas id="bg5"></canvas></div>
+  <div class="stars" id="st5"></div>
 
-  <div class="cycle-container">
-    <h2 class="section-title reveal">El ciclo de <span style="color:#3483FA;">un referente con propósito</span></h2>
-    <p class="section-sub reveal s1">No es un reporte mensual. Es un ciclo continuo de curiosidad → acción → impacto.</p>
+  <div class="cycle-wrap">
+    <h2 class="sec-title rv">El ciclo de <span class="blue">un referente con propósito</span></h2>
+    <p class="sec-sub rv d1">No es un reporte mensual. Es un ciclo continuo de curiosidad → acción → impacto.</p>
 
-    <div class="cycle-flow reveal s2">
-      <div class="cycle-step">
-        <div class="cycle-circle cc1 magnetic">🔍</div>
-        <div class="cycle-label">Indagar</div>
-        <div class="cycle-sub">Muestreos, patrones, el porqué detrás del número</div>
+    <div class="cycle-flow rv d2">
+      <div class="cy-step">
+        <div class="cy-circ cc1 mag">🔍</div>
+        <div class="cy-label">Indagar</div>
+        <div class="cy-sub">Muestreos, patrones, el porqué detrás del número</div>
       </div>
-      <div class="cycle-arrow">→</div>
-      <div class="cycle-step">
-        <div class="cycle-circle cc2 magnetic">💡</div>
-        <div class="cycle-label">Proponer</div>
-        <div class="cycle-sub">Estrategias de valor, no solo updates de cumplimiento</div>
+      <div class="cy-arrow">→</div>
+      <div class="cy-step">
+        <div class="cy-circ cc2 mag">💡</div>
+        <div class="cy-label">Proponer</div>
+        <div class="cy-sub">Estrategias de valor, no solo updates</div>
       </div>
-      <div class="cycle-arrow">→</div>
-      <div class="cycle-step">
-        <div class="cycle-circle cc3 magnetic">🚀</div>
-        <div class="cycle-label">Ejecutar</div>
-        <div class="cycle-sub">Planes con dueño, fecha y seguimiento real</div>
+      <div class="cy-arrow">→</div>
+      <div class="cy-step">
+        <div class="cy-circ cc3 mag">🚀</div>
+        <div class="cy-label">Ejecutar</div>
+        <div class="cy-sub">Planes con dueño, fecha y seguimiento</div>
       </div>
-      <div class="cycle-arrow">→</div>
-      <div class="cycle-step">
-        <div class="cycle-circle cc4 magnetic">📈</div>
-        <div class="cycle-label">Escalar</div>
-        <div class="cycle-sub">Compartir lo que funciona a todo Publicaciones Mature</div>
+      <div class="cy-arrow">→</div>
+      <div class="cy-step">
+        <div class="cy-circ cc4 mag">📈</div>
+        <div class="cy-label">Escalar</div>
+        <div class="cy-sub">Lo que funciona → todo Publicaciones Mature</div>
       </div>
     </div>
 
-    <div class="rhythm-row reveal s3">
-      <div class="rhythm-card magnetic">
-        <div class="rhythm-icon">📅</div>
-        <div class="rhythm-label" style="color:#FFE600;">Semanal</div>
-        <div class="rhythm-desc">QI: dolores actuales<br>y marcaciones</div>
-      </div>
-      <div class="rhythm-card magnetic">
-        <div class="rhythm-icon">🗓️</div>
-        <div class="rhythm-label" style="color:#3483FA;">Quincenal</div>
-        <div class="rhythm-desc">Avances, muestreos<br>e insights de valor</div>
-      </div>
-      <div class="rhythm-card magnetic">
-        <div class="rhythm-icon">📊</div>
-        <div class="rhythm-label" style="color:#00A650;">Mensual</div>
-        <div class="rhythm-desc">Resultados, benchmark<br>y planes ajustados</div>
-      </div>
+    <div class="rhythm-row rv d3">
+      <div class="rhythm mag"><div class="rhy-ico">📅</div><div class="rhy-label yellow">Semanal</div><div class="rhy-desc">QI: dolores actuales<br>y marcaciones</div></div>
+      <div class="rhythm mag"><div class="rhy-ico">🗓️</div><div class="rhy-label blue">Quincenal</div><div class="rhy-desc">Avances, muestreos<br>e insights</div></div>
+      <div class="rhythm mag"><div class="rhy-ico">📊</div><div class="rhy-label green">Mensual</div><div class="rhy-desc">Resultados, benchmark<br>y planes ajustados</div></div>
     </div>
   </div>
 </section>
 
-<!-- ====================== SLIDE 7: IMPACTO ====================== -->
-<section class="slide" id="slide-6">
-  <div class="mesh-bg"><canvas id="meshCanvas6"></canvas></div>
-  <div class="particles" id="p6"></div>
-  <div class="star-field" id="sf6"></div>
-  <div class="orb" style="width:420px;height:420px;background:#00A650;top:8%;right:5%;"></div>
-  <div class="orb" style="width:320px;height:320px;background:#FFE600;bottom:8%;left:8%;animation-delay:4s;"></div>
-  <div class="aurora"><div class="aurora-stripe" style="top:25%;background:#00A650;animation-delay:0s;"></div><div class="aurora-stripe" style="top:60%;background:#FFE600;animation-delay:5s;"></div></div>
+<!-- ========== SLIDE 7: IMPACTO ========== -->
+<section class="slide s-impacto" id="slide-6">
+  <div class="slide-bg"><canvas id="bg6"></canvas></div>
+  <div class="stars" id="st6"></div>
+  <div class="motes" id="mo6"></div>
 
-  <h2 class="section-title reveal">Lo que <span style="color:#00A650;">construimos</span> juntos 🎯</h2>
-  <p class="section-sub reveal s1">Personas con propósito generan resultados con significado.</p>
+  <h2 class="sec-title rv">Lo que <span class="green">construimos</span> juntos 🎯</h2>
+  <p class="sec-sub rv d1">Personas con propósito generan resultados con significado.</p>
 
   <div class="impact-grid">
-    <div class="impact-card ic1 reveal s1 magnetic">
-      <div class="impact-icon">👥</div>
-      <div class="impact-number yellow" data-count="7">0</div>
-      <div class="impact-label">Equipos alineados</div>
-    </div>
-    <div class="impact-card ic2 reveal s2 magnetic">
-      <div class="impact-icon">🎯</div>
-      <div class="impact-number blue" data-count="5">0</div>
-      <div class="impact-label">Métricas con propósito</div>
-    </div>
-    <div class="impact-card ic3 reveal s3 magnetic">
-      <div class="impact-icon">🌟</div>
-      <div class="impact-number green" data-count="70" data-prefix="+">0</div>
-      <div class="impact-label">Futuros líderes</div>
-    </div>
-    <div class="impact-card ic4 reveal s4 magnetic">
-      <div class="impact-icon">🔥</div>
-      <div class="impact-number purple" data-symbol="∞">∞</div>
-      <div class="impact-label">Sin rotación forzada</div>
-    </div>
+    <div class="imp-card ic1 rv d1 mag"><div class="imp-ico">👥</div><div class="imp-num ny" data-count="7">0</div><div class="imp-label">Equipos alineados</div></div>
+    <div class="imp-card ic2 rv d2 mag"><div class="imp-ico">🎯</div><div class="imp-num nb" data-count="5">0</div><div class="imp-label">Métricas con propósito</div></div>
+    <div class="imp-card ic3 rv d3 mag"><div class="imp-ico">🌟</div><div class="imp-num ng" data-count="70" data-pre="+">0</div><div class="imp-label">Futuros líderes</div></div>
+    <div class="imp-card ic4 rv d4 mag"><div class="imp-ico">🔥</div><div class="imp-num np">∞</div><div class="imp-label">Sin rotación forzada</div></div>
   </div>
 
-  <div class="benefits-row reveal s5">
-    <div class="benefit magnetic">
-      <div class="benefit-emoji">🧭</div>
-      <div class="benefit-title">Propósito Real</div>
-      <div class="benefit-desc">Referentes que quieren estar, no que les toca</div>
-    </div>
-    <div class="benefit magnetic">
-      <div class="benefit-emoji">🏗️</div>
-      <div class="benefit-title">Semillero de Líderes</div>
-      <div class="benefit-desc">Hoy referentes, mañana líderes formados</div>
-    </div>
-    <div class="benefit magnetic">
-      <div class="benefit-emoji">📉</div>
-      <div class="benefit-title">Brechas Cerradas</div>
-      <div class="benefit-desc">Lo mejor de un equipo replicado en todos</div>
-    </div>
-    <div class="benefit magnetic">
-      <div class="benefit-emoji">📈</div>
-      <div class="benefit-title">Métricas Sostenidas</div>
-      <div class="benefit-desc">Cumplimiento por convicción, no por presión</div>
-    </div>
+  <div class="ben-row rv d5">
+    <div class="ben mag"><div class="ben-ico">🧭</div><div class="ben-title">Propósito Real</div><div class="ben-desc">Referentes que quieren estar</div></div>
+    <div class="ben mag"><div class="ben-ico">🏗️</div><div class="ben-title">Semillero</div><div class="ben-desc">Hoy referentes, mañana líderes</div></div>
+    <div class="ben mag"><div class="ben-ico">📉</div><div class="ben-title">Brechas Cerradas</div><div class="ben-desc">Lo mejor replicado en todos</div></div>
+    <div class="ben mag"><div class="ben-ico">📈</div><div class="ben-title">Sostenibilidad</div><div class="ben-desc">Cumplimiento por convicción</div></div>
   </div>
 </section>
 
-<!-- ====================== SLIDE 8: CIERRE ====================== -->
-<section class="slide" id="slide-7">
-  <div class="mesh-bg"><canvas id="meshCanvas7"></canvas></div>
-  <div class="particles" id="p7"></div>
-  <div class="confetti-box" id="cf7"></div>
-  <div class="floating-hearts" id="h7"></div>
-  <div class="glow-ring"></div><div class="glow-ring"></div><div class="glow-ring"></div>
-  <div class="star-field" id="sf7"></div>
-  <div class="orb" style="width:480px;height:480px;background:#3483FA;top:12%;left:3%;"></div>
-  <div class="orb" style="width:380px;height:380px;background:#FFE600;bottom:8%;right:3%;animation-delay:4s;"></div>
-  <div class="orb" style="width:280px;height:280px;background:#00A650;top:48%;left:55%;animation-delay:8s;"></div>
-  <div class="shooting-star" style="top:22%;left:0;animation-delay:1s;width:130px;"></div>
-  <div class="shooting-star" style="top:58%;left:0;animation-delay:6s;width:150px;"></div>
+<!-- ========== SLIDE 8: CIERRE ========== -->
+<section class="slide s-cierre" id="slide-7">
+  <div class="slide-bg"><canvas id="bg7"></canvas></div>
+  <div class="stars" id="st7"></div>
+  <div class="motes" id="mo7"></div>
 
-  <div class="cierre-content">
-    <span class="cierre-emoji reveal">🚀</span>
-    <h2 class="cierre-title reveal s1">Que cada referente le encuentre<br><span class="cierre-glow">sentido a lo que lidera</span></h2>
-    <p class="cierre-desc reveal s2">
+  <div class="cierre-wrap">
+    <span class="cierre-ico rv">🚀</span>
+    <h2 class="cierre-h2 rv d1">Que cada referente le encuentre<br><span class="cierre-glow">sentido a lo que lidera</span></h2>
+    <p class="cierre-p rv d2">
       No es un tablero más. No es un update más.<br>
       Es la oportunidad de que <strong>alguien elija una métrica porque la quiere hacer suya</strong>, la investigue, la proponga, la lleve al siguiente nivel — y en el camino se convierta en el líder que quiere ser.
     </p>
-    <div class="cierre-divider reveal s3"></div>
-
-    <div class="next-steps reveal s4">
-      <div class="next-step"><div class="step-num">1</div>Validación con líderes</div>
-      <div class="next-step"><div class="step-num">2</div>Selección de referentes</div>
-      <div class="next-step"><div class="step-num">3</div>Kick-off por métrica</div>
-      <div class="next-step"><div class="step-num">4</div>Primer ciclo de planes</div>
+    <div class="cierre-div rv d3"></div>
+    <div class="next-row rv d4">
+      <div class="nxt"><div class="nxt-n">1</div>Validación con líderes</div>
+      <div class="nxt"><div class="nxt-n">2</div>Selección de referentes</div>
+      <div class="nxt"><div class="nxt-n">3</div>Kick-off por métrica</div>
+      <div class="nxt"><div class="nxt-n">4</div>Primer ciclo de planes</div>
     </div>
-
-    <div class="cierre-author reveal s5">Hecho con <span class="heart-beat">💛</span> para Publicaciones Mature</div>
-    <p class="cierre-sub reveal s6">REFERENTES CON PROPÓSITO · 2025</p>
+    <div class="cierre-author rv d5">Hecho con <span class="hb">💛</span> para Publicaciones Mature</div>
+    <p class="cierre-sub rv d6">REFERENTES CON PROPÓSITO · 2025</p>
   </div>
 </section>
 
-<!-- ==================== JAVASCRIPT ==================== -->
 <script>
 (function(){
 
-// ==================== ANIMATED MESH BACKGROUNDS ====================
-const meshConfigs = [
-  {id:'meshCanvas0', colors:['#3483FA','#7B61FF','#FFE600'], speed:.0004},
-  {id:'meshCanvas1', colors:['#FFE600','#00A650','#3483FA'], speed:.0003},
-  {id:'meshCanvas2', colors:['#F23D4F','#FF6B35','#7B61FF'], speed:.00035},
-  {id:'meshCanvas3', colors:['#00A650','#3483FA','#FFE600'], speed:.0003},
-  {id:'meshCanvas4', colors:['#FFE600','#3483FA','#00A650','#7B61FF'], speed:.00035},
-  {id:'meshCanvas5', colors:['#3483FA','#FFE600','#7B61FF'], speed:.0003},
-  {id:'meshCanvas6', colors:['#00A650','#FFE600','#3483FA'], speed:.00035},
-  {id:'meshCanvas7', colors:['#3483FA','#FFE600','#00A650','#7B61FF'], speed:.0004},
+/* ===== ANIMATED GRADIENT BACKGROUNDS (canvas) ===== */
+const bgCfg = [
+  {id:'bg0',pts:[{x:.15,y:.3,c:[52,131,250]},{x:.85,y:.7,c:[255,230,0]},{x:.5,y:.9,c:[123,97,255]}]},
+  {id:'bg1',pts:[{x:.2,y:.4,c:[255,230,0]},{x:.8,y:.6,c:[0,166,80]},{x:.5,y:.15,c:[52,131,250]}]},
+  {id:'bg2',pts:[{x:.5,y:.2,c:[242,61,79]},{x:.2,y:.8,c:[255,107,53]},{x:.8,y:.7,c:[123,97,255]}]},
+  {id:'bg3',pts:[{x:.2,y:.3,c:[0,166,80]},{x:.8,y:.6,c:[52,131,250]},{x:.5,y:.85,c:[255,230,0]}]},
+  {id:'bg4',pts:[{x:.1,y:.5,c:[255,230,0]},{x:.9,y:.3,c:[52,131,250]},{x:.5,y:.9,c:[0,166,80]},{x:.7,y:.1,c:[123,97,255]}]},
+  {id:'bg5',pts:[{x:.3,y:.2,c:[52,131,250]},{x:.7,y:.8,c:[255,230,0]},{x:.1,y:.7,c:[123,97,255]}]},
+  {id:'bg6',pts:[{x:.2,y:.3,c:[0,166,80]},{x:.8,y:.7,c:[255,230,0]},{x:.5,y:.1,c:[52,131,250]}]},
+  {id:'bg7',pts:[{x:.15,y:.4,c:[52,131,250]},{x:.85,y:.6,c:[255,230,0]},{x:.5,y:.85,c:[0,166,80]},{x:.4,y:.15,c:[123,97,255]}]},
 ];
 
-const meshCanvases = [];
-
-meshConfigs.forEach(cfg => {
-  const canvas = document.getElementById(cfg.id);
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
-  const points = cfg.colors.map((c, i) => ({
-    x: Math.random(), y: Math.random(),
-    vx: (Math.random()-.5)*cfg.speed*2,
-    vy: (Math.random()-.5)*cfg.speed*2,
-    color: c, radius: 250 + Math.random()*150
+const bgs=[];
+bgCfg.forEach(cfg=>{
+  const canvas=document.getElementById(cfg.id);if(!canvas)return;
+  const ctx=canvas.getContext('2d');
+  const pts=cfg.pts.map(p=>({
+    ...p,ox:p.x,oy:p.y,
+    vx:(Math.random()-.5)*.0003,
+    vy:(Math.random()-.5)*.0003,
+    r:220+Math.random()*100
   }));
-  meshCanvases.push({canvas, ctx, points, cfg});
+  bgs.push({canvas,ctx,pts});
 });
 
-function hexToRgb(hex) {
-  const r = parseInt(hex.slice(1,3),16);
-  const g = parseInt(hex.slice(3,5),16);
-  const b = parseInt(hex.slice(5,7),16);
-  return {r,g,b};
-}
+function resizeBgs(){bgs.forEach(b=>{b.canvas.width=b.canvas.parentElement.offsetWidth;b.canvas.height=b.canvas.parentElement.offsetHeight;});}
 
-function resizeMeshCanvases() {
-  meshCanvases.forEach(m => {
-    m.canvas.width = m.canvas.parentElement.offsetWidth;
-    m.canvas.height = m.canvas.parentElement.offsetHeight;
+function drawBg(b){
+  const{canvas:cv,ctx,pts}=b;
+  const w=cv.width,h=cv.height;if(!w||!h)return;
+  // Dark base
+  ctx.fillStyle='#0a0e1a';ctx.fillRect(0,0,w,h);
+  pts.forEach(p=>{
+    p.x+=p.vx;p.y+=p.vy;
+    if(p.x<-.15||p.x>1.15)p.vx*=-1;
+    if(p.y<-.15||p.y>1.15)p.vy*=-1;
+    const g=ctx.createRadialGradient(p.x*w,p.y*h,0,p.x*w,p.y*h,p.r);
+    g.addColorStop(0,`rgba(${p.c[0]},${p.c[1]},${p.c[2]},.06)`);
+    g.addColorStop(1,`rgba(${p.c[0]},${p.c[1]},${p.c[2]},0)`);
+    ctx.fillStyle=g;ctx.fillRect(0,0,w,h);
   });
 }
 
-function drawMesh(m) {
-  const {canvas, ctx, points} = m;
-  const w = canvas.width, h = canvas.height;
-  if (w === 0 || h === 0) return;
-  ctx.clearRect(0,0,w,h);
-  points.forEach(p => {
-    p.x += p.vx; p.y += p.vy;
-    if (p.x < -.2 || p.x > 1.2) p.vx *= -1;
-    if (p.y < -.2 || p.y > 1.2) p.vy *= -1;
-    const rgb = hexToRgb(p.color);
-    const grad = ctx.createRadialGradient(p.x*w, p.y*h, 0, p.x*w, p.y*h, p.radius);
-    grad.addColorStop(0, `rgba(${rgb.r},${rgb.g},${rgb.b},.08)`);
-    grad.addColorStop(1, `rgba(${rgb.r},${rgb.g},${rgb.b},0)`);
-    ctx.fillStyle = grad;
-    ctx.fillRect(0,0,w,h);
-  });
-}
+function loopBg(){bgs.forEach(drawBg);requestAnimationFrame(loopBg);}
+resizeBgs();window.addEventListener('resize',resizeBgs);loopBg();
 
-function animateMeshes() {
-  meshCanvases.forEach(drawMesh);
-  requestAnimationFrame(animateMeshes);
-}
-
-resizeMeshCanvases();
-window.addEventListener('resize', resizeMeshCanvases);
-animateMeshes();
-
-// ==================== STAR FIELDS ====================
-function createStars(id, count) {
-  const c = document.getElementById(id); if (!c) return;
-  for (let i = 0; i < count; i++) {
-    const s = document.createElement('div'); s.className = 'star';
-    const size = Math.random()*2+.5;
-    s.style.cssText = `width:${size}px;height:${size}px;left:${Math.random()*100}%;top:${Math.random()*100}%;animation-duration:${Math.random()*4+2}s;animation-delay:${Math.random()*4}s;`;
+/* ===== STARS ===== */
+function makeStars(id,n){
+  const c=document.getElementById(id);if(!c)return;
+  for(let i=0;i<n;i++){
+    const s=document.createElement('div');s.className='star';
+    const sz=Math.random()*1.5+.5;
+    s.style.cssText=`width:${sz}px;height:${sz}px;left:${Math.random()*100}%;top:${Math.random()*100}%;animation-duration:${2+Math.random()*3}s;animation-delay:${Math.random()*3}s;`;
     c.appendChild(s);
   }
 }
-for (let i=0;i<8;i++) createStars('sf'+i, 50);
+for(let i=0;i<8;i++)makeStars('st'+i,60);
 
-// ==================== PARTICLES ====================
-function createParticles(id, count) {
-  const c = document.getElementById(id); if (!c) return;
-  const colors = ['#FFE600','#3483FA','#00A650','#7B61FF','#FF6B35','#F23D4F'];
-  for (let i = 0; i < count; i++) {
-    const p = document.createElement('div'); p.className = 'particle';
-    const size = Math.random()*4+2;
-    p.style.cssText = `width:${size}px;height:${size}px;left:${Math.random()*100}%;background:${colors[i%colors.length]};animation-duration:${Math.random()*20+14}s;animation-delay:${Math.random()*14}s;`;
-    c.appendChild(p);
+/* ===== MOTES — small particles at EDGES only ===== */
+function makeMotes(id,n){
+  const c=document.getElementById(id);if(!c)return;
+  const colors=['#FFE600','#3483FA','#00A650','#7B61FF','#FF6B35'];
+  for(let i=0;i<n;i++){
+    const m=document.createElement('div');m.className='mote';
+    const sz=Math.random()*3+1;
+    // Only at edges: left 0-15% or right 85-100%
+    const left=Math.random()>.5?Math.random()*15:85+Math.random()*15;
+    m.style.cssText=`width:${sz}px;height:${sz}px;left:${left}%;bottom:-10px;background:${colors[i%colors.length]};animation-duration:${18+Math.random()*16}s;animation-delay:${Math.random()*16}s;`;
+    c.appendChild(m);
   }
 }
-createParticles('p0',30);createParticles('p4',22);createParticles('p6',25);createParticles('p7',32);
+makeMotes('mo0',14);makeMotes('mo1',10);makeMotes('mo3',10);
+makeMotes('mo4',12);makeMotes('mo6',10);makeMotes('mo7',14);
 
-// ==================== CONFETTI ====================
-function createConfetti(id) {
-  const c = document.getElementById(id); if (!c) return;
-  const colors = ['#FFE600','#3483FA','#00A650','#7B61FF','#FF6B35','#F23D4F','#fff'];
-  for (let i = 0; i < 50; i++) {
-    const el = document.createElement('div'); el.className = 'confetti';
-    const size = Math.random()*7+3; const isCircle = Math.random()>.5;
-    el.style.cssText = `left:${Math.random()*100}%;width:${size}px;height:${isCircle?size:size*2.5}px;background:${colors[i%colors.length]};border-radius:${isCircle?'50%':'2px'};animation-duration:${Math.random()*6+4}s;animation-delay:${Math.random()*12}s;`;
-    c.appendChild(el);
-  }
-}
-createConfetti('cf0');createConfetti('cf7');
-
-// ==================== FLOATING HEARTS ====================
-function createHearts(id) {
-  const c = document.getElementById(id); if (!c) return;
-  const h = ['💛','💙','💚','💜','🧡','✨','⭐','🌟','🚀','🔥','🏆','💡'];
-  for (let i = 0; i < 16; i++) {
-    const el = document.createElement('div'); el.className = 'float-heart';
-    el.textContent = h[i%h.length];
-    el.style.cssText = `left:${Math.random()*100}%;font-size:${Math.random()*14+12}px;animation-duration:${Math.random()*14+8}s;animation-delay:${Math.random()*12}s;`;
-    c.appendChild(el);
-  }
-}
-createHearts('h1');createHearts('h2');createHearts('h7');
-
-// ==================== LIGHT BEAMS ====================
-function createBeams(id) {
-  const c = document.getElementById(id); if (!c) return;
-  for (let i = 0; i < 8; i++) {
-    const b = document.createElement('div'); b.className = 'beam';
-    b.style.cssText = `left:${10+Math.random()*80}%;animation-delay:${Math.random()*8}s;animation-duration:${6+Math.random()*6}s;opacity:.5;`;
-    c.appendChild(b);
-  }
-}
-createBeams('lb1');createBeams('lb5');
-
-// ==================== COUNTERS ====================
-let countersAnimated = false;
-function animateCounters() {
-  if (countersAnimated) return; countersAnimated = true;
-  document.querySelectorAll('.impact-number[data-count]').forEach(el => {
-    const target = parseInt(el.dataset.count);
-    if (el.dataset.symbol) return;
-    const prefix = el.dataset.prefix || '';
-    const dur = 2200; const start = performance.now();
-    function upd(now) {
-      const elapsed = now - start;
-      const p = Math.min(elapsed / dur, 1);
-      const c4 = (2*Math.PI)/3;
-      const e = p===0?0:p===1?1:Math.pow(2,-10*p)*Math.sin((p*10-.75)*c4)+1;
-      el.textContent = prefix + Math.round(target * e);
-      if (p<1) requestAnimationFrame(upd);
-      else el.textContent = prefix + target;
-    }
-    requestAnimationFrame(upd);
+/* ===== COUNTERS ===== */
+let counted=false;
+function counters(){
+  if(counted)return;counted=true;
+  document.querySelectorAll('.imp-num[data-count]').forEach(el=>{
+    const t=+el.dataset.count,pre=el.dataset.pre||'';
+    const dur=2000,st=performance.now();
+    (function up(now){
+      const p=Math.min((now-st)/dur,1);
+      const e=1-Math.pow(1-p,4);// ease out quart
+      el.textContent=pre+Math.round(t*e);
+      if(p<1)requestAnimationFrame(up);else el.textContent=pre+t;
+    })(st);
   });
 }
 
-// ==================== REVEAL OBSERVER ====================
-const obs = new IntersectionObserver(entries => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-      if (entry.target.closest('#slide-6')) setTimeout(animateCounters, 300);
+/* ===== REVEAL OBSERVER ===== */
+const obs=new IntersectionObserver(ents=>{
+  ents.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.classList.add('vis');
+      if(e.target.closest('#slide-6'))setTimeout(counters,300);
     }
   });
-}, {threshold:.12, rootMargin:'0px 0px -40px 0px'});
-document.querySelectorAll('.reveal,.reveal-scale').forEach(el => obs.observe(el));
+},{threshold:.1,rootMargin:'0px 0px -30px 0px'});
+document.querySelectorAll('.rv,.rv-s').forEach(el=>obs.observe(el));
 
-// ==================== NAVIGATION ====================
-const slides = document.querySelectorAll('.slide');
-const dots = document.querySelectorAll('.nav-dot');
+/* ===== NAVIGATION ===== */
+const slides=document.querySelectorAll('.slide');
+const dots=document.querySelectorAll('.nav-dot');
 
-function updateNav() {
-  const sp = window.scrollY + window.innerHeight/2;
-  let cur = 0;
-  slides.forEach((s,i) => { if (sp >= s.offsetTop) cur = i; });
-  dots.forEach((d,i) => d.classList.toggle('active', i===cur));
-  const total = document.body.scrollHeight - window.innerHeight;
-  document.getElementById('progressBar').style.width = (total>0?(window.scrollY/total)*100:0)+'%';
+function updNav(){
+  const sp=window.scrollY+window.innerHeight/2;
+  let cur=0;slides.forEach((s,i)=>{if(sp>=s.offsetTop)cur=i;});
+  dots.forEach((d,i)=>d.classList.toggle('active',i===cur));
+  const total=document.body.scrollHeight-window.innerHeight;
+  document.getElementById('progressBar').style.width=(total>0?(window.scrollY/total)*100:0)+'%';
 }
 
-dots.forEach(dot => {
-  dot.addEventListener('click', () => {
-    const idx = parseInt(dot.dataset.slide);
-    if (slides[idx]) slides[idx].scrollIntoView({behavior:'smooth'});
-  });
-});
+dots.forEach(d=>d.addEventListener('click',()=>{
+  const i=+d.dataset.slide;if(slides[i])slides[i].scrollIntoView({behavior:'smooth'});
+}));
 
-document.getElementById('prevBtn').addEventListener('click', () => {
-  const c = Math.round(window.scrollY/window.innerHeight);
-  if (c>0) slides[c-1].scrollIntoView({behavior:'smooth'});
+document.getElementById('prevBtn').addEventListener('click',()=>{
+  const c=Math.round(window.scrollY/window.innerHeight);
+  if(c>0)slides[c-1].scrollIntoView({behavior:'smooth'});
 });
-document.getElementById('nextBtn').addEventListener('click', () => {
-  const c = Math.round(window.scrollY/window.innerHeight);
-  if (c<slides.length-1) slides[c+1].scrollIntoView({behavior:'smooth'});
+document.getElementById('nextBtn').addEventListener('click',()=>{
+  const c=Math.round(window.scrollY/window.innerHeight);
+  if(c<slides.length-1)slides[c+1].scrollIntoView({behavior:'smooth'});
 });
-
-document.addEventListener('keydown', e => {
-  const c = Math.round(window.scrollY/window.innerHeight);
-  if (e.key==='ArrowDown'||e.key===' '){e.preventDefault();if(c<slides.length-1)slides[c+1].scrollIntoView({behavior:'smooth'});}
-  if (e.key==='ArrowUp'){e.preventDefault();if(c>0)slides[c-1].scrollIntoView({behavior:'smooth'});}
+document.addEventListener('keydown',e=>{
+  const c=Math.round(window.scrollY/window.innerHeight);
+  if(e.key==='ArrowDown'||e.key===' '){e.preventDefault();if(c<slides.length-1)slides[c+1].scrollIntoView({behavior:'smooth'});}
+  if(e.key==='ArrowUp'){e.preventDefault();if(c>0)slides[c-1].scrollIntoView({behavior:'smooth'});}
 });
+window.addEventListener('scroll',updNav,{passive:true});
+updNav();
 
-window.addEventListener('scroll', updateNav, {passive:true});
-
-// ==================== PARALLAX ORBS ====================
-document.addEventListener('mousemove', e => {
-  const x = (e.clientX/window.innerWidth-.5)*18;
-  const y = (e.clientY/window.innerHeight-.5)*18;
-  document.querySelectorAll('.orb').forEach(o => {o.style.transform=`translate(${x}px,${y}px)`;});
-});
-
-updateNav();
 })();
 </script>
 </body>

@@ -1,1226 +1,959 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Iniciativa: Referentes de Métricas - Publicaciones Mature</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.2.1/dist/reveal.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.2.1/dist/theme/black.css" id="theme">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --meli-yellow: #FFE600;
-            --meli-blue: #3483FA;
-            --meli-dark: #1A1A2E;
-            --meli-darker: #0F0F1A;
-            --accent-green: #00E676;
-            --accent-red: #FF5252;
-            --accent-orange: #FFAB40;
-            --accent-purple: #B388FF;
-            --accent-cyan: #18FFFF;
-            --text-light: #E8E8F0;
-            --text-muted: #A0A0B8;
-        }
-
-        .reveal {
-            font-family: 'Inter', sans-serif;
-        }
-
-        .reveal .slides {
-            text-align: left;
-        }
-
-        .reveal .slides section {
-            padding: 30px 50px;
-        }
-
-        /* ====== SLIDE 1: PORTADA ====== */
-        .slide-cover {
-            display: flex !important;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center !important;
-            background: radial-gradient(ellipse at 30% 50%, rgba(52, 131, 250, 0.15) 0%, transparent 60%),
-                        radial-gradient(ellipse at 70% 80%, rgba(255, 230, 0, 0.08) 0%, transparent 50%),
-                        var(--meli-darker);
-        }
-
-        .slide-cover .badge {
-            display: inline-block;
-            background: linear-gradient(135deg, var(--meli-blue), #6C63FF);
-            color: white;
-            padding: 8px 24px;
-            border-radius: 50px;
-            font-size: 0.55em;
-            font-weight: 600;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            margin-bottom: 25px;
-        }
-
-        .slide-cover h1 {
-            font-size: 2.2em !important;
-            font-weight: 900 !important;
-            line-height: 1.15 !important;
-            margin-bottom: 10px !important;
-            background: linear-gradient(135deg, #FFFFFF 0%, var(--meli-yellow) 50%, var(--accent-cyan) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .slide-cover .subtitle {
-            font-size: 0.85em;
-            color: var(--text-muted);
-            font-weight: 300;
-            margin-bottom: 40px;
-            max-width: 700px;
-        }
-
-        .cover-metrics {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .cover-metrics .metric-pill {
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 8px 18px;
-            border-radius: 25px;
-            font-size: 0.5em;
-            color: var(--text-light);
-            font-weight: 500;
-            backdrop-filter: blur(10px);
-        }
-
-        .cover-footer {
-            margin-top: 40px;
-            font-size: 0.45em;
-            color: var(--text-muted);
-        }
-
-        /* ====== HEADERS GENERALES ====== */
-        .slide-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 25px;
-        }
-
-        .slide-header .icon {
-            width: 45px;
-            height: 45px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2em;
-        }
-
-        .slide-header h2 {
-            font-size: 1.5em !important;
-            font-weight: 800 !important;
-            margin: 0 !important;
-            color: white !important;
-        }
-
-        .slide-header .tag {
-            font-size: 0.4em;
-            background: rgba(255, 255, 255, 0.08);
-            padding: 4px 12px;
-            border-radius: 20px;
-            color: var(--text-muted);
-            font-weight: 500;
-        }
-
-        /* ====== CARDS GRID ====== */
-        .cards-grid {
-            display: grid;
-            gap: 16px;
-        }
-
-        .cards-grid.cols-2 {
-            grid-template-columns: 1fr 1fr;
-        }
-
-        .cards-grid.cols-3 {
-            grid-template-columns: 1fr 1fr 1fr;
-        }
-
-        .card {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 16px;
-            padding: 22px;
-            transition: all 0.3s ease;
-        }
-
-        .card:hover {
-            border-color: rgba(52, 131, 250, 0.3);
-            transform: translateY(-2px);
-        }
-
-        .card .card-icon {
-            font-size: 1.5em;
-            margin-bottom: 10px;
-        }
-
-        .card h3 {
-            font-size: 0.7em !important;
-            font-weight: 700 !important;
-            color: white !important;
-            margin: 0 0 8px 0 !important;
-        }
-
-        .card p, .card li {
-            font-size: 0.5em !important;
-            color: var(--text-muted) !important;
-            line-height: 1.6 !important;
-            margin: 0 !important;
-        }
-
-        .card ul {
-            padding-left: 15px !important;
-            margin: 5px 0 0 0 !important;
-        }
-
-        .card .highlight {
-            color: var(--meli-yellow) !important;
-            font-weight: 600;
-        }
-
-        .card .highlight-blue {
-            color: var(--meli-blue) !important;
-            font-weight: 600;
-        }
-
-        .card .highlight-green {
-            color: var(--accent-green) !important;
-            font-weight: 600;
-        }
-
-        /* ====== STAT CARDS ====== */
-        .stat-card {
-            text-align: center;
-            padding: 20px;
-        }
-
-        .stat-card .stat-number {
-            font-size: 2em;
-            font-weight: 900;
-            margin-bottom: 5px;
-        }
-
-        .stat-card .stat-label {
-            font-size: 0.5em !important;
-            color: var(--text-muted) !important;
-            font-weight: 400;
-        }
-
-        /* ====== TIMELINE ====== */
-        .timeline {
-            position: relative;
-            padding-left: 30px;
-        }
-
-        .timeline::before {
-            content: '';
-            position: absolute;
-            left: 8px;
-            top: 0;
-            bottom: 0;
-            width: 2px;
-            background: linear-gradient(to bottom, var(--meli-blue), var(--meli-yellow), var(--accent-green));
-        }
-
-        .timeline-item {
-            position: relative;
-            margin-bottom: 20px;
-            padding-left: 20px;
-        }
-
-        .timeline-item::before {
-            content: '';
-            position: absolute;
-            left: -26px;
-            top: 5px;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: var(--meli-blue);
-            border: 2px solid var(--meli-darker);
-        }
-
-        .timeline-item h4 {
-            font-size: 0.65em !important;
-            font-weight: 700 !important;
-            color: white !important;
-            margin: 0 0 5px 0 !important;
-        }
-
-        .timeline-item p {
-            font-size: 0.48em !important;
-            color: var(--text-muted) !important;
-            line-height: 1.5 !important;
-            margin: 0 !important;
-        }
-
-        /* ====== METRIC SECTION ====== */
-        .metric-header {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 15px 20px;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 14px;
-            margin-bottom: 20px;
-            border-left: 4px solid;
-        }
-
-        .metric-header .metric-emoji {
-            font-size: 1.8em;
-        }
-
-        .metric-header h2 {
-            font-size: 1.3em !important;
-            font-weight: 800 !important;
-            margin: 0 !important;
-        }
-
-        .metric-header .metric-desc {
-            font-size: 0.5em;
-            color: var(--text-muted);
-            margin-top: 3px;
-        }
-
-        /* ====== TABLE STYLES ====== */
-        .styled-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.48em;
-            margin-top: 15px;
-        }
-
-        .styled-table th {
-            background: rgba(52, 131, 250, 0.15);
-            color: var(--meli-blue);
-            padding: 10px 15px;
-            text-align: left;
-            font-weight: 700;
-            border-bottom: 2px solid rgba(52, 131, 250, 0.3);
-        }
-
-        .styled-table td {
-            padding: 10px 15px;
-            color: var(--text-light);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .styled-table tr:hover td {
-            background: rgba(255, 255, 255, 0.03);
-        }
-
-        /* ====== PROCESO VISUAL ====== */
-        .process-flow {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            flex-wrap: wrap;
-            margin: 15px 0;
-        }
-
-        .process-step {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: 12px 18px;
-            text-align: center;
-            min-width: 120px;
-        }
-
-        .process-step .step-num {
-            font-size: 0.45em;
-            color: var(--meli-blue);
-            font-weight: 700;
-            margin-bottom: 4px;
-        }
-
-        .process-step .step-text {
-            font-size: 0.5em;
-            color: white;
-            font-weight: 600;
-        }
-
-        .process-arrow {
-            font-size: 0.8em;
-            color: var(--meli-yellow);
-        }
-
-        /* ====== BENEFIT BAR ====== */
-        .benefit-bar {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 18px;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 10px;
-            margin-bottom: 10px;
-            border-left: 3px solid var(--accent-green);
-        }
-
-        .benefit-bar .benefit-icon {
-            font-size: 1em;
-        }
-
-        .benefit-bar .benefit-text {
-            font-size: 0.52em;
-            color: var(--text-light);
-            font-weight: 500;
-        }
-
-        /* ====== QUOTE ====== */
-        .big-quote {
-            text-align: center !important;
-            padding: 40px !important;
-        }
-
-        .big-quote blockquote {
-            border: none;
-            background: none;
-            box-shadow: none;
-            font-size: 1.3em;
-            font-weight: 300;
-            color: var(--text-light);
-            line-height: 1.5;
-            font-style: italic;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .big-quote blockquote span {
-            color: var(--meli-yellow);
-            font-weight: 700;
-        }
-
-        /* ====== ROLES VISUAL ====== */
-        .role-card {
-            display: flex;
-            align-items: flex-start;
-            gap: 15px;
-            padding: 18px;
-            background: rgba(255, 255, 255, 0.04);
-            border-radius: 14px;
-            margin-bottom: 12px;
-        }
-
-        .role-card .role-badge {
-            min-width: 45px;
-            height: 45px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.55em;
-            font-weight: 800;
-            color: white;
-        }
-
-        .role-card h4 {
-            font-size: 0.65em !important;
-            font-weight: 700 !important;
-            color: white !important;
-            margin: 0 0 5px 0 !important;
-        }
-
-        .role-card p {
-            font-size: 0.48em !important;
-            color: var(--text-muted) !important;
-            margin: 0 !important;
-            line-height: 1.5 !important;
-        }
-
-        /* ====== INSIGHT BOX ====== */
-        .insight-box {
-            background: linear-gradient(135deg, rgba(255, 230, 0, 0.08), rgba(52, 131, 250, 0.08));
-            border: 1px solid rgba(255, 230, 0, 0.2);
-            border-radius: 14px;
-            padding: 18px;
-            margin-top: 15px;
-        }
-
-        .insight-box .insight-label {
-            font-size: 0.45em;
-            color: var(--meli-yellow);
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            margin-bottom: 6px;
-        }
-
-        .insight-box p {
-            font-size: 0.52em !important;
-            color: var(--text-light) !important;
-            margin: 0 !important;
-            line-height: 1.6 !important;
-        }
-
-        /* ====== CIERRE ====== */
-        .slide-closing {
-            text-align: center !important;
-            display: flex !important;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .slide-closing h2 {
-            font-size: 2em !important;
-            font-weight: 900 !important;
-            background: linear-gradient(135deg, var(--meli-yellow), var(--accent-cyan));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .closing-pillars {
-            display: flex;
-            gap: 30px;
-            margin-top: 30px;
-        }
-
-        .closing-pillar {
-            text-align: center;
-        }
-
-        .closing-pillar .pillar-icon {
-            font-size: 2em;
-            margin-bottom: 10px;
-        }
-
-        .closing-pillar h4 {
-            font-size: 0.6em !important;
-            color: white !important;
-            font-weight: 700 !important;
-            margin: 0 !important;
-        }
-
-        .closing-pillar p {
-            font-size: 0.45em !important;
-            color: var(--text-muted) !important;
-            margin-top: 5px !important;
-        }
-
-        /* Fragments custom */
-        .reveal .slides section .fragment.fade-up {
-            transform: translateY(20px);
-        }
-
-        /* Color accents para metric headers */
-        .border-blue { border-left-color: var(--meli-blue) !important; }
-        .border-yellow { border-left-color: var(--meli-yellow) !important; }
-        .border-green { border-left-color: var(--accent-green) !important; }
-        .border-purple { border-left-color: var(--accent-purple) !important; }
-        .border-cyan { border-left-color: var(--accent-cyan) !important; }
-        .border-orange { border-left-color: var(--accent-orange) !important; }
-
-        .text-yellow { color: var(--meli-yellow) !important; }
-        .text-blue { color: var(--meli-blue) !important; }
-        .text-green { color: var(--accent-green) !important; }
-        .text-red { color: var(--accent-red) !important; }
-        .text-purple { color: var(--accent-purple) !important; }
-        .text-cyan { color: var(--accent-cyan) !important; }
-
-        .bg-blue { background: var(--meli-blue) !important; }
-        .bg-yellow { background: var(--meli-yellow) !important; color: #1A1A2E !important; }
-        .bg-green { background: var(--accent-green) !important; color: #1A1A2E !important; }
-        .bg-purple { background: var(--accent-purple) !important; }
-        .bg-cyan { background: var(--accent-cyan) !important; color: #1A1A2E !important; }
-        .bg-orange { background: var(--accent-orange) !important; color: #1A1A2E !important; }
-
-        .small-text {
-            font-size: 0.48em !important;
-            color: var(--text-muted) !important;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Iniciativa: Referentes de Métricas · Publicaciones Mature</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-snap-type: y mandatory; overflow-x: hidden; }
+body { font-family: 'Inter', sans-serif; background: #050510; color: white; overflow-x: hidden; }
+
+/* ==================== SLIDES ==================== */
+.slide {
+  min-height: 100vh; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 60px 40px; position: relative;
+  scroll-snap-align: start; overflow: hidden;
+}
+.slide::before {
+  content: ''; position: absolute; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 0;
+}
+.slide > * { position: relative;  }
+
+/* ==================== NAV ==================== */
+.nav-dots {
+  position: fixed; right: 20px; top: 50%; transform: translateY(-50%);
+  display: flex; flex-direction: column; gap: 8px; z-index: 1000;
+}
+.nav-dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  background: rgba(255,255,255,0.12); border: 2px solid rgba(255,255,255,0.15);
+  cursor: pointer; transition: all 0.4s cubic-bezier(0.175,0.885,0.32,1.275);
+}
+.nav-dot:hover, .nav-dot.active {
+  background: #FFE600; border-color: #FFE600;
+  transform: scale(1.5); box-shadow: 0 0 15px rgba(255,230,0,0.4);
+}
+.nav-dot::after {
+  content: attr(data-label);
+  position: absolute; right: 24px; top: 50%; transform: translateY(-50%);
+  background: rgba(0,0,0,0.9); backdrop-filter: blur(10px);
+  color: white; padding: 6px 14px; border-radius: 8px;
+  font-size: 11px; font-weight: 700; white-space: nowrap;
+  opacity: 0; pointer-events: none; transition: opacity 0.3s;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.nav-dot:hover::after { opacity: 1; }
+
+.nav-arrows {
+  position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%);
+  display: flex; gap: 10px; z-index: 1000;
+}
+.nav-arrow {
+  width: 44px; height: 44px; border-radius: 50%;
+  background: rgba(255,255,255,0.05); backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.08); color: white;
+  font-size: 18px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.4s cubic-bezier(0.175,0.885,0.32,1.275);
+}
+.nav-arrow:hover {
+  background: #FFE600; color: #333; border-color: #FFE600;
+  transform: scale(1.15); box-shadow: 0 0 25px rgba(255,230,0,0.3);
+}
+
+.progress-bar-top {
+  position: fixed; top: 0; left: 0; height: 3px;
+  background: linear-gradient(90deg, #FFE600, #3483FA, #00A650, #7B61FF);
+  z-index: 2000; transition: width 0.3s;
+  box-shadow: 0 0 15px rgba(255,230,0,0.5);
+}
+
+/* ==================== AMBIENT ==================== */
+.particles { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.particle {
+  position: absolute; border-radius: 50%;
+  animation: float linear infinite; opacity: 0;
+}
+@keyframes float {
+  0% { transform: translateY(100vh) rotate(0deg) scale(0); opacity: 0; }
+  8% { opacity: 0.5; transform: translateY(92vh) rotate(57deg) scale(1); }
+  92% { opacity: 0.3; }
+  100% { transform: translateY(-10vh) rotate(720deg) scale(0.3); opacity: 0; }
+}
+
+.orb {
+  position: absolute; border-radius: 50%;
+  filter: blur(100px); opacity: 0.12; pointer-events: none;
+  animation: orbDrift 25s ease-in-out infinite;
+}
+@keyframes orbDrift {
+  0%, 100% { transform: translate(0,0) scale(1); }
+  25% { transform: translate(40px,-50px) scale(1.15); }
+  50% { transform: translate(-30px,30px) scale(0.9); }
+  75% { transform: translate(50px,40px) scale(1.08); }
+}
+
+.glow-ring {
+  position: absolute; border-radius: 50%;
+  border: 1px solid rgba(52,131,250,0.05);
+  top: 50%; left: 50%; transform: translate(-50%, -50%);
+  animation: ringPulse 7s ease-in-out infinite; pointer-events: none;
+}
+.glow-ring:nth-child(1) { width: 350px; height: 350px; }
+.glow-ring:nth-child(2) { width: 550px; height: 550px; animation-delay: 1.5s; border-color: rgba(255,230,0,0.03); }
+.glow-ring:nth-child(3) { width: 750px; height: 750px; animation-delay: 3s; }
+@keyframes ringPulse { 0%, 100% { opacity: 0.3; transform: translate(-50%,-50%) scale(1); } 50% { opacity: 0.6; transform: translate(-50%,-50%) scale(1.04); } }
+
+.morph-blob {
+  position: absolute; width: 300px; height: 300px;
+  border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+  animation: morphBlob 15s ease-in-out infinite;
+  pointer-events: none; opacity: 0.06;
+}
+@keyframes morphBlob {
+  0% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+  25% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
+  50% { border-radius: 50% 60% 30% 70% / 40% 70% 60% 30%; }
+  75% { border-radius: 40% 30% 60% 50% / 70% 40% 50% 60%; }
+  100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+}
+
+.shooting-star {
+  position: absolute; width: 100px; height: 1px;
+  background: linear-gradient(90deg, rgba(255,230,0,0), rgba(255,230,0,0.8), rgba(255,230,0,0));
+  animation: shoot 3s linear infinite; opacity: 0; pointer-events: none;
+}
+@keyframes shoot {
+  0% { transform: translateX(-200px) translateY(0) rotate(-35deg); opacity: 0; }
+  5% { opacity: 1; } 30% { opacity: 0; }
+  100% { transform: translateX(calc(100vw + 200px)) translateY(300px) rotate(-35deg); opacity: 0; }
+}
+
+.floating-hearts { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.float-heart {
+  position: absolute; font-size: 20px;
+  animation: heartRise linear infinite; opacity: 0;
+}
+@keyframes heartRise {
+  0% { transform: translateY(100vh) scale(0) rotate(0); opacity: 0; }
+  10% { opacity: 0.6; transform: translateY(90vh) scale(1) rotate(20deg); }
+  50% { transform: translateY(50vh) scale(1.2) rotate(-10deg); opacity: 0.4; }
+  90% { opacity: 0.1; }
+  100% { transform: translateY(-10vh) scale(0.8) rotate(30deg); opacity: 0; }
+}
+
+.confetti-container { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.confetti { position: absolute; top: -20px; animation: confettiFall linear infinite; }
+@keyframes confettiFall {
+  0% { transform: translateY(-20px) rotateX(0) rotateZ(0); opacity: 1; }
+  100% { transform: translateY(100vh) rotateX(1080deg) rotateZ(540deg); opacity: 0; }
+}
+
+.magnetic { transition: transform 0.3s cubic-bezier(0.175,0.885,0.32,1.275); }
+.magnetic:hover { transform: translateY(-8px) scale(1.03); }
+
+/* ==================== REVEAL ANIMATIONS ==================== */
+.reveal { opacity: 0; transform: translateY(50px); transition: all 1s cubic-bezier(0.25,0.46,0.45,0.94); }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal-scale { opacity: 0; transform: scale(0.85); transition: all 1s cubic-bezier(0.25,0.46,0.45,0.94); }
+.reveal-scale.visible { opacity: 1; transform: scale(1); }
+.s1{transition-delay:.1s}.s2{transition-delay:.2s}.s3{transition-delay:.3s}
+.s4{transition-delay:.4s}.s5{transition-delay:.5s}.s6{transition-delay:.6s}
+
+/* ==================== SLIDE 1: PORTADA ==================== */
+.slide-portada {
+  background: radial-gradient(ellipse at 25% 50%, rgba(52,131,250,0.07) 0%, transparent 50%),
+              radial-gradient(ellipse at 75% 50%, rgba(255,230,0,0.05) 0%, transparent 50%),
+              radial-gradient(ellipse at 50% 80%, rgba(123,97,255,0.04) 0%, transparent 40%), #050510;
+}
+.portada-content { text-align: center; }
+.portada-badge-top {
+  display: inline-block; padding: 8px 28px;
+  background: rgba(255,230,0,0.06); border: 1px solid rgba(255,230,0,0.15);
+  border-radius: 50px; font-size: 13px; font-weight: 800;
+  color: #FFE600; letter-spacing: 4px; margin-bottom: 28px;
+  animation: fadeSlideDown 1s 0.2s backwards;
+}
+@keyframes fadeSlideDown { from { opacity: 0; transform: translateY(-30px) scale(0.9); } }
+.portada-emoji {
+  font-size: 70px; display: block; margin-bottom: 20px;
+  animation: emojiEntrance 1s 0.5s backwards;
+}
+@keyframes emojiEntrance { from { opacity: 0; transform: scale(0) rotate(-180deg); } to { opacity: 1; transform: scale(1) rotate(0); } }
+.portada-title {
+  font-size: clamp(38px, 7vw, 80px); font-weight: 900;
+  line-height: 1.05; margin-bottom: 24px; letter-spacing: -3px;
+  animation: titleReveal 1.2s 0.7s backwards;
+}
+@keyframes titleReveal { from { opacity: 0; transform: translateY(50px); filter: blur(10px); } to { opacity: 1; transform: translateY(0); filter: blur(0); } }
+.portada-title .yellow { color: #FFE600; text-shadow: 0 0 60px rgba(255,230,0,0.15); }
+.portada-title .blue { color: #3483FA; text-shadow: 0 0 60px rgba(52,131,250,0.15); }
+.portada-subtitle {
+  font-size: clamp(14px, 1.8vw, 20px); color: rgba(255,255,255,0.35);
+  font-weight: 400; margin-bottom: 44px; max-width: 650px;
+  margin-left: auto; margin-right: auto;
+  animation: titleReveal 1s 1s backwards; line-height: 1.6;
+}
+.portada-pills {
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;
+  animation: titleReveal 1s 1.3s backwards;
+}
+.portada-pill {
+  padding: 10px 20px; border-radius: 50px; font-weight: 700; font-size: 13px;
+  display: flex; align-items: center; gap: 8px; backdrop-filter: blur(10px);
+  transition: all 0.4s cubic-bezier(0.175,0.885,0.32,1.275);
+}
+.portada-pill:hover { transform: translateY(-4px) scale(1.05); }
+.pp1 { background: rgba(255,230,0,0.06); color: #FFE600; border: 1px solid rgba(255,230,0,0.15); }
+.pp2 { background: rgba(52,131,250,0.06); color: #3483FA; border: 1px solid rgba(52,131,250,0.15); }
+.pp3 { background: rgba(0,166,80,0.06); color: #00A650; border: 1px solid rgba(0,166,80,0.15); }
+.pp4 { background: rgba(255,107,53,0.06); color: #FF6B35; border: 1px solid rgba(255,107,53,0.15); }
+.pp5 { background: rgba(123,97,255,0.06); color: #7B61FF; border: 1px solid rgba(123,97,255,0.15); }
+
+.portada-scroll-hint {
+  position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  animation: fadeSlideDown 1s 2s backwards;
+}
+.scroll-mouse {
+  width: 24px; height: 38px; border: 2px solid rgba(255,255,255,0.2); border-radius: 12px; position: relative;
+}
+.scroll-mouse::after {
+  content: ''; position: absolute; top: 6px; left: 50%; transform: translateX(-50%);
+  width: 3px; height: 8px; background: #FFE600; border-radius: 3px;
+  animation: scrollWheel 2s ease-in-out infinite;
+}
+@keyframes scrollWheel { 0% { transform: translateX(-50%) translateY(0); opacity: 1; } 100% { transform: translateX(-50%) translateY(14px); opacity: 0; } }
+.scroll-text { font-size: 10px; color: rgba(255,255,255,0.2); font-weight: 700; letter-spacing: 2px; }
+
+/* ==================== SLIDE 2: LA REALIDAD ==================== */
+.slide-realidad {
+  background: radial-gradient(ellipse at 50% 50%, rgba(242,61,79,0.04) 0%, transparent 50%), #050510;
+}
+.realidad-content { text-align: center; max-width: 900px; }
+.realidad-title {
+  font-size: clamp(26px, 4vw, 50px); font-weight: 900;
+  line-height: 1.2; margin-bottom: 20px; letter-spacing: -1.5px;
+}
+.realidad-title .red { color: #F23D4F; text-shadow: 0 0 30px rgba(242,61,79,0.15); }
+.realidad-sub {
+  font-size: clamp(14px, 1.6vw, 18px); color: rgba(255,255,255,0.35);
+  line-height: 1.8; margin-bottom: 40px;
+}
+
+.dolor-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px; max-width: 1000px; width: 100%;
+}
+.dolor-card {
+  background: rgba(255,255,255,0.015); border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 20px; padding: 28px 22px; text-align: center;
+  transition: all 0.5s cubic-bezier(0.175,0.885,0.32,1.275);
+  backdrop-filter: blur(10px); position: relative; overflow: hidden;
+}
+.dolor-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(242,61,79,0.4), transparent);
+  opacity: 0; transition: opacity 0.4s;
+}
+.dolor-card:hover { transform: translateY(-10px); border-color: rgba(242,61,79,0.2); background: rgba(242,61,79,0.02); }
+.dolor-card:hover::before { opacity: 1; }
+.dolor-icon { font-size: 38px; margin-bottom: 14px; display: block; }
+.dolor-text { font-weight: 600; font-size: 13px; line-height: 1.7; color: rgba(255,255,255,0.55); }
+.dolor-text .highlight { color: #F23D4F; font-weight: 800; }
+
+/* ==================== SLIDE 3: LA PROPUESTA ==================== */
+.slide-propuesta {
+  background: radial-gradient(ellipse at 50% 40%, rgba(0,166,80,0.06) 0%, transparent 50%),
+              radial-gradient(ellipse at 30% 70%, rgba(255,230,0,0.03) 0%, transparent 40%), #050510;
+}
+.propuesta-content { text-align: center; max-width: 1000px; }
+.propuesta-icon { font-size: 80px; margin-bottom: 24px; display: block; animation: emojiFloat 4s ease-in-out infinite; }
+@keyframes emojiFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+.propuesta-title {
+  font-size: clamp(28px, 4.5vw, 56px); font-weight: 900;
+  margin-bottom: 20px; letter-spacing: -2px;
+}
+.propuesta-title .green { color: #00A650; text-shadow: 0 0 40px rgba(0,166,80,0.15); }
+.propuesta-desc {
+  font-size: clamp(14px, 1.6vw, 18px); color: rgba(255,255,255,0.4);
+  max-width: 700px; margin: 0 auto 40px; line-height: 1.75;
+}
+
+.structure-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px; max-width: 900px; width: 100%; margin-top: 10px;
+}
+.structure-card {
+  padding: 24px; border-radius: 20px;
+  background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06);
+  backdrop-filter: blur(10px); text-align: left;
+  transition: all 0.5s cubic-bezier(0.175,0.885,0.32,1.275);
+}
+.structure-card:hover { transform: translateY(-6px); border-color: rgba(255,255,255,0.12); }
+.structure-card .sc-top { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+.structure-card .sc-badge {
+  width: 44px; height: 44px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; font-weight: 900; color: white;
+}
+.structure-card .sc-title { font-weight: 800; font-size: 15px; }
+.structure-card .sc-desc { font-size: 12.5px; color: rgba(255,255,255,0.4); line-height: 1.7; }
+
+/* ==================== SLIDE 4: LAS 5 MÉTRICAS ==================== */
+.slide-metricas {
+  background: radial-gradient(ellipse at 50% 50%, rgba(52,131,250,0.04) 0%, transparent 50%), #050510;
+}
+.section-title {
+  text-align: center; font-size: clamp(24px, 3.5vw, 44px);
+  font-weight: 900; margin-bottom: 14px; letter-spacing: -1.5px; line-height: 1.2;
+}
+.section-sub {
+  text-align: center; color: rgba(255,255,255,0.3); font-size: 15px;
+  margin-bottom: 40px; max-width: 600px; line-height: 1.6;
+}
+
+.metricas-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 14px; max-width: 1100px; width: 100%;
+}
+.metrica-card {
+  background: rgba(255,255,255,0.015); border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 20px; padding: 26px 20px; text-align: center;
+  position: relative; overflow: hidden;
+  transition: all 0.5s cubic-bezier(0.175,0.885,0.32,1.275);
+  backdrop-filter: blur(10px);
+}
+.metrica-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  border-radius: 20px 20px 0 0; opacity: 0.6;
+}
+.metrica-card:hover { background: rgba(255,255,255,0.03); transform: translateY(-8px); }
+.metrica-card:hover::before { opacity: 1; }
+.mc-yellow::before { background: linear-gradient(90deg, #FFE600, rgba(255,230,0,0.2)); }
+.mc-yellow:hover { border-color: rgba(255,230,0,0.2); box-shadow: 0 20px 50px rgba(255,230,0,0.04); }
+.mc-blue::before { background: linear-gradient(90deg, #3483FA, rgba(52,131,250,0.2)); }
+.mc-blue:hover { border-color: rgba(52,131,250,0.2); box-shadow: 0 20px 50px rgba(52,131,250,0.04); }
+.mc-green::before { background: linear-gradient(90deg, #00A650, rgba(0,166,80,0.2)); }
+.mc-green:hover { border-color: rgba(0,166,80,0.2); box-shadow: 0 20px 50px rgba(0,166,80,0.04); }
+.mc-orange::before { background: linear-gradient(90deg, #FF6B35, rgba(255,107,53,0.2)); }
+.mc-orange:hover { border-color: rgba(255,107,53,0.2); box-shadow: 0 20px 50px rgba(255,107,53,0.04); }
+.mc-purple::before { background: linear-gradient(90deg, #7B61FF, rgba(123,97,255,0.2)); }
+.mc-purple:hover { border-color: rgba(123,97,255,0.2); box-shadow: 0 20px 50px rgba(123,97,255,0.04); }
+
+.mc-emoji { font-size: 36px; margin-bottom: 12px; display: block; }
+.mc-name { font-weight: 800; font-size: 15px; margin-bottom: 8px; }
+.mc-insight { font-size: 11.5px; color: rgba(255,255,255,0.4); line-height: 1.65; }
+.mc-insight strong { font-weight: 700; }
+.mc-insight .y { color: #FFE600; } .mc-insight .b { color: #3483FA; }
+.mc-insight .g { color: #00A650; } .mc-insight .o { color: #FF6B35; }
+.mc-insight .p { color: #7B61FF; } .mc-insight .r { color: #F23D4F; }
+
+/* ==================== SLIDE 5: CÓMO FUNCIONA ==================== */
+.slide-como {
+  background: radial-gradient(ellipse at 30% 50%, rgba(52,131,250,0.05) 0%, transparent 50%),
+              radial-gradient(ellipse at 70% 50%, rgba(255,230,0,0.03) 0%, transparent 50%), #050510;
+}
+.flow-container { max-width: 1100px; width: 100%; }
+.arq-flow {
+  display: flex; align-items: flex-start; justify-content: center;
+  gap: 0; flex-wrap: wrap; margin-bottom: 40px;
+}
+.arq-step { text-align: center; padding: 16px; flex: 1; min-width: 155px; }
+.arq-circle {
+  width: 80px; height: 80px; border-radius: 20px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 32px; margin: 0 auto 12px;
+  transition: all 0.5s cubic-bezier(0.175,0.885,0.32,1.275);
+}
+.arq-circle.c1 { background: rgba(255,230,0,0.08); border: 1.5px solid rgba(255,230,0,0.25); }
+.arq-circle.c2 { background: rgba(52,131,250,0.08); border: 1.5px solid rgba(52,131,250,0.25); }
+.arq-circle.c3 { background: rgba(0,166,80,0.08); border: 1.5px solid rgba(0,166,80,0.25); }
+.arq-circle.c4 { background: rgba(123,97,255,0.08); border: 1.5px solid rgba(123,97,255,0.25); }
+.arq-label { font-weight: 800; font-size: 13px; margin-bottom: 4px; }
+.arq-sub { font-size: 11px; color: rgba(255,255,255,0.3); line-height: 1.5; max-width: 160px; margin: 0 auto; }
+.arq-arrow {
+  font-size: 22px; color: rgba(255,255,255,0.12);
+  animation: arrowPulse 2s ease-in-out infinite; flex-shrink: 0; margin-top: 28px;
+}
+@keyframes arrowPulse { 0%, 100% { opacity: 0.12; transform: translateX(0); } 50% { opacity: 0.4; transform: translateX(6px); } }
+
+.cadencia-row {
+  display: flex; justify-content: center; gap: 14px; flex-wrap: wrap;
+}
+.cadencia-card {
+  padding: 18px 24px; background: rgba(255,255,255,0.015);
+  border: 1px solid rgba(255,255,255,0.05); border-radius: 16px;
+  text-align: center; min-width: 140px; backdrop-filter: blur(10px);
+  transition: all 0.4s cubic-bezier(0.175,0.885,0.32,1.275);
+}
+.cadencia-card:hover { border-color: rgba(255,230,0,0.15); transform: translateY(-4px); }
+.cadencia-icon { font-size: 26px; margin-bottom: 8px; }
+.cadencia-label { font-weight: 800; font-size: 12px; margin-bottom: 3px; }
+.cadencia-desc { font-size: 10.5px; color: rgba(255,255,255,0.3); line-height: 1.5; }
+
+/* ==================== SLIDE 6: IMPACTO ==================== */
+.slide-impacto {
+  background: radial-gradient(ellipse at 30% 40%, rgba(0,166,80,0.05) 0%, transparent 50%),
+              radial-gradient(ellipse at 70% 60%, rgba(255,230,0,0.03) 0%, transparent 50%), #050510;
+}
+.impacto-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 18px; max-width: 1000px; width: 100%; margin-bottom: 36px;
+}
+.impacto-card {
+  text-align: center; padding: 30px 20px; border-radius: 24px;
+  background: rgba(255,255,255,0.015); border: 1px solid rgba(255,255,255,0.05);
+  transition: all 0.5s cubic-bezier(0.175,0.885,0.32,1.275);
+  backdrop-filter: blur(10px); position: relative; overflow: hidden;
+}
+.impacto-card::before {
+  content: ''; position: absolute; inset: 0; border-radius: 24px;
+  opacity: 0; transition: opacity 0.4s;
+}
+.impacto-card:hover::before { opacity: 1; }
+.impacto-card.ic1::before { background: radial-gradient(ellipse at center, rgba(255,230,0,0.04), transparent 70%); }
+.impacto-card.ic1:hover { border-color: rgba(255,230,0,0.25); }
+.impacto-card.ic2::before { background: radial-gradient(ellipse at center, rgba(52,131,250,0.04), transparent 70%); }
+.impacto-card.ic2:hover { border-color: rgba(52,131,250,0.25); }
+.impacto-card.ic3::before { background: radial-gradient(ellipse at center, rgba(0,166,80,0.04), transparent 70%); }
+.impacto-card.ic3:hover { border-color: rgba(0,166,80,0.25); }
+.impacto-card.ic4::before { background: radial-gradient(ellipse at center, rgba(123,97,255,0.04), transparent 70%); }
+.impacto-card.ic4:hover { border-color: rgba(123,97,255,0.25); }
+.impacto-icon { font-size: 34px; margin-bottom: 10px; position: relative; z-index: 1; }
+.impacto-number {
+  font-size: clamp(36px, 5vw, 56px); font-weight: 900; letter-spacing: -2px; position: relative; z-index: 1;
+}
+.impacto-number.yellow { color: #FFE600; text-shadow: 0 0 30px rgba(255,230,0,0.12); }
+.impacto-number.blue { color: #3483FA; text-shadow: 0 0 30px rgba(52,131,250,0.12); }
+.impacto-number.green { color: #00A650; text-shadow: 0 0 30px rgba(0,166,80,0.12); }
+.impacto-number.purple { color: #7B61FF; text-shadow: 0 0 30px rgba(123,97,255,0.12); }
+.impacto-label { font-size: 11px; color: rgba(255,255,255,0.35); font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; margin-top: 6px; position: relative; z-index: 1; }
+
+.beneficios-row {
+  display: flex; justify-content: center; gap: 28px; flex-wrap: wrap;
+}
+.beneficio-item { text-align: center; max-width: 160px; transition: transform 0.3s; }
+.beneficio-item:hover { transform: translateY(-4px); }
+.beneficio-emoji { font-size: 28px; margin-bottom: 6px; }
+.beneficio-title { font-size: 12px; font-weight: 800; margin-bottom: 3px; }
+.beneficio-desc { font-size: 10.5px; color: rgba(255,255,255,0.3); line-height: 1.5; }
+
+/* ==================== SLIDE 7: CIERRE ==================== */
+.slide-cierre {
+  background: radial-gradient(ellipse at 30% 40%, rgba(52,131,250,0.06) 0%, transparent 50%),
+              radial-gradient(ellipse at 70% 60%, rgba(255,230,0,0.04) 0%, transparent 50%),
+              radial-gradient(ellipse at 50% 80%, rgba(0,166,80,0.03) 0%, transparent 40%), #050510;
+}
+.cierre-content { text-align: center; }
+.cierre-emoji { font-size: 70px; margin-bottom: 20px; display: block; animation: emojiEntrance 1s backwards; }
+.cierre-title {
+  font-size: clamp(26px, 4.5vw, 52px); font-weight: 900;
+  margin-bottom: 16px; line-height: 1.2; letter-spacing: -1.5px;
+}
+.cierre-highlight {
+  background: linear-gradient(135deg, #FFE600, #3483FA);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.cierre-desc {
+  font-size: clamp(14px, 1.6vw, 18px); color: rgba(255,255,255,0.4);
+  line-height: 1.7; margin-bottom: 30px; max-width: 620px; margin-left: auto; margin-right: auto;
+}
+.cierre-desc strong { color: rgba(255,255,255,0.7); }
+.cierre-divider {
+  width: 80px; height: 3px; margin: 0 auto 30px;
+  background: linear-gradient(90deg, #FFE600, #3483FA, #00A650);
+  border-radius: 10px;
+}
+
+.cierre-steps {
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 12px;
+  margin-bottom: 34px; max-width: 700px;
+}
+.cierre-step {
+  padding: 12px 22px; border-radius: 14px;
+  background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06);
+  font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.6);
+  display: flex; align-items: center; gap: 8px;
+  transition: all 0.4s cubic-bezier(0.175,0.885,0.32,1.275);
+}
+.cierre-step:hover { border-color: rgba(255,230,0,0.2); transform: translateY(-3px); }
+.cierre-step .step-num {
+  width: 26px; height: 26px; border-radius: 50%; background: rgba(255,230,0,0.1);
+  color: #FFE600; font-size: 11px; font-weight: 900;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.cierre-author {
+  font-size: 14px; color: rgba(255,255,255,0.5); font-weight: 600; margin-bottom: 6px;
+}
+.cierre-sub {
+  font-size: 11px; color: rgba(255,255,255,0.2); font-weight: 700; letter-spacing: 3px;
+}
+@keyframes heartbeat { 0%, 100% { transform: scale(1); } 15% { transform: scale(1.3); } 30% { transform: scale(1); } 45% { transform: scale(1.2); } }
+.heart-cierre { display: inline-block; animation: heartbeat 1.5s ease-in-out infinite; }
+
+/* ==================== RESPONSIVE ==================== */
+@media (max-width: 768px) {
+  .slide { padding: 40px 20px; }
+  .nav-dots { right: 8px; gap: 6px; }
+  .nav-dot { width: 7px; height: 7px; }
+  .nav-dot::after { display: none; }
+  .dolor-grid, .metricas-grid { grid-template-columns: 1fr; }
+  .structure-grid { grid-template-columns: 1fr; }
+  .arq-flow { flex-direction: column; align-items: center; }
+  .arq-arrow { transform: rotate(90deg); margin-top: 0; }
+  .impacto-grid { grid-template-columns: 1fr 1fr; }
+  .nav-arrows { bottom: 14px; }
+  .portada-scroll-hint { bottom: 24px; }
+  .cadencia-row { flex-direction: column; align-items: center; }
+}
+@media (max-width: 480px) { .impacto-grid { grid-template-columns: 1fr; } }
+</style>
 </head>
 <body>
-    <div class="reveal">
-        <div class="slides">
 
-            <!-- ============================================== -->
-            <!-- SLIDE 1: PORTADA -->
-            <!-- ============================================== -->
-            <section class="slide-cover" data-background-color="#0F0F1A">
-                <div class="badge">📋 Propuesta Estratégica 2025</div>
-                <h1>Referentes de Métricas<br>Publicaciones Mature</h1>
-                <p class="subtitle">Programa de liderazgo distribuido para estandarizar seguimientos, potenciar resultados y desarrollar futuros líderes en cada equipo.</p>
-                <div class="cover-metrics">
-                    <div class="metric-pill">⚡ Productividad</div>
-                    <div class="metric-pill">⭐ NPS</div>
-                    <div class="metric-pill">🎯 Adhesión Estilo Meli</div>
-                    <div class="metric-pill">🔄 TDI</div>
-                    <div class="metric-pill">🤖 QI</div>
-                </div>
-                <div class="cover-footer">Publicaciones Mature · 7 Equipos · Canal de Atención</div>
-            </section>
+<div class="progress-bar-top" id="progressBar"></div>
 
-            <!-- ============================================== -->
-            <!-- SLIDE 2: CONTEXTO Y PROBLEMA -->
-            <!-- ============================================== -->
-            <section data-background-color="#0F0F1A" data-auto-animate>
-                <div class="slide-header">
-                    <div class="icon bg-blue">🔍</div>
-                    <div>
-                        <h2>Contexto Actual</h2>
-                        <span class="tag">¿Dónde estamos hoy?</span>
-                    </div>
-                </div>
+<nav class="nav-dots" id="navDots">
+  <div class="nav-dot active" data-slide="0" data-label="Inicio"></div>
+  <div class="nav-dot" data-slide="1" data-label="La Realidad"></div>
+  <div class="nav-dot" data-slide="2" data-label="La Propuesta"></div>
+  <div class="nav-dot" data-slide="3" data-label="Las Métricas"></div>
+  <div class="nav-dot" data-slide="4" data-label="Cómo Funciona"></div>
+  <div class="nav-dot" data-slide="5" data-label="Impacto"></div>
+  <div class="nav-dot" data-slide="6" data-label="Siguiente Paso"></div>
+</nav>
 
-                <div class="cards-grid cols-2">
-                    <div class="card" data-fragment-index="1" class="fragment fade-up">
-                        <div class="card-icon">🚧</div>
-                        <h3>Referentes sin apropiación</h3>
-                        <p>Existen referentes asignados a cada métrica, pero <span class="highlight">no se percibe apropiación del rol</span>. La rotación cada 3 meses impide generar continuidad y profundidad en los planes de acción.</p>
-                    </div>
-                    <div class="card" data-fragment-index="2" class="fragment fade-up">
-                        <div class="card-icon">📊</div>
-                        <h3>Falta de diferencial por equipo</h3>
-                        <p>No hay un trabajo diferenciado que permita que <span class="highlight-blue">cada equipo mejore en cada métrica</span> con planes específicos, seguimientos estructurados y análisis profundos.</p>
-                    </div>
-                    <div class="card" data-fragment-index="3" class="fragment fade-up">
-                        <div class="card-icon">📈</div>
-                        <h3>Métricas sin cumplimiento sostenido</h3>
-                        <p>Varias métricas no se cumplen de forma consistente. Se evidencia <span class="highlight">alta dispersión</span> entre representantes y entre equipos sin un mecanismo de cierre de brechas.</p>
-                    </div>
-                    <div class="card" data-fragment-index="4" class="fragment fade-up">
-                        <div class="card-icon">🧩</div>
-                        <h3>Oportunidad de desarrollo</h3>
-                        <p>No se aprovecha el potencial de los referentes como <span class="highlight-green">semillero de liderazgo</span>: presentaciones, análisis de datos, seguimiento y toma de decisiones.</p>
-                    </div>
-                </div>
-            </section>
+<div class="nav-arrows">
+  <button class="nav-arrow" id="prevBtn">▲</button>
+  <button class="nav-arrow" id="nextBtn">▼</button>
+</div>
 
-            <!-- ============================================== -->
-            <!-- SLIDE 3: PROPUESTA - VISIÓN GENERAL -->
-            <!-- ============================================== -->
-            <section data-background-color="#0F0F1A" data-auto-animate>
-                <div class="slide-header">
-                    <div class="icon bg-yellow">💡</div>
-                    <div>
-                        <h2>La Propuesta</h2>
-                        <span class="tag">Visión General</span>
-                    </div>
-                </div>
+<!-- ====================== SLIDE 1: PORTADA ====================== -->
+<section class="slide slide-portada" id="slide-0">
+  <div class="particles" id="particles1"></div>
+  <div class="confetti-container" id="confetti1"></div>
+  <div class="glow-ring"></div><div class="glow-ring"></div><div class="glow-ring"></div>
+  <div class="orb" style="width:500px;height:500px;background:#3483FA;top:15%;left:5%;"></div>
+  <div class="orb" style="width:400px;height:400px;background:#FFE600;bottom:15%;right:5%;animation-delay:5s;"></div>
+  <div class="orb" style="width:300px;height:300px;background:#7B61FF;top:60%;left:50%;animation-delay:10s;"></div>
+  <div class="morph-blob" style="background:#3483FA;top:10%;right:15%;"></div>
+  <div class="morph-blob" style="background:#FFE600;bottom:10%;left:15%;animation-delay:5s;"></div>
+  <div class="shooting-star" style="top:15%;left:0;animation-delay:1s;"></div>
+  <div class="shooting-star" style="top:45%;left:0;animation-delay:4s;width:150px;"></div>
+  <div class="shooting-star" style="top:70%;left:0;animation-delay:7s;width:80px;"></div>
 
-                <p style="font-size: 0.6em; color: var(--text-light); margin-bottom: 20px; line-height: 1.7;">
-                    Crear un <strong style="color: var(--meli-yellow);">programa de Referentes de Métricas</strong> con estructura, continuidad y peso en el COMO de cada representante. Por cada equipo (7 en total) se designan <strong style="color: var(--meli-blue);">2 a 3 referentes por métrica</strong>: un líder principal y un secundario, con reuniones quincenales/mensuales para construir planes de trabajo, muestreos y seguimientos.
-                </p>
+  <div class="portada-content">
+    <div class="portada-badge-top">✦ PROPUESTA ESTRATÉGICA ✦</div>
+    <span class="portada-emoji">🚀</span>
+    <h1 class="portada-title">
+      Referentes de<br>
+      <span class="yellow">Métri</span><span class="blue">cas</span>
+    </h1>
+    <p class="portada-subtitle">Un programa de liderazgo distribuido para que cada equipo se apropie de sus resultados y construyamos futuros líderes desde la acción.</p>
+    <div class="portada-pills">
+      <span class="portada-pill pp1">⚡ Productividad</span>
+      <span class="portada-pill pp2">⭐ NPS</span>
+      <span class="portada-pill pp3">🎯 Adhesión Meli</span>
+      <span class="portada-pill pp4">🔄 TDI</span>
+      <span class="portada-pill pp5">🤖 QI</span>
+    </div>
+  </div>
+  <div class="portada-scroll-hint">
+    <div class="scroll-mouse"></div>
+    <span class="scroll-text">SCROLL</span>
+  </div>
+</section>
 
-                <div class="process-flow fragment fade-up">
-                    <div class="process-step">
-                        <div class="step-num">PASO 1</div>
-                        <div class="step-text">Selección<br>Referentes</div>
-                    </div>
-                    <div class="process-arrow">→</div>
-                    <div class="process-step">
-                        <div class="step-num">PASO 2</div>
-                        <div class="step-text">Asignación<br>de Roles</div>
-                    </div>
-                    <div class="process-arrow">→</div>
-                    <div class="process-step">
-                        <div class="step-num">PASO 3</div>
-                        <div class="step-text">Planes de<br>Trabajo</div>
-                    </div>
-                    <div class="process-arrow">→</div>
-                    <div class="process-step">
-                        <div class="step-num">PASO 4</div>
-                        <div class="step-text">Seguimiento<br>Quincenal</div>
-                    </div>
-                    <div class="process-arrow">→</div>
-                    <div class="process-step">
-                        <div class="step-num">PASO 5</div>
-                        <div class="step-text">Resultados<br>& Insights</div>
-                    </div>
-                </div>
+<!-- ====================== SLIDE 2: LA REALIDAD ====================== -->
+<section class="slide slide-realidad" id="slide-1">
+  <div class="orb" style="width:350px;height:350px;background:#F23D4F;top:10%;left:5%;"></div>
+  <div class="morph-blob" style="background:#FF6B35;bottom:10%;right:10%;"></div>
 
-                <div class="insight-box fragment fade-up">
-                    <div class="insight-label">🎯 Objetivo Central</div>
-                    <p>Estandarizar planes de acción, seguimientos, muestreos y análisis a nivel de <strong style="color: white;">todo Publicaciones Mature</strong>, para que los referentes se apropien de su rol, lideren resultados y se construyan como futuros líderes.</p>
-                </div>
-            </section>
+  <div class="realidad-content">
+    <span class="reveal" style="font-size:50px;display:block;margin-bottom:20px;">🪞</span>
+    <h2 class="realidad-title reveal s1">
+      Tenemos referentes, pero<br><span class="red">no hay apropiación</span>
+    </h2>
+    <p class="realidad-sub reveal s2">
+      Existen las métricas, existen los referentes… pero hoy no se percibe un diferencial real que mueva la aguja equipo por equipo.
+    </p>
+  </div>
 
-            <!-- ============================================== -->
-            <!-- SLIDE 4: ESTRUCTURA DE REFERENTES -->
-            <!-- ============================================== -->
-            <section data-background-color="#0F0F1A" data-auto-animate>
-                <div class="slide-header">
-                    <div class="icon bg-purple">👥</div>
-                    <div>
-                        <h2>Estructura de Referentes</h2>
-                        <span class="tag">7 Equipos × 5 Métricas</span>
-                    </div>
-                </div>
+  <div class="dolor-grid">
+    <div class="dolor-card reveal s1 magnetic">
+      <span class="dolor-icon">🔄</span>
+      <p class="dolor-text">Rotación cada 3 meses: <span class="highlight">no hay continuidad</span> ni profundidad en los planes de acción.</p>
+    </div>
+    <div class="dolor-card reveal s2 magnetic">
+      <span class="dolor-icon">📊</span>
+      <p class="dolor-text">Alta <span class="highlight">dispersión entre equipos</span> y representantes sin un mecanismo claro de cierre de brechas.</p>
+    </div>
+    <div class="dolor-card reveal s3 magnetic">
+      <span class="dolor-icon">🎯</span>
+      <p class="dolor-text">Métricas que <span class="highlight">no se cumplen de forma sostenida</span>. Cerca del objetivo, pero sin llegar.</p>
+    </div>
+    <div class="dolor-card reveal s4 magnetic">
+      <span class="dolor-icon">🌱</span>
+      <p class="dolor-text">Talento con potencial de liderazgo que <span class="highlight">no se está desarrollando</span> desde la operación.</p>
+    </div>
+  </div>
+</section>
 
-                <div class="cards-grid cols-2" style="margin-bottom: 15px;">
-                    <div>
-                        <div class="role-card fragment fade-up">
-                            <div class="role-badge bg-blue">L1</div>
-                            <div>
-                                <h4>Referente Líder (Principal)</h4>
-                                <p>Lidera el plan de acción, presenta avances en reuniones, ejecuta muestreos, propone iniciativas y es el dueño de la métrica dentro de su equipo. Representa al equipo a nivel Publicaciones Mature.</p>
-                            </div>
-                        </div>
-                        <div class="role-card fragment fade-up">
-                            <div class="role-badge bg-purple">L2</div>
-                            <div>
-                                <h4>Referente Secundario (Soporte)</h4>
-                                <p>Apoya al líder en análisis, recopila datos, realiza seguimientos complementarios y está preparado para asumir el liderazgo. Co-lidera iniciativas puntuales.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="card fragment fade-up" style="height: 100%;">
-                            <div class="card-icon">🏗️</div>
-                            <h3>Desarrollo de habilidades de liderazgo</h3>
-                            <ul>
-                                <li>Cómo hacer <span class="highlight">presentaciones</span> de resultados</li>
-                                <li>Cómo realizar <span class="highlight-blue">seguimientos</span> efectivos</li>
-                                <li>Cómo hacer <span class="highlight-green">análisis de datos</span> y patrones</li>
-                                <li>Cómo proponer <span class="highlight">planes de acción</span> con objetivos a corto, mediano y largo plazo</li>
-                                <li>Cómo identificar <span class="highlight-blue">insights de valor</span></li>
-                                <li>Cómo hacer <span class="highlight-green">muestreos</span> y detectar patrones</li>
-                            </ul>
+<!-- ====================== SLIDE 3: LA PROPUESTA ====================== -->
+<section class="slide slide-propuesta" id="slide-2">
+  <div class="floating-hearts" id="hearts1"></div>
+  <div class="orb" style="width:450px;height:450px;background:#00A650;top:15%;left:10%;"></div>
+  <div class="orb" style="width:350px;height:350px;background:#FFE600;bottom:15%;right:10%;animation-delay:3s;"></div>
+  <div class="morph-blob" style="background:#3483FA;top:50%;left:60%;"></div>
 
-                            <div class="insight-box" style="margin-top: 15px;">
-                                <div class="insight-label">💰 Peso en el COMO</div>
-                                <p>Proponer a líderes que este rol tenga <strong style="color: var(--meli-yellow);">peso en la evaluación del COMO</strong> de cada referente, para incentivar la dedicación y valorar el trabajo extra realizado.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
+  <div class="propuesta-content">
+    <span class="propuesta-icon reveal">💡</span>
+    <h2 class="propuesta-title reveal s1">Un referente líder por métrica<br>en cada <span class="green">equipo</span></h2>
+    <p class="propuesta-desc reveal s2">
+      2 a 3 referentes por equipo × 5 métricas × 7 equipos. Un líder principal, un soporte. Con reuniones quincenales, planes de trabajo reales y <strong style="color:rgba(255,255,255,0.7);">peso en el COMO</strong> de cada representante.
+    </p>
 
-            <!-- ============================================== -->
-            <!-- SLIDE 5: NÚMEROS CLAVE -->
-            <!-- ============================================== -->
-            <section data-background-color="#0F0F1A">
-                <div class="slide-header">
-                    <div class="icon bg-cyan">📐</div>
-                    <div>
-                        <h2>Dimensión del Programa</h2>
-                        <span class="tag">Números Clave</span>
-                    </div>
-                </div>
+    <div class="structure-grid">
+      <div class="structure-card reveal s3 magnetic">
+        <div class="sc-top">
+          <div class="sc-badge" style="background:rgba(52,131,250,0.15);border:1.5px solid rgba(52,131,250,0.3);color:#3483FA;">L1</div>
+          <div class="sc-title" style="color:#3483FA;">Referente Líder</div>
+        </div>
+        <div class="sc-desc">Dueño de la métrica en su equipo. Lidera planes, presenta avances, ejecuta muestreos, propone acciones y representa al equipo a nivel Publicaciones Mature.</div>
+      </div>
+      <div class="structure-card reveal s4 magnetic">
+        <div class="sc-top">
+          <div class="sc-badge" style="background:rgba(123,97,255,0.15);border:1.5px solid rgba(123,97,255,0.3);color:#7B61FF;">L2</div>
+          <div class="sc-title" style="color:#7B61FF;">Referente Soporte</div>
+        </div>
+        <div class="sc-desc">Apoya en análisis, recopila datos, co-lidera iniciativas y está preparado para asumir el liderazgo. Juntos hacen que la métrica avance.</div>
+      </div>
+      <div class="structure-card reveal s5 magnetic">
+        <div class="sc-top">
+          <div class="sc-badge" style="background:rgba(255,230,0,0.15);border:1.5px solid rgba(255,230,0,0.3);color:#FFE600;">🏗️</div>
+          <div class="sc-title" style="color:#FFE600;">Semillero de Líderes</div>
+        </div>
+        <div class="sc-desc">Aprenden a hacer presentaciones, seguimientos, análisis de datos, muestreos y toma de decisiones. Se construyen como líderes desde la acción.</div>
+      </div>
+    </div>
+  </div>
+</section>
 
-                <div class="cards-grid cols-3" style="margin-bottom: 20px;">
-                    <div class="card stat-card fragment fade-up">
-                        <div class="stat-number text-yellow">7</div>
-                        <div class="stat-label">Equipos involucrados</div>
-                    </div>
-                    <div class="card stat-card fragment fade-up">
-                        <div class="stat-number text-blue">5</div>
-                        <div class="stat-label">Métricas a liderar</div>
-                    </div>
-                    <div class="card stat-card fragment fade-up">
-                        <div class="stat-number text-green">14-21</div>
-                        <div class="stat-label">Referentes por métrica<br>(2-3 por equipo)</div>
-                    </div>
-                </div>
+<!-- ====================== SLIDE 4: LAS 5 MÉTRICAS ====================== -->
+<section class="slide slide-metricas" id="slide-3">
+  <div class="particles" id="particles2"></div>
+  <div class="orb" style="width:350px;height:350px;background:#3483FA;top:10%;right:10%;"></div>
+  <div class="orb" style="width:300px;height:300px;background:#00A650;bottom:15%;left:10%;animation-delay:4s;"></div>
 
-                <div class="cards-grid cols-3">
-                    <div class="card stat-card fragment fade-up">
-                        <div class="stat-number text-purple">70-105</div>
-                        <div class="stat-label">Total referentes activos<br>(5 métricas × 7 equipos)</div>
-                    </div>
-                    <div class="card stat-card fragment fade-up">
-                        <div class="stat-number text-cyan">2x</div>
-                        <div class="stat-label">Reuniones al mes<br>(quincenal / mensual)</div>
-                    </div>
-                    <div class="card stat-card fragment fade-up">
-                        <div class="stat-number text-yellow">∞</div>
-                        <div class="stat-label">Continuidad del referente<br>(sin rotación forzada)</div>
-                    </div>
-                </div>
+  <h2 class="section-title reveal">5 métricas, <span style="color:#FFE600;">un plan</span> por cada una</h2>
+  <p class="section-sub reveal s1">Cada referente lidera seguimientos, muestreos, benchmarks y planes de acción específicos para su métrica.</p>
 
-                <p class="small-text" style="text-align: center; margin-top: 15px;">La permanencia del referente en su métrica es clave: sin cambio obligatorio cada 3 meses. La motivación viene del impacto, no de la rotación.</p>
-            </section>
+  <div class="metricas-grid">
+    <div class="metrica-card mc-yellow reveal s1 magnetic">
+      <span class="mc-emoji">⚡</span>
+      <div class="mc-name" style="color:#FFE600;">Productividad</div>
+      <div class="mc-insight">Seguimiento a reps <strong class="y">Q3 y Q4</strong>. Análisis de TMC por proceso. Benchmark de mejores tiempos. Meta: que el bono sea <strong class="g">potenciador</strong>, no limitante.</div>
+    </div>
+    <div class="metrica-card mc-blue reveal s2 magnetic">
+      <span class="mc-emoji">⭐</span>
+      <div class="mc-name" style="color:#3483FA;">NPS</div>
+      <div class="mc-insight">Liderar <strong class="b">Meli Promo + Dash NPS</strong>. Reducir detractores, incrementar promotores. Analizar qué hacen diferente los equipos con <strong class="g">mejor NPS</strong>.</div>
+    </div>
+    <div class="metrica-card mc-green reveal s3 magnetic">
+      <span class="mc-emoji">🎯</span>
+      <div class="mc-name" style="color:#00A650;">Adhesión Meli</div>
+      <div class="mc-insight">Objetivo: <strong class="g">todos Q1-Q2</strong>. Referentes estrella crean templates, grabaciones y shadowings para mejorar <strong>bienvenida, exploración, argumentación y cierre</strong>.</div>
+    </div>
+    <div class="metrica-card mc-orange reveal s4 magnetic">
+      <span class="mc-emoji">🔄</span>
+      <div class="mc-name" style="color:#FF6B35;">TDI</div>
+      <div class="mc-insight">Detectar derivaciones incorrectas diarias. Analizar si es dolor permanente. <strong class="o">Milla extra</strong>: comentarios y preguntas complementarias para prevenir marcaciones.</div>
+    </div>
+    <div class="metrica-card mc-purple reveal s5 magnetic">
+      <span class="mc-emoji">🤖</span>
+      <div class="mc-name" style="color:#7B61FF;">QI</div>
+      <div class="mc-insight">Seguimiento semanal. Impulsar <strong class="p">notebooks de reputación</strong>. Llevar insights para <strong class="p">potenciar herramientas de IA</strong> y reducir marcaciones incorrectas.</div>
+    </div>
+  </div>
+</section>
 
-            <!-- ============================================== -->
-            <!-- SLIDE 6: MÉTRICA 1 - PRODUCTIVIDAD -->
-            <!-- ============================================== -->
-            <section data-background-color="#0F0F1A" data-auto-animate>
-                <div class="metric-header border-blue">
-                    <div class="metric-emoji">⚡</div>
-                    <div>
-                        <h2 class="text-blue">Productividad</h2>
-                        <div class="metric-desc">Cumplimiento de objetivo mes a mes · Reducción de dispersión · Análisis de TMC</div>
-                    </div>
-                </div>
+<!-- ====================== SLIDE 5: CÓMO FUNCIONA ====================== -->
+<section class="slide slide-como" id="slide-4">
+  <div class="orb" style="width:350px;height:350px;background:#3483FA;top:10%;right:10%;"></div>
+  <div class="orb" style="width:300px;height:300px;background:#FFE600;bottom:15%;left:10%;animation-delay:4s;"></div>
+  <div class="morph-blob" style="background:#00A650;top:60%;right:20%;"></div>
 
-                <div class="cards-grid cols-2">
-                    <div class="card fragment fade-up">
-                        <h3>🎯 Insight Principal</h3>
-                        <ul>
-                            <li>Cumplir con el <span class="highlight">objetivo de productividad mes a mes</span> (actualmente no se está muy lejos)</li>
-                            <li>Lograr que la productividad en el bono mensual sea un <span class="highlight-green">potenciador del % del bono</span> y NO un limitante para acceder a él</li>
-                        </ul>
-                    </div>
-                    <div class="card fragment fade-up">
-                        <h3>📉 Reducción de Dispersión</h3>
-                        <ul>
-                            <li>Reducir la <span class="highlight-blue">dispersión entre representantes</span> dentro de cada equipo</li>
-                            <li>Identificar patrones en reps de <span class="highlight">Q3 y Q4</span> en los últimos 3 meses</li>
-                            <li>Analizar TMC por tipo de proceso: ¿dónde les cuesta más?</li>
-                        </ul>
-                    </div>
-                    <div class="card fragment fade-up">
-                        <h3>🔬 Muestreos de TMC</h3>
-                        <ul>
-                            <li>Analizar casos de mayor TMC: ¿proceso específico? ¿equipo? ¿canal? ¿representantes puntuales?</li>
-                            <li>Determinar tipo de acción: refuerzo a nivel equipo, canal o acompañamiento individual</li>
-                        </ul>
-                    </div>
-                    <div class="card fragment fade-up">
-                        <h3>🏆 Benchmark Interno</h3>
-                        <ul>
-                            <li>Tomar como referencia a <span class="highlight-green">representantes líderes</span> con menor TMC en procesos complejos</li>
-                            <li>Recomendar casos y prácticas de reps Q1 a reps Q3/Q4</li>
-                            <li>Shadowing y acompañamiento entre pares</li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
+  <div class="flow-container">
+    <h2 class="section-title reveal">Así funciona el <span style="color:#3483FA;">programa</span> 🔄</h2>
+    <p class="section-sub reveal s1">Un ciclo continuo de análisis → acción → seguimiento → mejora.</p>
 
-            <!-- ============================================== -->
-            <!-- SLIDE 7: MÉTRICA 2 - NPS -->
-            <!-- ============================================== -->
-            <section data-background-color="#0F0F1A" data-auto-animate>
-                <div class="metric-header border-yellow">
-                    <div class="metric-emoji">⭐</div>
-                    <div>
-                        <h2 class="text-yellow">NPS (Net Promoter Score)</h2>
-                        <div class="metric-desc">Meli Promo · Dashboard NPS · Cierre de brechas en detractores y neutros</div>
-                    </div>
-                </div>
+    <div class="arq-flow reveal s2">
+      <div class="arq-step">
+        <div class="arq-circle c1 magnetic">🔍</div>
+        <div class="arq-label">Análisis</div>
+        <div class="arq-sub">Muestreos, patrones, cuartiles y benchmark entre equipos</div>
+      </div>
+      <div class="arq-arrow">→</div>
+      <div class="arq-step">
+        <div class="arq-circle c2 magnetic">📋</div>
+        <div class="arq-label">Plan de Acción</div>
+        <div class="arq-sub">Objetivos concretos a corto, mediano y largo plazo</div>
+      </div>
+      <div class="arq-arrow">→</div>
+      <div class="arq-step">
+        <div class="arq-circle c3 magnetic">📈</div>
+        <div class="arq-label">Seguimiento</div>
+        <div class="arq-sub">Reuniones quincenales con avances y resultados medibles</div>
+      </div>
+      <div class="arq-arrow">→</div>
+      <div class="arq-step">
+        <div class="arq-circle c4 magnetic">🚀</div>
+        <div class="arq-label">Mejora</div>
+        <div class="arq-sub">Insights, ajustes, refuerzos y escalamiento de buenas prácticas</div>
+      </div>
+    </div>
 
-                <div class="cards-grid cols-2">
-                    <div class="card fragment fade-up">
-                        <h3>🛡️ Escudo NPS - Nueva Versión Meli Promo</h3>
-                        <ul>
-                            <li>Los referentes lideran la <span class="highlight">nueva versión de Meli Promo</span></li>
-                            <li>Acompañada del <span class="highlight-blue">Dashboard de NPS</span> para seguimiento estructurado</li>
-                            <li>Cada equipo visualiza <span class="highlight-green">fortalezas y debilidades</span> como equipo</li>
-                        </ul>
-                    </div>
-                    <div class="card fragment fade-up">
-                        <h3>🔎 Salir de la caja</h3>
-                        <ul>
-                            <li>Analizar qué se hace <span class="highlight">diferente en equipos con mejor NPS</span></li>
-                            <li>Identificar procesos donde otros equipos tienen más promotores</li>
-                            <li>Replicar buenas prácticas de forma transversal</li>
-                        </ul>
-                    </div>
-                    <div class="card fragment fade-up">
-                        <h3>📉 Reducción de Detractores</h3>
-                        <ul>
-                            <li>Acortar brechas en <span class="highlight">detractores y neutros</span> por equipo</li>
-                            <li>Dar herramientas de análisis y gestión para cada equipo</li>
-                            <li>Reducir detractores del día a día con acciones concretas</li>
-                        </ul>
-                    </div>
-                    <div class="card fragment fade-up">
-                        <h3>📈 Incremento de Promotores</h3>
-                        <ul>
-                            <li>Identificar procesos con <span class="highlight-green">alto ratio de promotores</span> en otros equipos</li>
-                            <li>Analizar qué genera la diferencia y replicar</li>
-                            <li>Seguimiento quincenal de evolución por equipo</li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
+    <div class="cadencia-row reveal s3">
+      <div class="cadencia-card magnetic">
+        <div class="cadencia-icon">📅</div>
+        <div class="cadencia-label" style="color:#FFE600;">Semanal</div>
+        <div class="cadencia-desc">QI: dolores actuales<br>y marcaciones</div>
+      </div>
+      <div class="cadencia-card magnetic">
+        <div class="cadencia-icon">🗓️</div>
+        <div class="cadencia-label" style="color:#3483FA;">Quincenal</div>
+        <div class="cadencia-desc">Avance de planes,<br>muestreos e insights</div>
+      </div>
+      <div class="cadencia-card magnetic">
+        <div class="cadencia-icon">📊</div>
+        <div class="cadencia-label" style="color:#00A650;">Mensual</div>
+        <div class="cadencia-desc">Resultados, benchmark<br>y ajuste de planes</div>
+      </div>
+    </div>
+  </div>
+</section>
 
-            <!-- ============================================== -->
-            <!-- SLIDE 8: MÉTRICA 3 - ADHESIÓN ESTILO MELI -->
-            <!-- ============================================== -->
-            <section data-background-color="#0F0F1A" data-auto-animate>
-                <div class="metric-header border-green">
-                    <div class="metric-emoji">🎯</div>
-                    <div>
-                        <h2 class="text-green">Adhesión Estilo Meli</h2>
-                        <div class="metric-desc">Calidad en cada etapa del caso · Referentes estrella · Templates y grabaciones</div>
-                    </div>
-                </div>
+<!-- ====================== SLIDE 6: IMPACTO ====================== -->
+<section class="slide slide-impacto" id="slide-5">
+  <div class="particles" id="particles3"></div>
+  <div class="orb" style="width:450px;height:450px;background:#00A650;top:10%;right:5%;"></div>
+  <div class="orb" style="width:350px;height:350px;background:#FFE600;bottom:10%;left:10%;animation-delay:4s;"></div>
+  <div class="morph-blob" style="background:#3483FA;top:50%;left:30%;"></div>
 
-                <div class="cards-grid cols-2">
-                    <div class="card fragment fade-up">
-                        <h3>🎯 Objetivo a mediano plazo</h3>
-                        <p>Que <span class="highlight-green">todos los representantes sean Q1 o Q2</span> en Adhesión Estilo Meli. Estructurar planes de acción específicos para lograrlo tanto a nivel de equipo como a nivel de todo Publicaciones Mature.</p>
-                    </div>
-                    <div class="card fragment fade-up">
-                        <h3>🌟 Referentes Estrella</h3>
-                        <ul>
-                            <li>Identificar reps que han sido <span class="highlight">Q1 en los últimos 2-3 meses</span></li>
-                            <li>Analizar qué hacen diferente</li>
-                            <li>Generar <span class="highlight-blue">templates de respuesta</span></li>
-                            <li>Crear <span class="highlight-green">grabaciones de pantalla</span> como referencia</li>
-                            <li>Realizar <span class="highlight">shadowings</span> para transferencia de conocimiento</li>
-                        </ul>
-                    </div>
-                </div>
+  <h2 class="section-title reveal">El <span style="color:#00A650;">impacto</span> que buscamos 🎯</h2>
+  <p class="section-sub reveal s1">Números que se traducen en cultura, resultados y crecimiento.</p>
 
-                <div class="card fragment fade-up" style="margin-top: 15px;">
-                    <h3>🔄 Potenciar calidad en cada etapa</h3>
-                    <div class="process-flow" style="margin: 10px 0;">
-                        <div class="process-step" style="border-color: rgba(0, 230, 118, 0.3);">
-                            <div class="step-num text-green">ETAPA 1</div>
-                            <div class="step-text">Bienvenida</div>
-                        </div>
-                        <div class="process-arrow">→</div>
-                        <div class="process-step" style="border-color: rgba(52, 131, 250, 0.3);">
-                            <div class="step-num text-blue">ETAPA 2</div>
-                            <div class="step-text">Exploración</div>
-                        </div>
-                        <div class="process-arrow">→</div>
-                        <div class="process-step" style="border-color: rgba(255, 230, 0, 0.3);">
-                            <div class="step-num text-yellow">ETAPA 3</div>
-                            <div class="step-text">Argumentación</div>
-                        </div>
-                        <div class="process-arrow">→</div>
-                        <div class="process-step" style="border-color: rgba(179, 136, 255, 0.3);">
-                            <div class="step-num text-purple">ETAPA 4</div>
-                            <div class="step-text">Cierre</div>
-                        </div>
-                    </div>
-                    <p style="text-align: center;">Objetivo a corto plazo: que <span class="highlight">cualquier representante que responda una consulta lo haga con la calidad buscada</span> a nivel de equipo, canal y todo Publicaciones Mature.</p>
-                </div>
-            </section>
+  <div class="impacto-grid">
+    <div class="impacto-card ic1 reveal s1 magnetic">
+      <div class="impacto-icon">👥</div>
+      <div class="impacto-number yellow" data-count="7">0</div>
+      <div class="impacto-label">Equipos alineados</div>
+    </div>
+    <div class="impacto-card ic2 reveal s2 magnetic">
+      <div class="impacto-icon">🎯</div>
+      <div class="impacto-number blue" data-count="5">0</div>
+      <div class="impacto-label">Métricas lideradas</div>
+    </div>
+    <div class="impacto-card ic3 reveal s3 magnetic">
+      <div class="impacto-icon">🌟</div>
+      <div class="impacto-number green" data-count="70" data-prefix="+">0</div>
+      <div class="impacto-label">Referentes activos</div>
+    </div>
+    <div class="impacto-card ic4 reveal s4 magnetic">
+      <div class="impacto-icon">🏆</div>
+      <div class="impacto-number purple" data-count="0" data-symbol="∞">∞</div>
+      <div class="impacto-label">Sin rotación forzada</div>
+    </div>
+  </div>
 
-            <!-- ============================================== -->
-            <!-- SLIDE 9: MÉTRICA 4 - TDI -->
-            <!-- ============================================== -->
-            <section data-background-color="#0F0F1A" data-auto-animate>
-                <div class="metric-header border-orange">
-                    <div class="metric-emoji">🔄</div>
-                    <div>
-                        <h2 style="color: var(--accent-orange) !important;">TDI (Tasa de Derivaciones Incorrectas)</h2>
-                        <div class="metric-desc">Seguimiento de derivaciones · Análisis histórico · Benchmark entre equipos</div>
-                    </div>
-                </div>
+  <div class="beneficios-row reveal s5">
+    <div class="beneficio-item magnetic">
+      <div class="beneficio-emoji">💰</div>
+      <div class="beneficio-title">Peso en el COMO</div>
+      <div class="beneficio-desc">Valor real en la evaluación del referente</div>
+    </div>
+    <div class="beneficio-item magnetic">
+      <div class="beneficio-emoji">📉</div>
+      <div class="beneficio-title">Menos Dispersión</div>
+      <div class="beneficio-desc">Brechas cerradas entre equipos y reps</div>
+    </div>
+    <div class="beneficio-item magnetic">
+      <div class="beneficio-emoji">🏗️</div>
+      <div class="beneficio-title">Futuros Líderes</div>
+      <div class="beneficio-desc">Semillero real desde la operación</div>
+    </div>
+    <div class="beneficio-item magnetic">
+      <div class="beneficio-emoji">📈</div>
+      <div class="beneficio-title">Métricas Sostenidas</div>
+      <div class="beneficio-desc">Cumplimiento constante, no puntual</div>
+    </div>
+  </div>
+</section>
 
-                <div class="cards-grid cols-2">
-                    <div class="card fragment fade-up">
-                        <h3>📋 Seguimiento Diario</h3>
-                        <ul>
-                            <li>Identificar <span class="highlight">qué tipo de derivaciones quedan incorrectas</span> en el día a día</li>
-                            <li>Analizar históricamente si es un <span class="highlight-blue">dolor que permanece</span> o es puntual</li>
-                            <li>Detectar patrones por tipo de consulta, equipo o representante</li>
-                        </ul>
-                    </div>
-                    <div class="card fragment fade-up">
-                        <h3>🏆 Benchmark de Equipos</h3>
-                        <ul>
-                            <li>Tomar como referencia equipos con <span class="highlight-green">menor % de derivaciones incorrectas</span> (histórico y actual)</li>
-                            <li>Replicar acciones que esos equipos están tomando</li>
-                            <li>Compartir mejores prácticas transversalmente</li>
-                        </ul>
-                    </div>
-                    <div class="card fragment fade-up">
-                        <h3>🎯 Objetivo Progresivo</h3>
-                        <p>No solo <span class="highlight">cumplir el objetivo de derivaciones incorrectas</span>, sino tener el compromiso de mantenerlo en el <span class="highlight-green">menor porcentaje posible</span> de forma sostenida.</p>
-                    </div>
-                    <div class="card fragment fade-up">
-                        <h3>🌟 La Milla Extra</h3>
-                        <ul>
-                            <li>Actuar desde derivaciones donde podemos dar un <span class="highlight">esfuerzo adicional</span></li>
-                            <li>Agregar <span class="highlight-blue">comentarios complementarios</span></li>
-                            <li>Generar <span class="highlight-green">preguntas adicionales</span> para prevenir marcación de equipo B</li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
+<!-- ====================== SLIDE 7: CIERRE ====================== -->
+<section class="slide slide-cierre" id="slide-6">
+  <div class="particles" id="particles4"></div>
+  <div class="confetti-container" id="confetti2"></div>
+  <div class="floating-hearts" id="hearts2"></div>
+  <div class="glow-ring"></div><div class="glow-ring"></div><div class="glow-ring"></div>
+  <div class="orb" style="width:500px;height:500px;background:#3483FA;top:15%;left:5%;"></div>
+  <div class="orb" style="width:400px;height:400px;background:#FFE600;bottom:10%;right:5%;animation-delay:4s;"></div>
+  <div class="orb" style="width:300px;height:300px;background:#00A650;top:50%;left:60%;animation-delay:8s;"></div>
+  <div class="morph-blob" style="background:#7B61FF;top:20%;right:20%;"></div>
+  <div class="shooting-star" style="top:20%;left:0;animation-delay:1s;"></div>
+  <div class="shooting-star" style="top:55%;left:0;animation-delay:5s;width:140px;"></div>
 
-            <!-- ============================================== -->
-            <!-- SLIDE 10: MÉTRICA 5 - QI -->
-            <!-- ============================================== -->
-            <section data-background-color="#0F0F1A" data-auto-animate>
-                <div class="metric-header border-purple">
-                    <div class="metric-emoji">🤖</div>
-                    <div>
-                        <h2 class="text-purple">QI (Quality Intelligence)</h2>
-                        <div class="metric-desc">Seguimientos semanales · Notebooks de reputación · Insights de IA</div>
-                    </div>
-                </div>
+  <div class="cierre-content">
+    <span class="cierre-emoji reveal">🚀</span>
+    <h2 class="cierre-title reveal s1">Estandaricemos la<br><span class="cierre-highlight">excelencia</span></h2>
+    <p class="cierre-desc reveal s2">
+      Que cada referente se apropie de su métrica, lidere con datos y aporte su granito de arena para que <strong>todo Publicaciones Mature</strong> alcance otro nivel.
+    </p>
+    <div class="cierre-divider reveal s3"></div>
 
-                <div class="cards-grid cols-2">
-                    <div class="card fragment fade-up">
-                        <h3>📅 Seguimientos Semanales y Mensuales</h3>
-                        <ul>
-                            <li>Revisión semanal de <span class="highlight">dolores actuales</span> en QI</li>
-                            <li>Seguimiento mensual de evolución y tendencias</li>
-                            <li>Identificar qué tipo de marcaciones incorrectas prevalecen</li>
-                        </ul>
-                    </div>
-                    <div class="card fragment fade-up">
-                        <h3>📓 Notebooks de Reputación</h3>
-                        <ul>
-                            <li>Incentivar el <span class="highlight-blue">uso de notebooks de reputación</span> cuando aplique</li>
-                            <li>Prevenir marcaciones incorrectas con mejor documentación</li>
-                            <li>Generar cultura de consulta antes de marcar</li>
-                        </ul>
-                    </div>
-                </div>
+    <div class="cierre-steps reveal s4">
+      <div class="cierre-step"><div class="step-num">1</div> Validación con líderes</div>
+      <div class="cierre-step"><div class="step-num">2</div> Selección de referentes</div>
+      <div class="cierre-step"><div class="step-num">3</div> Kick-off por métrica</div>
+      <div class="cierre-step"><div class="step-num">4</div> Primer ciclo de planes</div>
+    </div>
 
-                <div class="insight-box fragment fade-up">
-                    <div class="insight-label">🤖 Potenciar la Inteligencia Artificial</div>
-                    <p>Llevar <strong style="color: white;">insights de valor</strong> con los cuales se puedan potenciar las herramientas de IA disponibles. Que los referentes sean el puente entre los dolores reales de la operación y las oportunidades de mejora en las herramientas de inteligencia artificial.</p>
-                </div>
-            </section>
+    <div class="cierre-author reveal s5">Hecho con <span class="heart-cierre">💛</span> para Publicaciones Mature</div>
+    <p class="cierre-sub reveal s6">REFERENTES DE MÉTRICAS · 2025</p>
+  </div>
+</section>
 
-            <!-- ============================================== -->
-            <!-- SLIDE 11: CADENCIA Y GOBERNANZA -->
-            <!-- ============================================== -->
-            <section data-background-color="#0F0F1A" data-auto-animate>
-                <div class="slide-header">
-                    <div class="icon bg-orange">🗓️</div>
-                    <div>
-                        <h2>Cadencia y Gobernanza</h2>
-                        <span class="tag">Ritmo de trabajo</span>
-                    </div>
-                </div>
+<script>
+(function() {
+  const COLORES = ['#FFE600','#3483FA','#00A650','#7B61FF','#FF6B35','#F23D4F'];
 
-                <div class="cards-grid cols-2" style="margin-bottom: 15px;">
-                    <div class="card fragment fade-up">
-                        <h3>📆 Reuniones Quincenales / Mensuales</h3>
-                        <table class="styled-table">
-                            <thead>
-                                <tr>
-                                    <th>Frecuencia</th>
-                                    <th>Objetivo</th>
-                                    <th>Participantes</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><strong class="text-blue">Semanal</strong></td>
-                                    <td>QI: dolores actuales, marcaciones</td>
-                                    <td>Referentes QI</td>
-                                </tr>
-                                <tr>
-                                    <td><strong class="text-yellow">Quincenal</strong></td>
-                                    <td>Avance de planes, muestreos, insights</td>
-                                    <td>Todos los referentes por métrica</td>
-                                </tr>
-                                <tr>
-                                    <td><strong class="text-green">Mensual</strong></td>
-                                    <td>Resultados, benchmark, ajuste de planes</td>
-                                    <td>Referentes + Coordinación</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="card fragment fade-up">
-                        <h3>📋 Entregables por Reunión</h3>
-                        <ul>
-                            <li><span class="highlight">Muestreos</span> realizados y hallazgos</li>
-                            <li><span class="highlight-blue">Análisis de patrones</span> por cuartil, equipo y canal</li>
-                            <li><span class="highlight-green">Plan de acción</span> actualizado con responsables y fechas</li>
-                            <li><span class="highlight">Benchmark</span> entre equipos: qué se replica</li>
-                            <li><span class="highlight-blue">Insights</span> para escalar a líderes o áreas de soporte</li>
-                        </ul>
-                    </div>
-                </div>
+  function createParticles(id, count) {
+    const c = document.getElementById(id); if (!c) return;
+    for (let i = 0; i < count; i++) {
+      const p = document.createElement('div'); p.className = 'particle';
+      const size = Math.random() * 5 + 2;
+      p.style.cssText = `width:${size}px;height:${size}px;left:${Math.random()*100}%;background:${COLORES[i%COLORES.length]};animation-duration:${Math.random()*22+14}s;animation-delay:${Math.random()*14}s;`;
+      c.appendChild(p);
+    }
+  }
 
-                <div class="timeline fragment fade-up">
-                    <div class="timeline-item">
-                        <h4>📊 Corto Plazo (1-2 meses)</h4>
-                        <p>Selección de referentes, primeras reuniones, línea base por métrica, primeros muestreos y planes de acción iniciales.</p>
-                    </div>
-                    <div class="timeline-item">
-                        <h4>📈 Mediano Plazo (3-4 meses)</h4>
-                        <p>Planes consolidados, reducción de dispersión, cumplimiento sostenido de métricas, referentes presentando resultados con autonomía.</p>
-                    </div>
-                    <div class="timeline-item">
-                        <h4>🚀 Largo Plazo (5-6 meses)</h4>
-                        <p>Métricas en objetivo sostenido, referentes como líderes formados, estándar replicable a otros equipos/canales. Cultura de mejora continua.</p>
-                    </div>
-                </div>
-            </section>
+  function createConfetti(id) {
+    const c = document.getElementById(id); if (!c) return;
+    const colors = [...COLORES, '#fff'];
+    for (let i = 0; i < 55; i++) {
+      const el = document.createElement('div'); el.className = 'confetti';
+      const size = Math.random() * 8 + 3; const isCircle = Math.random() > 0.5;
+      el.style.cssText = `left:${Math.random()*100}%;width:${size}px;height:${isCircle?size:size*2.5}px;background:${colors[i%colors.length]};border-radius:${isCircle?'50%':'2px'};animation-duration:${Math.random()*6+4}s;animation-delay:${Math.random()*12}s;`;
+      c.appendChild(el);
+    }
+  }
 
-            <!-- ============================================== -->
-            <!-- SLIDE 12: BENEFICIOS PARA TODOS -->
-            <!-- ============================================== -->
-            <section data-background-color="#0F0F1A" data-auto-animate>
-                <div class="slide-header">
-                    <div class="icon bg-green">🏆</div>
-                    <div>
-                        <h2>Beneficios para Todos</h2>
-                        <span class="tag">Win-Win-Win</span>
-                    </div>
-                </div>
+  function createHearts(id) {
+    const c = document.getElementById(id); if (!c) return;
+    const hearts = ['💛','💙','💚','💜','🧡','✨','⭐','🌟','🚀','🏆'];
+    for (let i = 0; i < 18; i++) {
+      const h = document.createElement('div'); h.className = 'float-heart';
+      h.textContent = hearts[i % hearts.length];
+      h.style.cssText = `left:${Math.random()*100}%;font-size:${Math.random()*16+12}px;animation-duration:${Math.random()*14+8}s;animation-delay:${Math.random()*12}s;`;
+      c.appendChild(h);
+    }
+  }
 
-                <div class="cards-grid cols-3">
-                    <div class="card fragment fade-up">
-                        <div class="card-icon">👤</div>
-                        <h3>Para el Referente</h3>
-                        <ul>
-                            <li><span class="highlight-green">Peso en el COMO</span> (evaluación)</li>
-                            <li>Desarrollo de habilidades de liderazgo</li>
-                            <li>Visibilidad ante líderes</li>
-                            <li>Aprendizaje en presentaciones, análisis y seguimiento</li>
-                            <li>Semillero para roles de mayor responsabilidad</li>
-                        </ul>
-                    </div>
-                    <div class="card fragment fade-up">
-                        <div class="card-icon">👥</div>
-                        <h3>Para el Equipo</h3>
-                        <ul>
-                            <li>Planes de acción <span class="highlight-blue">específicos y medibles</span></li>
-                            <li>Reducción de dispersión interna</li>
-                            <li>Acompañamiento a reps Q3/Q4</li>
-                            <li>Mejores resultados en bono</li>
-                            <li>Cultura de mejora continua</li>
-                        </ul>
-                    </div>
-                    <div class="card fragment fade-up">
-                        <div class="card-icon">🏢</div>
-                        <h3>Para Publicaciones Mature</h3>
-                        <ul>
-                            <li><span class="highlight">Estandarización</span> de seguimientos</li>
-                            <li>Cumplimiento sostenido de métricas</li>
-                            <li>Insights transversales de valor</li>
-                            <li>Cierre de brechas entre equipos</li>
-                            <li>Pipeline de líderes formados</li>
-                        </ul>
-                    </div>
-                </div>
+  // Counters
+  let countersAnimated = false;
+  function animateCounters() {
+    if (countersAnimated) return; countersAnimated = true;
+    document.querySelectorAll('.impacto-number[data-count]').forEach(el => {
+      const target = parseInt(el.dataset.count);
+      if (el.dataset.symbol) return;
+      const prefix = el.dataset.prefix || '';
+      const duration = 2200; const start = performance.now();
+      function update(now) {
+        const elapsed = now - start;
+        const progress = Math.min(elapsed / duration, 1);
+        const c4 = (2 * Math.PI) / 3;
+        const eased = progress === 0 ? 0 : progress === 1 ? 1 : Math.pow(2, -10 * progress) * Math.sin((progress * 10 - 0.75) * c4) + 1;
+        el.textContent = prefix + Math.round(target * eased);
+        if (progress < 1) requestAnimationFrame(update);
+        else el.textContent = prefix + target;
+      }
+      requestAnimationFrame(update);
+    });
+  }
 
-                <div class="insight-box fragment fade-up" style="margin-top: 15px;">
-                    <div class="insight-label">💡 Propuesta clave para líderes</div>
-                    <p>Que las acciones como referente de métrica tengan un <strong style="color: var(--meli-yellow);">peso real en el COMO</strong> de cada representante, de modo que el trabajo extra se valore formalmente y motive una dedicación genuina al rol.</p>
-                </div>
-            </section>
+  // Reveal observer
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        if (entry.target.closest('#slide-5')) setTimeout(animateCounters, 300);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.reveal, .reveal-scale').forEach(el => observer.observe(el));
 
-            <!-- ============================================== -->
-            <!-- SLIDE 13: RESUMEN POR MÉTRICA -->
-            <!-- ============================================== -->
-            <section data-background-color="#0F0F1A">
-                <div class="slide-header">
-                    <div class="icon bg-blue">📊</div>
-                    <div>
-                        <h2>Resumen por Métrica</h2>
-                        <span class="tag">Visión Consolidada</span>
-                    </div>
-                </div>
+  // Navigation
+  const slides = document.querySelectorAll('.slide');
+  const dots = document.querySelectorAll('.nav-dot');
 
-                <table class="styled-table fragment fade-up">
-                    <thead>
-                        <tr>
-                            <th>Métrica</th>
-                            <th>Insight Principal</th>
-                            <th>Acción Clave</th>
-                            <th>Meta</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>⚡ <strong>Productividad</strong></td>
-                            <td>Bono como potenciador, no limitante</td>
-                            <td>Análisis TMC por Q3/Q4, muestreos, shadowing</td>
-                            <td class="text-green">Objetivo mes a mes ✓</td>
-                        </tr>
-                        <tr>
-                            <td>⭐ <strong>NPS</strong></td>
-                            <td>Meli Promo + Dash NPS</td>
-                            <td>Benchmark equipos, reducir detractores, subir promotores</td>
-                            <td class="text-green">Cerrar brechas por equipo</td>
-                        </tr>
-                        <tr>
-                            <td>🎯 <strong>Adhesión Meli</strong></td>
-                            <td>Todos Q1-Q2 a mediano plazo</td>
-                            <td>Templates, grabaciones, shadowings, ref. estrella</td>
-                            <td class="text-green">Calidad estándar en todo PM</td>
-                        </tr>
-                        <tr>
-                            <td>🔄 <strong>TDI</strong></td>
-                            <td>Menor % posible sostenido</td>
-                            <td>Análisis diario, benchmark, milla extra en comentarios</td>
-                            <td class="text-green">Debajo del objetivo siempre</td>
-                        </tr>
-                        <tr>
-                            <td>🤖 <strong>QI</strong></td>
-                            <td>Potenciar herramientas de IA</td>
-                            <td>Seguimiento semanal, notebooks, insights para IA</td>
-                            <td class="text-green">Menos marcaciones incorrectas</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </section>
+  function updateNav() {
+    const scrollPos = window.scrollY + window.innerHeight / 2;
+    let current = 0;
+    slides.forEach((s, i) => { if (scrollPos >= s.offsetTop) current = i; });
+    dots.forEach((d, i) => d.classList.toggle('active', i === current));
+    const total = document.body.scrollHeight - window.innerHeight;
+    document.getElementById('progressBar').style.width = (total > 0 ? (window.scrollY / total) * 100 : 0) + '%';
+  }
 
-            <!-- ============================================== -->
-            <!-- SLIDE 14: CIERRE -->
-            <!-- ============================================== -->
-            <section class="slide-closing" data-background-color="#0F0F1A">
-                <h2>Construyamos Líderes,<br>Potenciemos Resultados</h2>
-                <p style="font-size: 0.65em; color: var(--text-muted); max-width: 700px; margin: 10px auto 30px;">
-                    Un programa donde cada referente se apropia de su métrica, lidera con datos, y aporta su granito de arena para que todo Publicaciones Mature alcance la excelencia.
-                </p>
+  dots.forEach(dot => {
+    dot.addEventListener('click', () => {
+      const idx = parseInt(dot.dataset.slide);
+      if (slides[idx]) slides[idx].scrollIntoView({ behavior: 'smooth' });
+    });
+  });
 
-                <div class="closing-pillars">
-                    <div class="closing-pillar fragment fade-up">
-                        <div class="pillar-icon">📊</div>
-                        <h4>Estandarización</h4>
-                        <p>Planes, seguimientos<br>y muestreos unificados</p>
-                    </div>
-                    <div class="closing-pillar fragment fade-up">
-                        <div class="pillar-icon">🎯</div>
-                        <h4>Apropiación</h4>
-                        <p>Referentes dueños<br>de su métrica</p>
-                    </div>
-                    <div class="closing-pillar fragment fade-up">
-                        <div class="pillar-icon">🚀</div>
-                        <h4>Desarrollo</h4>
-                        <p>Semillero de<br>futuros líderes</p>
-                    </div>
-                    <div class="closing-pillar fragment fade-up">
-                        <div class="pillar-icon">💡</div>
-                        <h4>Resultados</h4>
-                        <p>Métricas en objetivo<br>de forma sostenida</p>
-                    </div>
-                </div>
+  document.getElementById('prevBtn').addEventListener('click', () => {
+    const c = Math.round(window.scrollY / window.innerHeight);
+    if (c > 0) slides[c-1].scrollIntoView({ behavior: 'smooth' });
+  });
+  document.getElementById('nextBtn').addEventListener('click', () => {
+    const c = Math.round(window.scrollY / window.innerHeight);
+    if (c < slides.length-1) slides[c+1].scrollIntoView({ behavior: 'smooth' });
+  });
 
-                <div class="insight-box fragment fade-up" style="margin-top: 30px; max-width: 600px;">
-                    <div class="insight-label">🤝 Próximos Pasos</div>
-                    <p>1. Validación de la propuesta con líderes<br>
-                       2. Definición de referentes por equipo y métrica<br>
-                       3. Kick-off con primera reunión de arranque<br>
-                       4. Primer ciclo de muestreos y planes de acción</p>
-                </div>
-            </section>
+  document.addEventListener('keydown', (e) => {
+    const c = Math.round(window.scrollY / window.innerHeight);
+    if (e.key === 'ArrowDown' || e.key === ' ') { e.preventDefault(); if (c < slides.length-1) slides[c+1].scrollIntoView({ behavior: 'smooth' }); }
+    if (e.key === 'ArrowUp') { e.preventDefault(); if (c > 0) slides[c-1].scrollIntoView({ behavior: 'smooth' }); }
+  });
 
-        </div> <!-- /slides -->
-    </div> <!-- /reveal -->
+  window.addEventListener('scroll', updateNav, { passive: true });
 
-    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.2.1/dist/reveal.js"></script>
-    <script>
-        Reveal.initialize({
-            hash: true,
-            slideNumber: true,
-            transition: 'slide',
-            transitionSpeed: 'default',
-            backgroundTransition: 'fade',
-            center: false,
-            width: 1200,
-            height: 700,
-            margin: 0.04,
-            minScale: 0.2,
-            maxScale: 2.0,
-            autoAnimateDuration: 0.8,
-            autoAnimateEasing: 'ease-out',
-        });
-    </script>
+  // Parallax orbs
+  document.addEventListener('mousemove', (e) => {
+    const x = (e.clientX / window.innerWidth - 0.5) * 20;
+    const y = (e.clientY / window.innerHeight - 0.5) * 20;
+    document.querySelectorAll('.orb').forEach(orb => { orb.style.transform = `translate(${x}px, ${y}px)`; });
+  });
+
+  // Init
+  createParticles('particles1', 35);
+  createParticles('particles2', 25);
+  createParticles('particles3', 28);
+  createParticles('particles4', 35);
+  createConfetti('confetti1');
+  createConfetti('confetti2');
+  createHearts('hearts1');
+  createHearts('hearts2');
+  updateNav();
+})();
+</script>
 </body>
 </html>

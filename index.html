@@ -3,531 +3,559 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Iniciativa: Referentes de Métricas · Publicaciones Mature</title>
+<title>Referentes con Propósito · Publicaciones Mature</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-html { scroll-behavior: smooth; scroll-snap-type: y mandatory; overflow-x: hidden; }
-body { font-family: 'Inter', sans-serif; background: #050510; color: white; overflow-x: hidden; }
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-snap-type:y mandatory;overflow-x:hidden}
+body{font-family:'Inter',sans-serif;background:#08081a;color:#f0f0f8;overflow-x:hidden}
 
-/* ==================== SLIDES ==================== */
-.slide {
-  min-height: 100vh; display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  padding: 60px 40px; position: relative;
-  scroll-snap-align: start; overflow: hidden;
+/* ==================== BASE SLIDES ==================== */
+.slide{
+  min-height:100vh;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:60px 40px;position:relative;
+  scroll-snap-align:start;overflow:hidden;
 }
-.slide::before {
-  content: ''; position: absolute; inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
-  pointer-events: none; z-index: 0;
+
+/* ==================== ANIMATED MESH BACKGROUND ==================== */
+.mesh-bg{
+  position:absolute;inset:0;z-index:0;overflow:hidden;
 }
-.slide > * { position: relative;  }
+.mesh-bg canvas{position:absolute;inset:0;width:100%;height:100%;}
+
+/* Grain overlay */
+.slide::after{
+  content:'';position:absolute;inset:0;z-index:1;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  opacity:.7;
+}
+.slide>*:not(.mesh-bg){position:relative;z-index:2;}
+
+/* ==================== AURORA STRIPES ==================== */
+.aurora{
+  position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:0;
+}
+.aurora-stripe{
+  position:absolute;width:200%;height:180px;
+  filter:blur(80px);opacity:.07;
+  animation:auroraFlow 20s ease-in-out infinite;
+}
+@keyframes auroraFlow{
+  0%,100%{transform:translateX(-30%) rotate(-6deg) scaleY(1);}
+  33%{transform:translateX(10%) rotate(-3deg) scaleY(1.4);}
+  66%{transform:translateX(-15%) rotate(-8deg) scaleY(.8);}
+}
+
+/* ==================== FLOATING ORBS ==================== */
+.orb{
+  position:absolute;border-radius:50%;
+  filter:blur(90px);pointer-events:none;
+  animation:orbFloat 22s ease-in-out infinite;
+}
+@keyframes orbFloat{
+  0%,100%{transform:translate(0,0) scale(1);}
+  25%{transform:translate(35px,-45px) scale(1.12);}
+  50%{transform:translate(-25px,30px) scale(.92);}
+  75%{transform:translate(45px,35px) scale(1.06);}
+}
+
+/* ==================== PARTICLES ==================== */
+.particles{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:1;}
+.particle{
+  position:absolute;border-radius:50%;
+  animation:particleRise linear infinite;opacity:0;
+}
+@keyframes particleRise{
+  0%{transform:translateY(100vh) scale(0);opacity:0;}
+  6%{opacity:.6;transform:translateY(94vh) scale(1);}
+  90%{opacity:.15;}
+  100%{transform:translateY(-5vh) scale(.3);opacity:0;}
+}
+
+/* ==================== LIGHT BEAMS ==================== */
+.light-beams{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:0;}
+.beam{
+  position:absolute;width:2px;height:100%;
+  background:linear-gradient(to bottom,transparent,rgba(255,230,0,.04),transparent);
+  animation:beamPulse 8s ease-in-out infinite;
+}
+@keyframes beamPulse{
+  0%,100%{opacity:0;transform:scaleY(.3);}
+  50%{opacity:1;transform:scaleY(1);}
+}
+
+/* ==================== STAR FIELD ==================== */
+.star-field{position:absolute;inset:0;pointer-events:none;z-index:0;}
+.star{
+  position:absolute;background:#fff;border-radius:50%;
+  animation:starTwinkle ease-in-out infinite;
+}
+@keyframes starTwinkle{
+  0%,100%{opacity:.1;transform:scale(.8);}
+  50%{opacity:.8;transform:scale(1.2);}
+}
+
+/* ==================== SHOOTING STARS ==================== */
+.shooting-star{
+  position:absolute;height:1px;pointer-events:none;z-index:1;
+  background:linear-gradient(90deg,transparent,rgba(255,230,0,.7),transparent);
+  animation:shootStar 4s linear infinite;opacity:0;
+}
+@keyframes shootStar{
+  0%{transform:translateX(-200px) translateY(0) rotate(-30deg);opacity:0;}
+  4%{opacity:1;}25%{opacity:0;}
+  100%{transform:translateX(calc(100vw + 300px)) translateY(250px) rotate(-30deg);opacity:0;}
+}
+
+/* ==================== CONFETTI ==================== */
+.confetti-box{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:1;}
+.confetti{position:absolute;top:-20px;animation:confettiFall linear infinite;}
+@keyframes confettiFall{
+  0%{transform:translateY(-20px) rotateX(0) rotateZ(0);opacity:1;}
+  100%{transform:translateY(100vh) rotateX(1080deg) rotateZ(540deg);opacity:0;}
+}
+
+/* ==================== GLOW RINGS ==================== */
+.glow-ring{
+  position:absolute;border-radius:50%;
+  border:1px solid rgba(52,131,250,.04);
+  top:50%;left:50%;transform:translate(-50%,-50%);
+  animation:ringPulse 8s ease-in-out infinite;pointer-events:none;z-index:0;
+}
+.glow-ring:nth-child(1){width:320px;height:320px;}
+.glow-ring:nth-child(2){width:520px;height:520px;animation-delay:2s;border-color:rgba(255,230,0,.03);}
+.glow-ring:nth-child(3){width:720px;height:720px;animation-delay:4s;}
+@keyframes ringPulse{0%,100%{opacity:.25;transform:translate(-50%,-50%) scale(1);}50%{opacity:.55;transform:translate(-50%,-50%) scale(1.06);}}
 
 /* ==================== NAV ==================== */
-.nav-dots {
-  position: fixed; right: 20px; top: 50%; transform: translateY(-50%);
-  display: flex; flex-direction: column; gap: 8px; z-index: 1000;
+.nav-dots{
+  position:fixed;right:22px;top:50%;transform:translateY(-50%);
+  display:flex;flex-direction:column;gap:10px;z-index:1000;
 }
-.nav-dot {
-  width: 10px; height: 10px; border-radius: 50%;
-  background: rgba(255,255,255,0.12); border: 2px solid rgba(255,255,255,0.15);
-  cursor: pointer; transition: all 0.4s cubic-bezier(0.175,0.885,0.32,1.275);
+.nav-dot{
+  width:10px;height:10px;border-radius:50%;
+  background:rgba(255,255,255,.08);border:2px solid rgba(255,255,255,.12);
+  cursor:pointer;transition:all .4s cubic-bezier(.175,.885,.32,1.275);
+  position:relative;
 }
-.nav-dot:hover, .nav-dot.active {
-  background: #FFE600; border-color: #FFE600;
-  transform: scale(1.5); box-shadow: 0 0 15px rgba(255,230,0,0.4);
+.nav-dot:hover,.nav-dot.active{
+  background:#FFE600;border-color:#FFE600;
+  transform:scale(1.6);box-shadow:0 0 18px rgba(255,230,0,.45);
 }
-.nav-dot::after {
-  content: attr(data-label);
-  position: absolute; right: 24px; top: 50%; transform: translateY(-50%);
-  background: rgba(0,0,0,0.9); backdrop-filter: blur(10px);
-  color: white; padding: 6px 14px; border-radius: 8px;
-  font-size: 11px; font-weight: 700; white-space: nowrap;
-  opacity: 0; pointer-events: none; transition: opacity 0.3s;
-  border: 1px solid rgba(255,255,255,0.1);
+.nav-dot::after{
+  content:attr(data-label);
+  position:absolute;right:26px;top:50%;transform:translateY(-50%);
+  background:rgba(8,8,26,.95);backdrop-filter:blur(12px);
+  color:#f0f0f8;padding:7px 16px;border-radius:10px;
+  font-size:11px;font-weight:700;white-space:nowrap;
+  opacity:0;pointer-events:none;transition:opacity .3s;
+  border:1px solid rgba(255,255,255,.08);
 }
-.nav-dot:hover::after { opacity: 1; }
+.nav-dot:hover::after{opacity:1;}
 
-.nav-arrows {
-  position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%);
-  display: flex; gap: 10px; z-index: 1000;
+.nav-arrows{
+  position:fixed;bottom:28px;left:50%;transform:translateX(-50%);
+  display:flex;gap:10px;z-index:1000;
 }
-.nav-arrow {
-  width: 44px; height: 44px; border-radius: 50%;
-  background: rgba(255,255,255,0.05); backdrop-filter: blur(20px);
-  border: 1px solid rgba(255,255,255,0.08); color: white;
-  font-size: 18px; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  transition: all 0.4s cubic-bezier(0.175,0.885,0.32,1.275);
+.nav-arrow{
+  width:46px;height:46px;border-radius:50%;
+  background:rgba(255,255,255,.04);backdrop-filter:blur(20px);
+  border:1px solid rgba(255,255,255,.07);color:#f0f0f8;
+  font-size:18px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .4s cubic-bezier(.175,.885,.32,1.275);
 }
-.nav-arrow:hover {
-  background: #FFE600; color: #333; border-color: #FFE600;
-  transform: scale(1.15); box-shadow: 0 0 25px rgba(255,230,0,0.3);
-}
-
-.progress-bar-top {
-  position: fixed; top: 0; left: 0; height: 3px;
-  background: linear-gradient(90deg, #FFE600, #3483FA, #00A650, #7B61FF);
-  z-index: 2000; transition: width 0.3s;
-  box-shadow: 0 0 15px rgba(255,230,0,0.5);
+.nav-arrow:hover{
+  background:#FFE600;color:#08081a;border-color:#FFE600;
+  transform:scale(1.15);box-shadow:0 0 28px rgba(255,230,0,.35);
 }
 
-/* ==================== AMBIENT ==================== */
-.particles { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
-.particle {
-  position: absolute; border-radius: 50%;
-  animation: float linear infinite; opacity: 0;
-}
-@keyframes float {
-  0% { transform: translateY(100vh) rotate(0deg) scale(0); opacity: 0; }
-  8% { opacity: 0.5; transform: translateY(92vh) rotate(57deg) scale(1); }
-  92% { opacity: 0.3; }
-  100% { transform: translateY(-10vh) rotate(720deg) scale(0.3); opacity: 0; }
+.progress-bar{
+  position:fixed;top:0;left:0;height:3px;z-index:2000;
+  background:linear-gradient(90deg,#FFE600,#3483FA,#00A650,#7B61FF,#FF6B35);
+  transition:width .3s;box-shadow:0 0 18px rgba(255,230,0,.5);
 }
 
-.orb {
-  position: absolute; border-radius: 50%;
-  filter: blur(100px); opacity: 0.12; pointer-events: none;
-  animation: orbDrift 25s ease-in-out infinite;
-}
-@keyframes orbDrift {
-  0%, 100% { transform: translate(0,0) scale(1); }
-  25% { transform: translate(40px,-50px) scale(1.15); }
-  50% { transform: translate(-30px,30px) scale(0.9); }
-  75% { transform: translate(50px,40px) scale(1.08); }
-}
-
-.glow-ring {
-  position: absolute; border-radius: 50%;
-  border: 1px solid rgba(52,131,250,0.05);
-  top: 50%; left: 50%; transform: translate(-50%, -50%);
-  animation: ringPulse 7s ease-in-out infinite; pointer-events: none;
-}
-.glow-ring:nth-child(1) { width: 350px; height: 350px; }
-.glow-ring:nth-child(2) { width: 550px; height: 550px; animation-delay: 1.5s; border-color: rgba(255,230,0,0.03); }
-.glow-ring:nth-child(3) { width: 750px; height: 750px; animation-delay: 3s; }
-@keyframes ringPulse { 0%, 100% { opacity: 0.3; transform: translate(-50%,-50%) scale(1); } 50% { opacity: 0.6; transform: translate(-50%,-50%) scale(1.04); } }
-
-.morph-blob {
-  position: absolute; width: 300px; height: 300px;
-  border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
-  animation: morphBlob 15s ease-in-out infinite;
-  pointer-events: none; opacity: 0.06;
-}
-@keyframes morphBlob {
-  0% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
-  25% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
-  50% { border-radius: 50% 60% 30% 70% / 40% 70% 60% 30%; }
-  75% { border-radius: 40% 30% 60% 50% / 70% 40% 50% 60%; }
-  100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
-}
-
-.shooting-star {
-  position: absolute; width: 100px; height: 1px;
-  background: linear-gradient(90deg, rgba(255,230,0,0), rgba(255,230,0,0.8), rgba(255,230,0,0));
-  animation: shoot 3s linear infinite; opacity: 0; pointer-events: none;
-}
-@keyframes shoot {
-  0% { transform: translateX(-200px) translateY(0) rotate(-35deg); opacity: 0; }
-  5% { opacity: 1; } 30% { opacity: 0; }
-  100% { transform: translateX(calc(100vw + 200px)) translateY(300px) rotate(-35deg); opacity: 0; }
-}
-
-.floating-hearts { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
-.float-heart {
-  position: absolute; font-size: 20px;
-  animation: heartRise linear infinite; opacity: 0;
-}
-@keyframes heartRise {
-  0% { transform: translateY(100vh) scale(0) rotate(0); opacity: 0; }
-  10% { opacity: 0.6; transform: translateY(90vh) scale(1) rotate(20deg); }
-  50% { transform: translateY(50vh) scale(1.2) rotate(-10deg); opacity: 0.4; }
-  90% { opacity: 0.1; }
-  100% { transform: translateY(-10vh) scale(0.8) rotate(30deg); opacity: 0; }
-}
-
-.confetti-container { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
-.confetti { position: absolute; top: -20px; animation: confettiFall linear infinite; }
-@keyframes confettiFall {
-  0% { transform: translateY(-20px) rotateX(0) rotateZ(0); opacity: 1; }
-  100% { transform: translateY(100vh) rotateX(1080deg) rotateZ(540deg); opacity: 0; }
-}
-
-.magnetic { transition: transform 0.3s cubic-bezier(0.175,0.885,0.32,1.275); }
-.magnetic:hover { transform: translateY(-8px) scale(1.03); }
-
-/* ==================== REVEAL ANIMATIONS ==================== */
-.reveal { opacity: 0; transform: translateY(50px); transition: all 1s cubic-bezier(0.25,0.46,0.45,0.94); }
-.reveal.visible { opacity: 1; transform: translateY(0); }
-.reveal-scale { opacity: 0; transform: scale(0.85); transition: all 1s cubic-bezier(0.25,0.46,0.45,0.94); }
-.reveal-scale.visible { opacity: 1; transform: scale(1); }
+/* ==================== REVEALS ==================== */
+.reveal{opacity:0;transform:translateY(45px);transition:all 1.1s cubic-bezier(.25,.46,.45,.94);}
+.reveal.visible{opacity:1;transform:translateY(0);}
+.reveal-scale{opacity:0;transform:scale(.88);transition:all 1.1s cubic-bezier(.25,.46,.45,.94);}
+.reveal-scale.visible{opacity:1;transform:scale(1);}
 .s1{transition-delay:.1s}.s2{transition-delay:.2s}.s3{transition-delay:.3s}
 .s4{transition-delay:.4s}.s5{transition-delay:.5s}.s6{transition-delay:.6s}
 
-/* ==================== SLIDE 1: PORTADA ==================== */
-.slide-portada {
-  background: radial-gradient(ellipse at 25% 50%, rgba(52,131,250,0.07) 0%, transparent 50%),
-              radial-gradient(ellipse at 75% 50%, rgba(255,230,0,0.05) 0%, transparent 50%),
-              radial-gradient(ellipse at 50% 80%, rgba(123,97,255,0.04) 0%, transparent 40%), #050510;
-}
-.portada-content { text-align: center; }
-.portada-badge-top {
-  display: inline-block; padding: 8px 28px;
-  background: rgba(255,230,0,0.06); border: 1px solid rgba(255,230,0,0.15);
-  border-radius: 50px; font-size: 13px; font-weight: 800;
-  color: #FFE600; letter-spacing: 4px; margin-bottom: 28px;
-  animation: fadeSlideDown 1s 0.2s backwards;
-}
-@keyframes fadeSlideDown { from { opacity: 0; transform: translateY(-30px) scale(0.9); } }
-.portada-emoji {
-  font-size: 70px; display: block; margin-bottom: 20px;
-  animation: emojiEntrance 1s 0.5s backwards;
-}
-@keyframes emojiEntrance { from { opacity: 0; transform: scale(0) rotate(-180deg); } to { opacity: 1; transform: scale(1) rotate(0); } }
-.portada-title {
-  font-size: clamp(38px, 7vw, 80px); font-weight: 900;
-  line-height: 1.05; margin-bottom: 24px; letter-spacing: -3px;
-  animation: titleReveal 1.2s 0.7s backwards;
-}
-@keyframes titleReveal { from { opacity: 0; transform: translateY(50px); filter: blur(10px); } to { opacity: 1; transform: translateY(0); filter: blur(0); } }
-.portada-title .yellow { color: #FFE600; text-shadow: 0 0 60px rgba(255,230,0,0.15); }
-.portada-title .blue { color: #3483FA; text-shadow: 0 0 60px rgba(52,131,250,0.15); }
-.portada-subtitle {
-  font-size: clamp(14px, 1.8vw, 20px); color: rgba(255,255,255,0.35);
-  font-weight: 400; margin-bottom: 44px; max-width: 650px;
-  margin-left: auto; margin-right: auto;
-  animation: titleReveal 1s 1s backwards; line-height: 1.6;
-}
-.portada-pills {
-  display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;
-  animation: titleReveal 1s 1.3s backwards;
-}
-.portada-pill {
-  padding: 10px 20px; border-radius: 50px; font-weight: 700; font-size: 13px;
-  display: flex; align-items: center; gap: 8px; backdrop-filter: blur(10px);
-  transition: all 0.4s cubic-bezier(0.175,0.885,0.32,1.275);
-}
-.portada-pill:hover { transform: translateY(-4px) scale(1.05); }
-.pp1 { background: rgba(255,230,0,0.06); color: #FFE600; border: 1px solid rgba(255,230,0,0.15); }
-.pp2 { background: rgba(52,131,250,0.06); color: #3483FA; border: 1px solid rgba(52,131,250,0.15); }
-.pp3 { background: rgba(0,166,80,0.06); color: #00A650; border: 1px solid rgba(0,166,80,0.15); }
-.pp4 { background: rgba(255,107,53,0.06); color: #FF6B35; border: 1px solid rgba(255,107,53,0.15); }
-.pp5 { background: rgba(123,97,255,0.06); color: #7B61FF; border: 1px solid rgba(123,97,255,0.15); }
+.magnetic{transition:transform .3s cubic-bezier(.175,.885,.32,1.275);}
+.magnetic:hover{transform:translateY(-8px) scale(1.03);}
 
-.portada-scroll-hint {
-  position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
-  display: flex; flex-direction: column; align-items: center; gap: 8px;
-  animation: fadeSlideDown 1s 2s backwards;
+/* ==================== PORTADA ==================== */
+.portada-content{text-align:center;max-width:900px;}
+.portada-tag{
+  display:inline-block;padding:9px 30px;
+  background:rgba(255,230,0,.05);border:1px solid rgba(255,230,0,.12);
+  border-radius:50px;font-size:12px;font-weight:800;
+  color:#FFE600;letter-spacing:5px;margin-bottom:30px;
+  animation:tagEnter 1s .2s backwards;
 }
-.scroll-mouse {
-  width: 24px; height: 38px; border: 2px solid rgba(255,255,255,0.2); border-radius: 12px; position: relative;
+@keyframes tagEnter{from{opacity:0;transform:translateY(-25px) scale(.9);}}
+.portada-emoji{
+  font-size:72px;display:block;margin-bottom:22px;
+  animation:emojiPop 1s .5s backwards;
 }
-.scroll-mouse::after {
-  content: ''; position: absolute; top: 6px; left: 50%; transform: translateX(-50%);
-  width: 3px; height: 8px; background: #FFE600; border-radius: 3px;
-  animation: scrollWheel 2s ease-in-out infinite;
+@keyframes emojiPop{from{opacity:0;transform:scale(0) rotate(-180deg);}}
+.portada-title{
+  font-size:clamp(36px,6.5vw,78px);font-weight:900;
+  line-height:1.05;margin-bottom:22px;letter-spacing:-3px;
+  animation:titleUp 1.2s .7s backwards;
 }
-@keyframes scrollWheel { 0% { transform: translateX(-50%) translateY(0); opacity: 1; } 100% { transform: translateX(-50%) translateY(14px); opacity: 0; } }
-.scroll-text { font-size: 10px; color: rgba(255,255,255,0.2); font-weight: 700; letter-spacing: 2px; }
+@keyframes titleUp{from{opacity:0;transform:translateY(50px);filter:blur(12px);}}
+.portada-title .glow-yellow{
+  color:#FFE600;
+  text-shadow:0 0 50px rgba(255,230,0,.2),0 0 120px rgba(255,230,0,.08);
+}
+.portada-title .glow-blue{
+  color:#3483FA;
+  text-shadow:0 0 50px rgba(52,131,250,.2),0 0 120px rgba(52,131,250,.08);
+}
+.portada-sub{
+  font-size:clamp(14px,1.7vw,19px);color:rgba(240,240,248,.45);
+  font-weight:400;margin-bottom:40px;max-width:620px;
+  margin-left:auto;margin-right:auto;line-height:1.7;
+  animation:titleUp 1s 1s backwards;
+}
+.portada-pills{
+  display:flex;flex-wrap:wrap;justify-content:center;gap:10px;
+  animation:titleUp 1s 1.3s backwards;
+}
+.pill{
+  padding:10px 20px;border-radius:50px;font-weight:700;font-size:13px;
+  display:flex;align-items:center;gap:8px;backdrop-filter:blur(12px);
+  transition:all .4s cubic-bezier(.175,.885,.32,1.275);
+}
+.pill:hover{transform:translateY(-4px) scale(1.06);}
+.pill-y{background:rgba(255,230,0,.06);color:#FFE600;border:1px solid rgba(255,230,0,.14);}
+.pill-b{background:rgba(52,131,250,.06);color:#3483FA;border:1px solid rgba(52,131,250,.14);}
+.pill-g{background:rgba(0,166,80,.06);color:#00A650;border:1px solid rgba(0,166,80,.14);}
+.pill-o{background:rgba(255,107,53,.06);color:#FF6B35;border:1px solid rgba(255,107,53,.14);}
+.pill-p{background:rgba(123,97,255,.06);color:#7B61FF;border:1px solid rgba(123,97,255,.14);}
 
-/* ==================== SLIDE 2: LA REALIDAD ==================== */
-.slide-realidad {
-  background: radial-gradient(ellipse at 50% 50%, rgba(242,61,79,0.04) 0%, transparent 50%), #050510;
+.scroll-hint{
+  position:absolute;bottom:38px;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  animation:tagEnter 1s 2s backwards;
 }
-.realidad-content { text-align: center; max-width: 900px; }
-.realidad-title {
-  font-size: clamp(26px, 4vw, 50px); font-weight: 900;
-  line-height: 1.2; margin-bottom: 20px; letter-spacing: -1.5px;
+.scroll-mouse{
+  width:24px;height:38px;border:2px solid rgba(255,255,255,.15);
+  border-radius:12px;position:relative;
 }
-.realidad-title .red { color: #F23D4F; text-shadow: 0 0 30px rgba(242,61,79,0.15); }
-.realidad-sub {
-  font-size: clamp(14px, 1.6vw, 18px); color: rgba(255,255,255,0.35);
-  line-height: 1.8; margin-bottom: 40px;
+.scroll-mouse::after{
+  content:'';position:absolute;top:6px;left:50%;transform:translateX(-50%);
+  width:3px;height:8px;background:#FFE600;border-radius:3px;
+  animation:wheel 2s ease-in-out infinite;
 }
+@keyframes wheel{0%{transform:translateX(-50%) translateY(0);opacity:1;}100%{transform:translateX(-50%) translateY(14px);opacity:0;}}
+.scroll-label{font-size:10px;color:rgba(255,255,255,.18);font-weight:700;letter-spacing:3px;}
 
-.dolor-grid {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 16px; max-width: 1000px; width: 100%;
+/* ==================== SLIDE 2: PROPÓSITO ==================== */
+.proposito-content{text-align:center;max-width:820px;}
+.proposito-quote{
+  font-size:clamp(22px,3.5vw,42px);font-weight:700;
+  line-height:1.4;color:rgba(240,240,248,.85);margin-bottom:20px;letter-spacing:-.5px;
 }
-.dolor-card {
-  background: rgba(255,255,255,0.015); border: 1px solid rgba(255,255,255,0.05);
-  border-radius: 20px; padding: 28px 22px; text-align: center;
-  transition: all 0.5s cubic-bezier(0.175,0.885,0.32,1.275);
-  backdrop-filter: blur(10px); position: relative; overflow: hidden;
+.proposito-quote .em{color:#FFE600;font-style:italic;}
+.proposito-quote .em-b{color:#3483FA;}
+.proposito-divider{
+  width:80px;height:3px;margin:24px auto;
+  background:linear-gradient(90deg,#FFE600,#3483FA);border-radius:10px;
 }
-.dolor-card::before {
-  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-  background: linear-gradient(90deg, transparent, rgba(242,61,79,0.4), transparent);
-  opacity: 0; transition: opacity 0.4s;
+.proposito-after{
+  font-size:clamp(15px,2vw,22px);color:rgba(240,240,248,.4);
+  line-height:1.7;max-width:640px;margin:0 auto;
 }
-.dolor-card:hover { transform: translateY(-10px); border-color: rgba(242,61,79,0.2); background: rgba(242,61,79,0.02); }
-.dolor-card:hover::before { opacity: 1; }
-.dolor-icon { font-size: 38px; margin-bottom: 14px; display: block; }
-.dolor-text { font-weight: 600; font-size: 13px; line-height: 1.7; color: rgba(255,255,255,0.55); }
-.dolor-text .highlight { color: #F23D4F; font-weight: 800; }
+.proposito-after strong{color:rgba(240,240,248,.7);}
 
-/* ==================== SLIDE 3: LA PROPUESTA ==================== */
-.slide-propuesta {
-  background: radial-gradient(ellipse at 50% 40%, rgba(0,166,80,0.06) 0%, transparent 50%),
-              radial-gradient(ellipse at 30% 70%, rgba(255,230,0,0.03) 0%, transparent 40%), #050510;
+/* ==================== SLIDE 3: REALIDAD ==================== */
+.realidad-content{text-align:center;max-width:950px;}
+.realidad-title{
+  font-size:clamp(24px,3.8vw,46px);font-weight:900;
+  line-height:1.2;margin-bottom:16px;letter-spacing:-1.5px;
 }
-.propuesta-content { text-align: center; max-width: 1000px; }
-.propuesta-icon { font-size: 80px; margin-bottom: 24px; display: block; animation: emojiFloat 4s ease-in-out infinite; }
-@keyframes emojiFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
-.propuesta-title {
-  font-size: clamp(28px, 4.5vw, 56px); font-weight: 900;
-  margin-bottom: 20px; letter-spacing: -2px;
-}
-.propuesta-title .green { color: #00A650; text-shadow: 0 0 40px rgba(0,166,80,0.15); }
-.propuesta-desc {
-  font-size: clamp(14px, 1.6vw, 18px); color: rgba(255,255,255,0.4);
-  max-width: 700px; margin: 0 auto 40px; line-height: 1.75;
+.realidad-title .red{color:#F23D4F;text-shadow:0 0 30px rgba(242,61,79,.12);}
+.realidad-sub{
+  font-size:clamp(13px,1.5vw,17px);color:rgba(240,240,248,.35);
+  line-height:1.8;margin-bottom:36px;max-width:650px;margin-left:auto;margin-right:auto;
 }
 
-.structure-grid {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 16px; max-width: 900px; width: 100%; margin-top: 10px;
+.pain-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+  gap:16px;max-width:1000px;width:100%;
 }
-.structure-card {
-  padding: 24px; border-radius: 20px;
-  background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06);
-  backdrop-filter: blur(10px); text-align: left;
-  transition: all 0.5s cubic-bezier(0.175,0.885,0.32,1.275);
+.pain-card{
+  background:linear-gradient(145deg,rgba(242,61,79,.03),rgba(255,255,255,.01));
+  border:1px solid rgba(242,61,79,.08);
+  border-radius:22px;padding:28px 20px;text-align:center;
+  transition:all .5s cubic-bezier(.175,.885,.32,1.275);
+  backdrop-filter:blur(12px);position:relative;overflow:hidden;
 }
-.structure-card:hover { transform: translateY(-6px); border-color: rgba(255,255,255,0.12); }
-.structure-card .sc-top { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
-.structure-card .sc-badge {
-  width: 44px; height: 44px; border-radius: 12px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 18px; font-weight: 900; color: white;
+.pain-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,rgba(242,61,79,.35),transparent);
+  opacity:0;transition:opacity .4s;
 }
-.structure-card .sc-title { font-weight: 800; font-size: 15px; }
-.structure-card .sc-desc { font-size: 12.5px; color: rgba(255,255,255,0.4); line-height: 1.7; }
+.pain-card:hover{transform:translateY(-10px);border-color:rgba(242,61,79,.2);background:linear-gradient(145deg,rgba(242,61,79,.06),rgba(255,255,255,.02));}
+.pain-card:hover::before{opacity:1;}
+.pain-icon{font-size:36px;margin-bottom:12px;display:block;}
+.pain-text{font-weight:500;font-size:13px;line-height:1.75;color:rgba(240,240,248,.5);}
+.pain-text .hl{color:#F23D4F;font-weight:800;}
 
-/* ==================== SLIDE 4: LAS 5 MÉTRICAS ==================== */
-.slide-metricas {
-  background: radial-gradient(ellipse at 50% 50%, rgba(52,131,250,0.04) 0%, transparent 50%), #050510;
+/* ==================== SLIDE 4: LA VISIÓN ==================== */
+.vision-content{text-align:center;max-width:1000px;}
+.vision-icon{font-size:80px;margin-bottom:24px;display:block;animation:iconFloat 4s ease-in-out infinite;}
+@keyframes iconFloat{0%,100%{transform:translateY(0) rotate(0);}50%{transform:translateY(-14px) rotate(3deg);}}
+.vision-title{
+  font-size:clamp(26px,4.2vw,54px);font-weight:900;
+  margin-bottom:20px;letter-spacing:-2px;line-height:1.15;
 }
-.section-title {
-  text-align: center; font-size: clamp(24px, 3.5vw, 44px);
-  font-weight: 900; margin-bottom: 14px; letter-spacing: -1.5px; line-height: 1.2;
-}
-.section-sub {
-  text-align: center; color: rgba(255,255,255,0.3); font-size: 15px;
-  margin-bottom: 40px; max-width: 600px; line-height: 1.6;
-}
-
-.metricas-grid {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 14px; max-width: 1100px; width: 100%;
-}
-.metrica-card {
-  background: rgba(255,255,255,0.015); border: 1px solid rgba(255,255,255,0.05);
-  border-radius: 20px; padding: 26px 20px; text-align: center;
-  position: relative; overflow: hidden;
-  transition: all 0.5s cubic-bezier(0.175,0.885,0.32,1.275);
-  backdrop-filter: blur(10px);
-}
-.metrica-card::before {
-  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
-  border-radius: 20px 20px 0 0; opacity: 0.6;
-}
-.metrica-card:hover { background: rgba(255,255,255,0.03); transform: translateY(-8px); }
-.metrica-card:hover::before { opacity: 1; }
-.mc-yellow::before { background: linear-gradient(90deg, #FFE600, rgba(255,230,0,0.2)); }
-.mc-yellow:hover { border-color: rgba(255,230,0,0.2); box-shadow: 0 20px 50px rgba(255,230,0,0.04); }
-.mc-blue::before { background: linear-gradient(90deg, #3483FA, rgba(52,131,250,0.2)); }
-.mc-blue:hover { border-color: rgba(52,131,250,0.2); box-shadow: 0 20px 50px rgba(52,131,250,0.04); }
-.mc-green::before { background: linear-gradient(90deg, #00A650, rgba(0,166,80,0.2)); }
-.mc-green:hover { border-color: rgba(0,166,80,0.2); box-shadow: 0 20px 50px rgba(0,166,80,0.04); }
-.mc-orange::before { background: linear-gradient(90deg, #FF6B35, rgba(255,107,53,0.2)); }
-.mc-orange:hover { border-color: rgba(255,107,53,0.2); box-shadow: 0 20px 50px rgba(255,107,53,0.04); }
-.mc-purple::before { background: linear-gradient(90deg, #7B61FF, rgba(123,97,255,0.2)); }
-.mc-purple:hover { border-color: rgba(123,97,255,0.2); box-shadow: 0 20px 50px rgba(123,97,255,0.04); }
-
-.mc-emoji { font-size: 36px; margin-bottom: 12px; display: block; }
-.mc-name { font-weight: 800; font-size: 15px; margin-bottom: 8px; }
-.mc-insight { font-size: 11.5px; color: rgba(255,255,255,0.4); line-height: 1.65; }
-.mc-insight strong { font-weight: 700; }
-.mc-insight .y { color: #FFE600; } .mc-insight .b { color: #3483FA; }
-.mc-insight .g { color: #00A650; } .mc-insight .o { color: #FF6B35; }
-.mc-insight .p { color: #7B61FF; } .mc-insight .r { color: #F23D4F; }
-
-/* ==================== SLIDE 5: CÓMO FUNCIONA ==================== */
-.slide-como {
-  background: radial-gradient(ellipse at 30% 50%, rgba(52,131,250,0.05) 0%, transparent 50%),
-              radial-gradient(ellipse at 70% 50%, rgba(255,230,0,0.03) 0%, transparent 50%), #050510;
-}
-.flow-container { max-width: 1100px; width: 100%; }
-.arq-flow {
-  display: flex; align-items: flex-start; justify-content: center;
-  gap: 0; flex-wrap: wrap; margin-bottom: 40px;
-}
-.arq-step { text-align: center; padding: 16px; flex: 1; min-width: 155px; }
-.arq-circle {
-  width: 80px; height: 80px; border-radius: 20px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 32px; margin: 0 auto 12px;
-  transition: all 0.5s cubic-bezier(0.175,0.885,0.32,1.275);
-}
-.arq-circle.c1 { background: rgba(255,230,0,0.08); border: 1.5px solid rgba(255,230,0,0.25); }
-.arq-circle.c2 { background: rgba(52,131,250,0.08); border: 1.5px solid rgba(52,131,250,0.25); }
-.arq-circle.c3 { background: rgba(0,166,80,0.08); border: 1.5px solid rgba(0,166,80,0.25); }
-.arq-circle.c4 { background: rgba(123,97,255,0.08); border: 1.5px solid rgba(123,97,255,0.25); }
-.arq-label { font-weight: 800; font-size: 13px; margin-bottom: 4px; }
-.arq-sub { font-size: 11px; color: rgba(255,255,255,0.3); line-height: 1.5; max-width: 160px; margin: 0 auto; }
-.arq-arrow {
-  font-size: 22px; color: rgba(255,255,255,0.12);
-  animation: arrowPulse 2s ease-in-out infinite; flex-shrink: 0; margin-top: 28px;
-}
-@keyframes arrowPulse { 0%, 100% { opacity: 0.12; transform: translateX(0); } 50% { opacity: 0.4; transform: translateX(6px); } }
-
-.cadencia-row {
-  display: flex; justify-content: center; gap: 14px; flex-wrap: wrap;
-}
-.cadencia-card {
-  padding: 18px 24px; background: rgba(255,255,255,0.015);
-  border: 1px solid rgba(255,255,255,0.05); border-radius: 16px;
-  text-align: center; min-width: 140px; backdrop-filter: blur(10px);
-  transition: all 0.4s cubic-bezier(0.175,0.885,0.32,1.275);
-}
-.cadencia-card:hover { border-color: rgba(255,230,0,0.15); transform: translateY(-4px); }
-.cadencia-icon { font-size: 26px; margin-bottom: 8px; }
-.cadencia-label { font-weight: 800; font-size: 12px; margin-bottom: 3px; }
-.cadencia-desc { font-size: 10.5px; color: rgba(255,255,255,0.3); line-height: 1.5; }
-
-/* ==================== SLIDE 6: IMPACTO ==================== */
-.slide-impacto {
-  background: radial-gradient(ellipse at 30% 40%, rgba(0,166,80,0.05) 0%, transparent 50%),
-              radial-gradient(ellipse at 70% 60%, rgba(255,230,0,0.03) 0%, transparent 50%), #050510;
-}
-.impacto-grid {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 18px; max-width: 1000px; width: 100%; margin-bottom: 36px;
-}
-.impacto-card {
-  text-align: center; padding: 30px 20px; border-radius: 24px;
-  background: rgba(255,255,255,0.015); border: 1px solid rgba(255,255,255,0.05);
-  transition: all 0.5s cubic-bezier(0.175,0.885,0.32,1.275);
-  backdrop-filter: blur(10px); position: relative; overflow: hidden;
-}
-.impacto-card::before {
-  content: ''; position: absolute; inset: 0; border-radius: 24px;
-  opacity: 0; transition: opacity 0.4s;
-}
-.impacto-card:hover::before { opacity: 1; }
-.impacto-card.ic1::before { background: radial-gradient(ellipse at center, rgba(255,230,0,0.04), transparent 70%); }
-.impacto-card.ic1:hover { border-color: rgba(255,230,0,0.25); }
-.impacto-card.ic2::before { background: radial-gradient(ellipse at center, rgba(52,131,250,0.04), transparent 70%); }
-.impacto-card.ic2:hover { border-color: rgba(52,131,250,0.25); }
-.impacto-card.ic3::before { background: radial-gradient(ellipse at center, rgba(0,166,80,0.04), transparent 70%); }
-.impacto-card.ic3:hover { border-color: rgba(0,166,80,0.25); }
-.impacto-card.ic4::before { background: radial-gradient(ellipse at center, rgba(123,97,255,0.04), transparent 70%); }
-.impacto-card.ic4:hover { border-color: rgba(123,97,255,0.25); }
-.impacto-icon { font-size: 34px; margin-bottom: 10px; position: relative; z-index: 1; }
-.impacto-number {
-  font-size: clamp(36px, 5vw, 56px); font-weight: 900; letter-spacing: -2px; position: relative; z-index: 1;
-}
-.impacto-number.yellow { color: #FFE600; text-shadow: 0 0 30px rgba(255,230,0,0.12); }
-.impacto-number.blue { color: #3483FA; text-shadow: 0 0 30px rgba(52,131,250,0.12); }
-.impacto-number.green { color: #00A650; text-shadow: 0 0 30px rgba(0,166,80,0.12); }
-.impacto-number.purple { color: #7B61FF; text-shadow: 0 0 30px rgba(123,97,255,0.12); }
-.impacto-label { font-size: 11px; color: rgba(255,255,255,0.35); font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; margin-top: 6px; position: relative; z-index: 1; }
-
-.beneficios-row {
-  display: flex; justify-content: center; gap: 28px; flex-wrap: wrap;
-}
-.beneficio-item { text-align: center; max-width: 160px; transition: transform 0.3s; }
-.beneficio-item:hover { transform: translateY(-4px); }
-.beneficio-emoji { font-size: 28px; margin-bottom: 6px; }
-.beneficio-title { font-size: 12px; font-weight: 800; margin-bottom: 3px; }
-.beneficio-desc { font-size: 10.5px; color: rgba(255,255,255,0.3); line-height: 1.5; }
-
-/* ==================== SLIDE 7: CIERRE ==================== */
-.slide-cierre {
-  background: radial-gradient(ellipse at 30% 40%, rgba(52,131,250,0.06) 0%, transparent 50%),
-              radial-gradient(ellipse at 70% 60%, rgba(255,230,0,0.04) 0%, transparent 50%),
-              radial-gradient(ellipse at 50% 80%, rgba(0,166,80,0.03) 0%, transparent 40%), #050510;
-}
-.cierre-content { text-align: center; }
-.cierre-emoji { font-size: 70px; margin-bottom: 20px; display: block; animation: emojiEntrance 1s backwards; }
-.cierre-title {
-  font-size: clamp(26px, 4.5vw, 52px); font-weight: 900;
-  margin-bottom: 16px; line-height: 1.2; letter-spacing: -1.5px;
-}
-.cierre-highlight {
-  background: linear-gradient(135deg, #FFE600, #3483FA);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-}
-.cierre-desc {
-  font-size: clamp(14px, 1.6vw, 18px); color: rgba(255,255,255,0.4);
-  line-height: 1.7; margin-bottom: 30px; max-width: 620px; margin-left: auto; margin-right: auto;
-}
-.cierre-desc strong { color: rgba(255,255,255,0.7); }
-.cierre-divider {
-  width: 80px; height: 3px; margin: 0 auto 30px;
-  background: linear-gradient(90deg, #FFE600, #3483FA, #00A650);
-  border-radius: 10px;
+.vision-title .green{color:#00A650;text-shadow:0 0 40px rgba(0,166,80,.15);}
+.vision-desc{
+  font-size:clamp(14px,1.5vw,17px);color:rgba(240,240,248,.4);
+  max-width:680px;margin:0 auto 36px;line-height:1.8;
 }
 
-.cierre-steps {
-  display: flex; flex-wrap: wrap; justify-content: center; gap: 12px;
-  margin-bottom: 34px; max-width: 700px;
+.pillars-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:16px;max-width:900px;width:100%;
 }
-.cierre-step {
-  padding: 12px 22px; border-radius: 14px;
-  background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06);
-  font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.6);
-  display: flex; align-items: center; gap: 8px;
-  transition: all 0.4s cubic-bezier(0.175,0.885,0.32,1.275);
+.pillar-card{
+  padding:26px;border-radius:22px;
+  background:linear-gradient(145deg,rgba(255,255,255,.02),rgba(255,255,255,.005));
+  border:1px solid rgba(255,255,255,.06);
+  backdrop-filter:blur(12px);text-align:left;
+  transition:all .5s cubic-bezier(.175,.885,.32,1.275);
+  position:relative;overflow:hidden;
 }
-.cierre-step:hover { border-color: rgba(255,230,0,0.2); transform: translateY(-3px); }
-.cierre-step .step-num {
-  width: 26px; height: 26px; border-radius: 50%; background: rgba(255,230,0,0.1);
-  color: #FFE600; font-size: 11px; font-weight: 900;
-  display: flex; align-items: center; justify-content: center;
+.pillar-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  border-radius:22px 22px 0 0;opacity:.5;transition:opacity .3s;
+}
+.pillar-card:hover{transform:translateY(-8px);background:linear-gradient(145deg,rgba(255,255,255,.035),rgba(255,255,255,.01));}
+.pillar-card:hover::before{opacity:1;}
+.pc-blue::before{background:linear-gradient(90deg,#3483FA,transparent);}
+.pc-blue:hover{border-color:rgba(52,131,250,.2);box-shadow:0 20px 50px rgba(52,131,250,.04);}
+.pc-purple::before{background:linear-gradient(90deg,#7B61FF,transparent);}
+.pc-purple:hover{border-color:rgba(123,97,255,.2);box-shadow:0 20px 50px rgba(123,97,255,.04);}
+.pc-yellow::before{background:linear-gradient(90deg,#FFE600,transparent);}
+.pc-yellow:hover{border-color:rgba(255,230,0,.2);box-shadow:0 20px 50px rgba(255,230,0,.04);}
+
+.pc-top{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+.pc-badge{
+  width:44px;height:44px;border-radius:14px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;font-weight:900;color:#fff;
+}
+.pc-title{font-weight:800;font-size:15px;}
+.pc-desc{font-size:12.5px;color:rgba(240,240,248,.4);line-height:1.75;}
+
+/* ==================== SLIDE 5: MÉTRICAS ==================== */
+.section-title{
+  text-align:center;font-size:clamp(24px,3.5vw,44px);
+  font-weight:900;margin-bottom:14px;letter-spacing:-1.5px;line-height:1.2;
+}
+.section-sub{
+  text-align:center;color:rgba(240,240,248,.3);font-size:15px;
+  margin-bottom:40px;max-width:600px;line-height:1.65;
 }
 
-.cierre-author {
-  font-size: 14px; color: rgba(255,255,255,0.5); font-weight: 600; margin-bottom: 6px;
+.metricas-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(195px,1fr));
+  gap:14px;max-width:1100px;width:100%;
 }
-.cierre-sub {
-  font-size: 11px; color: rgba(255,255,255,0.2); font-weight: 700; letter-spacing: 3px;
+.metrica-card{
+  background:linear-gradient(155deg,rgba(255,255,255,.02),rgba(255,255,255,.005));
+  border:1px solid rgba(255,255,255,.05);
+  border-radius:22px;padding:26px 18px;text-align:center;
+  position:relative;overflow:hidden;
+  transition:all .5s cubic-bezier(.175,.885,.32,1.275);
+  backdrop-filter:blur(12px);
 }
-@keyframes heartbeat { 0%, 100% { transform: scale(1); } 15% { transform: scale(1.3); } 30% { transform: scale(1); } 45% { transform: scale(1.2); } }
-.heart-cierre { display: inline-block; animation: heartbeat 1.5s ease-in-out infinite; }
+.metrica-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  border-radius:22px 22px 0 0;opacity:.5;
+}
+.metrica-card:hover{background:linear-gradient(155deg,rgba(255,255,255,.04),rgba(255,255,255,.01));transform:translateY(-8px);}
+.metrica-card:hover::before{opacity:1;}
+.mc-y::before{background:linear-gradient(90deg,#FFE600,transparent);}
+.mc-y:hover{border-color:rgba(255,230,0,.2);box-shadow:0 20px 50px rgba(255,230,0,.04);}
+.mc-b::before{background:linear-gradient(90deg,#3483FA,transparent);}
+.mc-b:hover{border-color:rgba(52,131,250,.2);box-shadow:0 20px 50px rgba(52,131,250,.04);}
+.mc-g::before{background:linear-gradient(90deg,#00A650,transparent);}
+.mc-g:hover{border-color:rgba(0,166,80,.2);box-shadow:0 20px 50px rgba(0,166,80,.04);}
+.mc-o::before{background:linear-gradient(90deg,#FF6B35,transparent);}
+.mc-o:hover{border-color:rgba(255,107,53,.2);box-shadow:0 20px 50px rgba(255,107,53,.04);}
+.mc-p::before{background:linear-gradient(90deg,#7B61FF,transparent);}
+.mc-p:hover{border-color:rgba(123,97,255,.2);box-shadow:0 20px 50px rgba(123,97,255,.04);}
+
+.mc-emoji{font-size:34px;margin-bottom:10px;display:block;}
+.mc-name{font-weight:800;font-size:14px;margin-bottom:6px;}
+.mc-purpose{font-size:11px;font-weight:700;margin-bottom:8px;letter-spacing:.5px;}
+.mc-desc{font-size:11px;color:rgba(240,240,248,.38);line-height:1.7;}
+.mc-desc strong{font-weight:700;}
+.mc-desc .y{color:#FFE600;}.mc-desc .b{color:#3483FA;}.mc-desc .g{color:#00A650;}.mc-desc .o{color:#FF6B35;}.mc-desc .p{color:#7B61FF;}
+
+/* ==================== SLIDE 6: CICLO ==================== */
+.cycle-container{max-width:1100px;width:100%;}
+.cycle-flow{
+  display:flex;align-items:flex-start;justify-content:center;
+  gap:0;flex-wrap:wrap;margin-bottom:38px;
+}
+.cycle-step{text-align:center;padding:16px;flex:1;min-width:145px;}
+.cycle-circle{
+  width:78px;height:78px;border-radius:20px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:30px;margin:0 auto 12px;
+  transition:all .5s cubic-bezier(.175,.885,.32,1.275);
+}
+.cycle-circle:hover{transform:translateY(-6px) scale(1.08);}
+.cc1{background:rgba(255,230,0,.07);border:1.5px solid rgba(255,230,0,.2);}
+.cc2{background:rgba(52,131,250,.07);border:1.5px solid rgba(52,131,250,.2);}
+.cc3{background:rgba(0,166,80,.07);border:1.5px solid rgba(0,166,80,.2);}
+.cc4{background:rgba(123,97,255,.07);border:1.5px solid rgba(123,97,255,.2);}
+.cycle-label{font-weight:800;font-size:12.5px;margin-bottom:4px;}
+.cycle-sub{font-size:10.5px;color:rgba(240,240,248,.3);line-height:1.55;max-width:150px;margin:0 auto;}
+.cycle-arrow{
+  font-size:20px;color:rgba(255,255,255,.1);flex-shrink:0;margin-top:26px;
+  animation:arrowPulse 2s ease-in-out infinite;
+}
+@keyframes arrowPulse{0%,100%{opacity:.1;transform:translateX(0);}50%{opacity:.35;transform:translateX(6px);}}
+
+.rhythm-row{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;}
+.rhythm-card{
+  padding:16px 22px;
+  background:linear-gradient(145deg,rgba(255,255,255,.015),rgba(255,255,255,.005));
+  border:1px solid rgba(255,255,255,.05);border-radius:16px;
+  text-align:center;min-width:130px;backdrop-filter:blur(12px);
+  transition:all .4s cubic-bezier(.175,.885,.32,1.275);
+}
+.rhythm-card:hover{border-color:rgba(255,230,0,.15);transform:translateY(-4px);}
+.rhythm-icon{font-size:24px;margin-bottom:6px;}
+.rhythm-label{font-weight:800;font-size:11.5px;margin-bottom:3px;}
+.rhythm-desc{font-size:10px;color:rgba(240,240,248,.3);line-height:1.5;}
+
+/* ==================== SLIDE 7: IMPACTO ==================== */
+.impact-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
+  gap:18px;max-width:950px;width:100%;margin-bottom:36px;
+}
+.impact-card{
+  text-align:center;padding:28px 18px;border-radius:24px;
+  background:linear-gradient(155deg,rgba(255,255,255,.02),rgba(255,255,255,.005));
+  border:1px solid rgba(255,255,255,.05);
+  transition:all .5s cubic-bezier(.175,.885,.32,1.275);
+  backdrop-filter:blur(12px);position:relative;overflow:hidden;
+}
+.impact-card::before{content:'';position:absolute;inset:0;border-radius:24px;opacity:0;transition:opacity .4s;}
+.impact-card:hover::before{opacity:1;}
+.ic1::before{background:radial-gradient(ellipse at center,rgba(255,230,0,.04),transparent 70%);}
+.ic1:hover{border-color:rgba(255,230,0,.25);}
+.ic2::before{background:radial-gradient(ellipse at center,rgba(52,131,250,.04),transparent 70%);}
+.ic2:hover{border-color:rgba(52,131,250,.25);}
+.ic3::before{background:radial-gradient(ellipse at center,rgba(0,166,80,.04),transparent 70%);}
+.ic3:hover{border-color:rgba(0,166,80,.25);}
+.ic4::before{background:radial-gradient(ellipse at center,rgba(123,97,255,.04),transparent 70%);}
+.ic4:hover{border-color:rgba(123,97,255,.25);}
+
+.impact-icon{font-size:30px;margin-bottom:8px;position:relative;z-index:1;}
+.impact-number{
+  font-size:clamp(34px,4.5vw,52px);font-weight:900;letter-spacing:-2px;position:relative;z-index:1;
+}
+.impact-number.yellow{color:#FFE600;text-shadow:0 0 30px rgba(255,230,0,.1);}
+.impact-number.blue{color:#3483FA;text-shadow:0 0 30px rgba(52,131,250,.1);}
+.impact-number.green{color:#00A650;text-shadow:0 0 30px rgba(0,166,80,.1);}
+.impact-number.purple{color:#7B61FF;text-shadow:0 0 30px rgba(123,97,255,.1);}
+.impact-label{font-size:10px;color:rgba(240,240,248,.35);font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-top:5px;position:relative;z-index:1;}
+
+.benefits-row{display:flex;justify-content:center;gap:28px;flex-wrap:wrap;}
+.benefit{text-align:center;max-width:150px;transition:transform .3s;}
+.benefit:hover{transform:translateY(-5px);}
+.benefit-emoji{font-size:26px;margin-bottom:5px;}
+.benefit-title{font-size:11.5px;font-weight:800;margin-bottom:3px;}
+.benefit-desc{font-size:10px;color:rgba(240,240,248,.3);line-height:1.55;}
+
+/* ==================== SLIDE 8: CIERRE ==================== */
+.cierre-content{text-align:center;max-width:750px;}
+.cierre-emoji{font-size:70px;margin-bottom:20px;display:block;animation:emojiPop 1s backwards;}
+.cierre-title{
+  font-size:clamp(26px,4.5vw,52px);font-weight:900;
+  margin-bottom:16px;line-height:1.2;letter-spacing:-1.5px;
+}
+.cierre-glow{
+  background:linear-gradient(135deg,#FFE600,#3483FA,#00A650);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;background-size:200% 200%;
+  animation:gradientShift 4s ease-in-out infinite;
+}
+@keyframes gradientShift{0%{background-position:0% 50%;}50%{background-position:100% 50%;}100%{background-position:0% 50%;}}
+.cierre-desc{
+  font-size:clamp(14px,1.5vw,17px);color:rgba(240,240,248,.4);
+  line-height:1.75;margin-bottom:32px;
+}
+.cierre-desc strong{color:rgba(240,240,248,.7);}
+.cierre-divider{
+  width:80px;height:3px;margin:0 auto 30px;
+  background:linear-gradient(90deg,#FFE600,#3483FA,#00A650);border-radius:10px;
+}
+.next-steps{
+  display:flex;flex-wrap:wrap;justify-content:center;gap:12px;
+  margin-bottom:34px;max-width:680px;
+}
+.next-step{
+  padding:12px 22px;border-radius:14px;
+  background:linear-gradient(145deg,rgba(255,255,255,.02),rgba(255,255,255,.005));
+  border:1px solid rgba(255,255,255,.06);
+  font-size:13px;font-weight:700;color:rgba(240,240,248,.6);
+  display:flex;align-items:center;gap:8px;
+  transition:all .4s cubic-bezier(.175,.885,.32,1.275);
+}
+.next-step:hover{border-color:rgba(255,230,0,.2);transform:translateY(-3px);}
+.step-num{
+  width:26px;height:26px;border-radius:50%;
+  background:rgba(255,230,0,.08);color:#FFE600;
+  font-size:11px;font-weight:900;
+  display:flex;align-items:center;justify-content:center;
+}
+.cierre-author{font-size:14px;color:rgba(240,240,248,.45);font-weight:600;margin-bottom:6px;}
+.cierre-sub{font-size:11px;color:rgba(240,240,248,.18);font-weight:700;letter-spacing:3px;}
+@keyframes heartbeat{0%,100%{transform:scale(1);}15%{transform:scale(1.3);}30%{transform:scale(1);}45%{transform:scale(1.2);}}
+.heart-beat{display:inline-block;animation:heartbeat 1.5s ease-in-out infinite;}
 
 /* ==================== RESPONSIVE ==================== */
-@media (max-width: 768px) {
-  .slide { padding: 40px 20px; }
-  .nav-dots { right: 8px; gap: 6px; }
-  .nav-dot { width: 7px; height: 7px; }
-  .nav-dot::after { display: none; }
-  .dolor-grid, .metricas-grid { grid-template-columns: 1fr; }
-  .structure-grid { grid-template-columns: 1fr; }
-  .arq-flow { flex-direction: column; align-items: center; }
-  .arq-arrow { transform: rotate(90deg); margin-top: 0; }
-  .impacto-grid { grid-template-columns: 1fr 1fr; }
-  .nav-arrows { bottom: 14px; }
-  .portada-scroll-hint { bottom: 24px; }
-  .cadencia-row { flex-direction: column; align-items: center; }
+@media(max-width:768px){
+  .slide{padding:40px 20px;}
+  .nav-dots{right:8px;gap:6px;}.nav-dot{width:7px;height:7px;}.nav-dot::after{display:none;}
+  .pain-grid,.metricas-grid,.pillars-grid{grid-template-columns:1fr;}
+  .cycle-flow{flex-direction:column;align-items:center;}
+  .cycle-arrow{transform:rotate(90deg);margin-top:0;}
+  .impact-grid{grid-template-columns:1fr 1fr;}
+  .rhythm-row{flex-direction:column;align-items:center;}
+  .nav-arrows{bottom:14px;}
+  .scroll-hint{bottom:24px;}
 }
-@media (max-width: 480px) { .impacto-grid { grid-template-columns: 1fr; } }
+@media(max-width:480px){.impact-grid{grid-template-columns:1fr;}}
 </style>
 </head>
 <body>
 
-<div class="progress-bar-top" id="progressBar"></div>
+<div class="progress-bar" id="progressBar"></div>
 
 <nav class="nav-dots" id="navDots">
   <div class="nav-dot active" data-slide="0" data-label="Inicio"></div>
-  <div class="nav-dot" data-slide="1" data-label="La Realidad"></div>
-  <div class="nav-dot" data-slide="2" data-label="La Propuesta"></div>
-  <div class="nav-dot" data-slide="3" data-label="Las Métricas"></div>
-  <div class="nav-dot" data-slide="4" data-label="Cómo Funciona"></div>
-  <div class="nav-dot" data-slide="5" data-label="Impacto"></div>
-  <div class="nav-dot" data-slide="6" data-label="Siguiente Paso"></div>
+  <div class="nav-dot" data-slide="1" data-label="Propósito"></div>
+  <div class="nav-dot" data-slide="2" data-label="La Realidad"></div>
+  <div class="nav-dot" data-slide="3" data-label="La Visión"></div>
+  <div class="nav-dot" data-slide="4" data-label="Las Métricas"></div>
+  <div class="nav-dot" data-slide="5" data-label="El Ciclo"></div>
+  <div class="nav-dot" data-slide="6" data-label="Impacto"></div>
+  <div class="nav-dot" data-slide="7" data-label="Siguiente Paso"></div>
 </nav>
 
 <div class="nav-arrows">
@@ -536,423 +564,556 @@ body { font-family: 'Inter', sans-serif; background: #050510; color: white; over
 </div>
 
 <!-- ====================== SLIDE 1: PORTADA ====================== -->
-<section class="slide slide-portada" id="slide-0">
-  <div class="particles" id="particles1"></div>
-  <div class="confetti-container" id="confetti1"></div>
+<section class="slide" id="slide-0">
+  <div class="mesh-bg"><canvas id="meshCanvas0"></canvas></div>
+  <div class="particles" id="p0"></div>
+  <div class="confetti-box" id="cf0"></div>
   <div class="glow-ring"></div><div class="glow-ring"></div><div class="glow-ring"></div>
-  <div class="orb" style="width:500px;height:500px;background:#3483FA;top:15%;left:5%;"></div>
-  <div class="orb" style="width:400px;height:400px;background:#FFE600;bottom:15%;right:5%;animation-delay:5s;"></div>
-  <div class="orb" style="width:300px;height:300px;background:#7B61FF;top:60%;left:50%;animation-delay:10s;"></div>
-  <div class="morph-blob" style="background:#3483FA;top:10%;right:15%;"></div>
-  <div class="morph-blob" style="background:#FFE600;bottom:10%;left:15%;animation-delay:5s;"></div>
-  <div class="shooting-star" style="top:15%;left:0;animation-delay:1s;"></div>
-  <div class="shooting-star" style="top:45%;left:0;animation-delay:4s;width:150px;"></div>
-  <div class="shooting-star" style="top:70%;left:0;animation-delay:7s;width:80px;"></div>
+  <div class="star-field" id="sf0"></div>
+  <div class="orb" style="width:480px;height:480px;background:#3483FA;top:12%;left:3%;"></div>
+  <div class="orb" style="width:380px;height:380px;background:#FFE600;bottom:12%;right:3%;animation-delay:5s;"></div>
+  <div class="orb" style="width:280px;height:280px;background:#7B61FF;top:55%;left:48%;animation-delay:10s;"></div>
+  <div class="shooting-star" style="top:18%;left:0;animation-delay:1s;width:120px;"></div>
+  <div class="shooting-star" style="top:48%;left:0;animation-delay:5s;width:160px;"></div>
 
   <div class="portada-content">
-    <div class="portada-badge-top">✦ PROPUESTA ESTRATÉGICA ✦</div>
-    <span class="portada-emoji">🚀</span>
+    <div class="portada-tag">✦ PROPUESTA ESTRATÉGICA ✦</div>
+    <span class="portada-emoji">🔥</span>
     <h1 class="portada-title">
-      Referentes de<br>
-      <span class="yellow">Métri</span><span class="blue">cas</span>
+      Referentes con<br>
+      <span class="glow-yellow">Propó</span><span class="glow-blue">sito</span>
     </h1>
-    <p class="portada-subtitle">Un programa de liderazgo distribuido para que cada equipo se apropie de sus resultados y construyamos futuros líderes desde la acción.</p>
+    <p class="portada-sub">No buscamos cumplir por cumplir. Buscamos referentes que indaguen, propongan y lideren con visión. Futuros líderes que le encuentren un significado real a cada métrica.</p>
     <div class="portada-pills">
-      <span class="portada-pill pp1">⚡ Productividad</span>
-      <span class="portada-pill pp2">⭐ NPS</span>
-      <span class="portada-pill pp3">🎯 Adhesión Meli</span>
-      <span class="portada-pill pp4">🔄 TDI</span>
-      <span class="portada-pill pp5">🤖 QI</span>
+      <span class="pill pill-y">⚡ Productividad</span>
+      <span class="pill pill-b">⭐ NPS</span>
+      <span class="pill pill-g">🎯 Adhesión Meli</span>
+      <span class="pill pill-o">🔄 TDI</span>
+      <span class="pill pill-p">🤖 QI</span>
     </div>
   </div>
-  <div class="portada-scroll-hint">
+  <div class="scroll-hint">
     <div class="scroll-mouse"></div>
-    <span class="scroll-text">SCROLL</span>
+    <span class="scroll-label">SCROLL</span>
   </div>
 </section>
 
-<!-- ====================== SLIDE 2: LA REALIDAD ====================== -->
-<section class="slide slide-realidad" id="slide-1">
-  <div class="orb" style="width:350px;height:350px;background:#F23D4F;top:10%;left:5%;"></div>
-  <div class="morph-blob" style="background:#FF6B35;bottom:10%;right:10%;"></div>
+<!-- ====================== SLIDE 2: PROPÓSITO ====================== -->
+<section class="slide" id="slide-1">
+  <div class="mesh-bg"><canvas id="meshCanvas1"></canvas></div>
+  <div class="star-field" id="sf1"></div>
+  <div class="floating-hearts" id="h1"></div>
+  <div class="orb" style="width:350px;height:350px;background:#FFE600;top:18%;right:18%;"></div>
+  <div class="orb" style="width:280px;height:280px;background:#00A650;bottom:20%;left:12%;animation-delay:4s;"></div>
+  <div class="light-beams" id="lb1"></div>
+
+  <div class="proposito-content">
+    <span class="reveal" style="font-size:52px;display:block;margin-bottom:22px;">🧭</span>
+    <p class="proposito-quote reveal s1">
+      No queremos referentes que<br>
+      <span class="em">actualicen un tablero</span>
+    </p>
+    <div class="proposito-divider reveal s2"></div>
+    <p class="proposito-quote reveal s3" style="font-size:clamp(18px,2.5vw,30px);color:rgba(240,240,248,.5);margin-top:16px;">
+      Queremos personas que <span class="em-b">se pregunten por qué</span>,<br>
+      que busquen el patrón detrás del número<br>
+      y que <span class="em">propongan lo que nadie ha propuesto</span>
+    </p>
+    <p class="proposito-after reveal s4" style="margin-top:30px;">
+      El objetivo no es el cumplimiento. Es construir <strong>representantes que quieran una métrica</strong>, que se apasionen por ella, que la hagan suya y que desde ahí <strong>se forjen como líderes</strong>.
+    </p>
+  </div>
+</section>
+
+<!-- ====================== SLIDE 3: LA REALIDAD ====================== -->
+<section class="slide" id="slide-2">
+  <div class="mesh-bg"><canvas id="meshCanvas2"></canvas></div>
+  <div class="star-field" id="sf2"></div>
+  <div class="orb" style="width:340px;height:340px;background:#F23D4F;top:8%;left:5%;opacity:.1;"></div>
+  <div class="aurora"><div class="aurora-stripe" style="top:20%;background:#F23D4F;animation-delay:0s;"></div><div class="aurora-stripe" style="top:55%;background:#FF6B35;animation-delay:5s;"></div></div>
 
   <div class="realidad-content">
-    <span class="reveal" style="font-size:50px;display:block;margin-bottom:20px;">🪞</span>
+    <span class="reveal" style="font-size:48px;display:block;margin-bottom:18px;">🪞</span>
     <h2 class="realidad-title reveal s1">
-      Tenemos referentes, pero<br><span class="red">no hay apropiación</span>
+      Hoy tenemos referentes, pero<br><span class="red">sin propósito real</span>
     </h2>
     <p class="realidad-sub reveal s2">
-      Existen las métricas, existen los referentes… pero hoy no se percibe un diferencial real que mueva la aguja equipo por equipo.
+      No es un problema de personas, es un problema de estructura. No hay un marco que les permita indagar, proponer y liderar con impacto.
     </p>
   </div>
 
-  <div class="dolor-grid">
-    <div class="dolor-card reveal s1 magnetic">
-      <span class="dolor-icon">🔄</span>
-      <p class="dolor-text">Rotación cada 3 meses: <span class="highlight">no hay continuidad</span> ni profundidad en los planes de acción.</p>
+  <div class="pain-grid">
+    <div class="pain-card reveal s1 magnetic">
+      <span class="pain-icon">🔄</span>
+      <p class="pain-text">Rotación cada 3 meses: <span class="hl">justo cuando entienden la métrica, cambian</span>. No se genera profundidad.</p>
     </div>
-    <div class="dolor-card reveal s2 magnetic">
-      <span class="dolor-icon">📊</span>
-      <p class="dolor-text">Alta <span class="highlight">dispersión entre equipos</span> y representantes sin un mecanismo claro de cierre de brechas.</p>
+    <div class="pain-card reveal s2 magnetic">
+      <span class="pain-icon">📋</span>
+      <p class="pain-text">Se percibe como un <span class="hl">"update" más</span>: actualizar números, no indagar patrones ni proponer estrategias.</p>
     </div>
-    <div class="dolor-card reveal s3 magnetic">
-      <span class="dolor-icon">🎯</span>
-      <p class="dolor-text">Métricas que <span class="highlight">no se cumplen de forma sostenida</span>. Cerca del objetivo, pero sin llegar.</p>
+    <div class="pain-card reveal s3 magnetic">
+      <span class="pain-icon">📊</span>
+      <p class="pain-text">Alta <span class="hl">dispersión entre equipos</span>: unos cumplen, otros no, y nadie analiza qué hacen diferente los mejores.</p>
     </div>
-    <div class="dolor-card reveal s4 magnetic">
-      <span class="dolor-icon">🌱</span>
-      <p class="dolor-text">Talento con potencial de liderazgo que <span class="highlight">no se está desarrollando</span> desde la operación.</p>
+    <div class="pain-card reveal s4 magnetic">
+      <span class="pain-icon">🌱</span>
+      <p class="pain-text">Talento con hambre de crecer que <span class="hl">no tiene un espacio estructurado</span> para desarrollarse como líder.</p>
     </div>
   </div>
 </section>
 
-<!-- ====================== SLIDE 3: LA PROPUESTA ====================== -->
-<section class="slide slide-propuesta" id="slide-2">
-  <div class="floating-hearts" id="hearts1"></div>
-  <div class="orb" style="width:450px;height:450px;background:#00A650;top:15%;left:10%;"></div>
-  <div class="orb" style="width:350px;height:350px;background:#FFE600;bottom:15%;right:10%;animation-delay:3s;"></div>
-  <div class="morph-blob" style="background:#3483FA;top:50%;left:60%;"></div>
+<!-- ====================== SLIDE 4: LA VISIÓN ====================== -->
+<section class="slide" id="slide-3">
+  <div class="mesh-bg"><canvas id="meshCanvas3"></canvas></div>
+  <div class="star-field" id="sf3"></div>
+  <div class="floating-hearts" id="h2"></div>
+  <div class="orb" style="width:420px;height:420px;background:#00A650;top:12%;left:8%;"></div>
+  <div class="orb" style="width:320px;height:320px;background:#FFE600;bottom:12%;right:8%;animation-delay:3s;"></div>
+  <div class="aurora"><div class="aurora-stripe" style="top:30%;background:#00A650;animation-delay:2s;"></div><div class="aurora-stripe" style="top:65%;background:#3483FA;animation-delay:7s;"></div></div>
 
-  <div class="propuesta-content">
-    <span class="propuesta-icon reveal">💡</span>
-    <h2 class="propuesta-title reveal s1">Un referente líder por métrica<br>en cada <span class="green">equipo</span></h2>
-    <p class="propuesta-desc reveal s2">
-      2 a 3 referentes por equipo × 5 métricas × 7 equipos. Un líder principal, un soporte. Con reuniones quincenales, planes de trabajo reales y <strong style="color:rgba(255,255,255,0.7);">peso en el COMO</strong> de cada representante.
+  <div class="vision-content">
+    <span class="vision-icon reveal">💡</span>
+    <h2 class="vision-title reveal s1">Referentes que <span class="green">lideran</span>,<br>no que reportan</h2>
+    <p class="vision-desc reveal s2">
+      Un programa donde cada referente elige su métrica por pasión, la hace suya, investiga patrones, propone estrategias de valor y se construye como líder desde la acción diaria.
     </p>
 
-    <div class="structure-grid">
-      <div class="structure-card reveal s3 magnetic">
-        <div class="sc-top">
-          <div class="sc-badge" style="background:rgba(52,131,250,0.15);border:1.5px solid rgba(52,131,250,0.3);color:#3483FA;">L1</div>
-          <div class="sc-title" style="color:#3483FA;">Referente Líder</div>
+    <div class="pillars-grid">
+      <div class="pillar-card pc-blue reveal s3 magnetic">
+        <div class="pc-top">
+          <div class="pc-badge" style="background:rgba(52,131,250,.15);border:1.5px solid rgba(52,131,250,.3);color:#3483FA;">L1</div>
+          <div class="pc-title" style="color:#3483FA;">Referente Líder</div>
         </div>
-        <div class="sc-desc">Dueño de la métrica en su equipo. Lidera planes, presenta avances, ejecuta muestreos, propone acciones y representa al equipo a nivel Publicaciones Mature.</div>
+        <div class="pc-desc">No es quien "actualiza", es quien <strong style="color:rgba(240,240,248,.65);">indaga, descubre y propone</strong>. Lidera muestreos, detecta por qué pasan las cosas y busca la raíz de cada resultado.</div>
       </div>
-      <div class="structure-card reveal s4 magnetic">
-        <div class="sc-top">
-          <div class="sc-badge" style="background:rgba(123,97,255,0.15);border:1.5px solid rgba(123,97,255,0.3);color:#7B61FF;">L2</div>
-          <div class="sc-title" style="color:#7B61FF;">Referente Soporte</div>
+      <div class="pillar-card pc-purple reveal s4 magnetic">
+        <div class="pc-top">
+          <div class="pc-badge" style="background:rgba(123,97,255,.15);border:1.5px solid rgba(123,97,255,.3);color:#7B61FF;">L2</div>
+          <div class="pc-title" style="color:#7B61FF;">Referente Soporte</div>
         </div>
-        <div class="sc-desc">Apoya en análisis, recopila datos, co-lidera iniciativas y está preparado para asumir el liderazgo. Juntos hacen que la métrica avance.</div>
+        <div class="pc-desc">Co-lidera el análisis, <strong style="color:rgba(240,240,248,.65);">aporta perspectiva desde otro ángulo</strong> y está preparado para tomar el liderazgo. Juntos multiplican impacto.</div>
       </div>
-      <div class="structure-card reveal s5 magnetic">
-        <div class="sc-top">
-          <div class="sc-badge" style="background:rgba(255,230,0,0.15);border:1.5px solid rgba(255,230,0,0.3);color:#FFE600;">🏗️</div>
-          <div class="sc-title" style="color:#FFE600;">Semillero de Líderes</div>
+      <div class="pillar-card pc-yellow reveal s5 magnetic">
+        <div class="pc-top">
+          <div class="pc-badge" style="background:rgba(255,230,0,.15);border:1.5px solid rgba(255,230,0,.3);color:#FFE600;">🔥</div>
+          <div class="pc-title" style="color:#FFE600;">Forjar Líderes</div>
         </div>
-        <div class="sc-desc">Aprenden a hacer presentaciones, seguimientos, análisis de datos, muestreos y toma de decisiones. Se construyen como líderes desde la acción.</div>
+        <div class="pc-desc">Aprenden a <strong style="color:rgba(240,240,248,.65);">presentar, analizar, seguir y decidir</strong>. No es trabajo extra: es la oportunidad de construirse como el líder que quieren ser.</div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ====================== SLIDE 4: LAS 5 MÉTRICAS ====================== -->
-<section class="slide slide-metricas" id="slide-3">
-  <div class="particles" id="particles2"></div>
-  <div class="orb" style="width:350px;height:350px;background:#3483FA;top:10%;right:10%;"></div>
-  <div class="orb" style="width:300px;height:300px;background:#00A650;bottom:15%;left:10%;animation-delay:4s;"></div>
+<!-- ====================== SLIDE 5: LAS 5 MÉTRICAS ====================== -->
+<section class="slide" id="slide-4">
+  <div class="mesh-bg"><canvas id="meshCanvas4"></canvas></div>
+  <div class="particles" id="p4"></div>
+  <div class="star-field" id="sf4"></div>
+  <div class="orb" style="width:320px;height:320px;background:#3483FA;top:8%;right:8%;"></div>
+  <div class="orb" style="width:280px;height:280px;background:#00A650;bottom:12%;left:8%;animation-delay:4s;"></div>
+  <div class="aurora"><div class="aurora-stripe" style="top:15%;background:#FFE600;animation-delay:1s;"></div></div>
 
-  <h2 class="section-title reveal">5 métricas, <span style="color:#FFE600;">un plan</span> por cada una</h2>
-  <p class="section-sub reveal s1">Cada referente lidera seguimientos, muestreos, benchmarks y planes de acción específicos para su métrica.</p>
+  <h2 class="section-title reveal">5 métricas, un <span style="color:#FFE600;">propósito mayor</span> por cada una</h2>
+  <p class="section-sub reveal s1">No se trata de cumplir el número. Se trata de entender por qué pasa lo que pasa y proponer lo que nadie ha propuesto.</p>
 
   <div class="metricas-grid">
-    <div class="metrica-card mc-yellow reveal s1 magnetic">
+    <div class="metrica-card mc-y reveal s1 magnetic">
       <span class="mc-emoji">⚡</span>
       <div class="mc-name" style="color:#FFE600;">Productividad</div>
-      <div class="mc-insight">Seguimiento a reps <strong class="y">Q3 y Q4</strong>. Análisis de TMC por proceso. Benchmark de mejores tiempos. Meta: que el bono sea <strong class="g">potenciador</strong>, no limitante.</div>
+      <div class="mc-purpose" style="color:rgba(255,230,0,.6);">PROPÓSITO: QUE EL BONO POTENCIALICE, NO LIMITE</div>
+      <div class="mc-desc">Indagar patrones en reps <strong class="y">Q3-Q4</strong>. Analizar TMC por proceso. Detectar si el dolor es de equipo, canal o persona. <strong class="g">Benchmark</strong> de los mejores tiempos.</div>
     </div>
-    <div class="metrica-card mc-blue reveal s2 magnetic">
+    <div class="metrica-card mc-b reveal s2 magnetic">
       <span class="mc-emoji">⭐</span>
       <div class="mc-name" style="color:#3483FA;">NPS</div>
-      <div class="mc-insight">Liderar <strong class="b">Meli Promo + Dash NPS</strong>. Reducir detractores, incrementar promotores. Analizar qué hacen diferente los equipos con <strong class="g">mejor NPS</strong>.</div>
+      <div class="mc-purpose" style="color:rgba(52,131,250,.6);">PROPÓSITO: SALIR DE LA CAJA Y CERRAR BRECHAS</div>
+      <div class="mc-desc">Liderar <strong class="b">Meli Promo + Dash NPS</strong>. Analizar qué hacen diferente los equipos con mejor NPS. Reducir detractores, <strong class="g">multiplicar promotores</strong>.</div>
     </div>
-    <div class="metrica-card mc-green reveal s3 magnetic">
+    <div class="metrica-card mc-g reveal s3 magnetic">
       <span class="mc-emoji">🎯</span>
       <div class="mc-name" style="color:#00A650;">Adhesión Meli</div>
-      <div class="mc-insight">Objetivo: <strong class="g">todos Q1-Q2</strong>. Referentes estrella crean templates, grabaciones y shadowings para mejorar <strong>bienvenida, exploración, argumentación y cierre</strong>.</div>
+      <div class="mc-purpose" style="color:rgba(0,166,80,.6);">PROPÓSITO: CALIDAD ESTÁNDAR EN CADA CASO</div>
+      <div class="mc-desc">Referentes estrella crean <strong class="g">templates y grabaciones</strong>. Shadowings para potenciar bienvenida, exploración, argumentación y cierre. Meta: <strong>todos Q1-Q2</strong>.</div>
     </div>
-    <div class="metrica-card mc-orange reveal s4 magnetic">
+    <div class="metrica-card mc-o reveal s4 magnetic">
       <span class="mc-emoji">🔄</span>
       <div class="mc-name" style="color:#FF6B35;">TDI</div>
-      <div class="mc-insight">Detectar derivaciones incorrectas diarias. Analizar si es dolor permanente. <strong class="o">Milla extra</strong>: comentarios y preguntas complementarias para prevenir marcaciones.</div>
+      <div class="mc-purpose" style="color:rgba(255,107,53,.6);">PROPÓSITO: LA MILLA EXTRA QUE PREVIENE</div>
+      <div class="mc-desc">No solo cumplir: mantener el <strong class="o">menor % posible</strong>. Comentarios complementarios, preguntas extra para prevenir marcaciones. Benchmark entre equipos.</div>
     </div>
-    <div class="metrica-card mc-purple reveal s5 magnetic">
+    <div class="metrica-card mc-p reveal s5 magnetic">
       <span class="mc-emoji">🤖</span>
       <div class="mc-name" style="color:#7B61FF;">QI</div>
-      <div class="mc-insight">Seguimiento semanal. Impulsar <strong class="p">notebooks de reputación</strong>. Llevar insights para <strong class="p">potenciar herramientas de IA</strong> y reducir marcaciones incorrectas.</div>
+      <div class="mc-purpose" style="color:rgba(123,97,255,.6);">PROPÓSITO: POTENCIAR LA IA DESDE LA OPERACIÓN</div>
+      <div class="mc-desc">Notebooks de reputación. Insights que <strong class="p">potencien herramientas de IA</strong>. Detectar dolores actuales y convertirlos en oportunidades de mejora.</div>
     </div>
   </div>
 </section>
 
-<!-- ====================== SLIDE 5: CÓMO FUNCIONA ====================== -->
-<section class="slide slide-como" id="slide-4">
-  <div class="orb" style="width:350px;height:350px;background:#3483FA;top:10%;right:10%;"></div>
-  <div class="orb" style="width:300px;height:300px;background:#FFE600;bottom:15%;left:10%;animation-delay:4s;"></div>
-  <div class="morph-blob" style="background:#00A650;top:60%;right:20%;"></div>
+<!-- ====================== SLIDE 6: EL CICLO ====================== -->
+<section class="slide" id="slide-5">
+  <div class="mesh-bg"><canvas id="meshCanvas5"></canvas></div>
+  <div class="star-field" id="sf5"></div>
+  <div class="orb" style="width:340px;height:340px;background:#3483FA;top:8%;right:8%;"></div>
+  <div class="orb" style="width:280px;height:280px;background:#FFE600;bottom:12%;left:8%;animation-delay:4s;"></div>
+  <div class="light-beams" id="lb5"></div>
 
-  <div class="flow-container">
-    <h2 class="section-title reveal">Así funciona el <span style="color:#3483FA;">programa</span> 🔄</h2>
-    <p class="section-sub reveal s1">Un ciclo continuo de análisis → acción → seguimiento → mejora.</p>
+  <div class="cycle-container">
+    <h2 class="section-title reveal">El ciclo de <span style="color:#3483FA;">un referente con propósito</span></h2>
+    <p class="section-sub reveal s1">No es un reporte mensual. Es un ciclo continuo de curiosidad → acción → impacto.</p>
 
-    <div class="arq-flow reveal s2">
-      <div class="arq-step">
-        <div class="arq-circle c1 magnetic">🔍</div>
-        <div class="arq-label">Análisis</div>
-        <div class="arq-sub">Muestreos, patrones, cuartiles y benchmark entre equipos</div>
+    <div class="cycle-flow reveal s2">
+      <div class="cycle-step">
+        <div class="cycle-circle cc1 magnetic">🔍</div>
+        <div class="cycle-label">Indagar</div>
+        <div class="cycle-sub">Muestreos, patrones, el porqué detrás del número</div>
       </div>
-      <div class="arq-arrow">→</div>
-      <div class="arq-step">
-        <div class="arq-circle c2 magnetic">📋</div>
-        <div class="arq-label">Plan de Acción</div>
-        <div class="arq-sub">Objetivos concretos a corto, mediano y largo plazo</div>
+      <div class="cycle-arrow">→</div>
+      <div class="cycle-step">
+        <div class="cycle-circle cc2 magnetic">💡</div>
+        <div class="cycle-label">Proponer</div>
+        <div class="cycle-sub">Estrategias de valor, no solo updates de cumplimiento</div>
       </div>
-      <div class="arq-arrow">→</div>
-      <div class="arq-step">
-        <div class="arq-circle c3 magnetic">📈</div>
-        <div class="arq-label">Seguimiento</div>
-        <div class="arq-sub">Reuniones quincenales con avances y resultados medibles</div>
+      <div class="cycle-arrow">→</div>
+      <div class="cycle-step">
+        <div class="cycle-circle cc3 magnetic">🚀</div>
+        <div class="cycle-label">Ejecutar</div>
+        <div class="cycle-sub">Planes con dueño, fecha y seguimiento real</div>
       </div>
-      <div class="arq-arrow">→</div>
-      <div class="arq-step">
-        <div class="arq-circle c4 magnetic">🚀</div>
-        <div class="arq-label">Mejora</div>
-        <div class="arq-sub">Insights, ajustes, refuerzos y escalamiento de buenas prácticas</div>
+      <div class="cycle-arrow">→</div>
+      <div class="cycle-step">
+        <div class="cycle-circle cc4 magnetic">📈</div>
+        <div class="cycle-label">Escalar</div>
+        <div class="cycle-sub">Compartir lo que funciona a todo Publicaciones Mature</div>
       </div>
     </div>
 
-    <div class="cadencia-row reveal s3">
-      <div class="cadencia-card magnetic">
-        <div class="cadencia-icon">📅</div>
-        <div class="cadencia-label" style="color:#FFE600;">Semanal</div>
-        <div class="cadencia-desc">QI: dolores actuales<br>y marcaciones</div>
+    <div class="rhythm-row reveal s3">
+      <div class="rhythm-card magnetic">
+        <div class="rhythm-icon">📅</div>
+        <div class="rhythm-label" style="color:#FFE600;">Semanal</div>
+        <div class="rhythm-desc">QI: dolores actuales<br>y marcaciones</div>
       </div>
-      <div class="cadencia-card magnetic">
-        <div class="cadencia-icon">🗓️</div>
-        <div class="cadencia-label" style="color:#3483FA;">Quincenal</div>
-        <div class="cadencia-desc">Avance de planes,<br>muestreos e insights</div>
+      <div class="rhythm-card magnetic">
+        <div class="rhythm-icon">🗓️</div>
+        <div class="rhythm-label" style="color:#3483FA;">Quincenal</div>
+        <div class="rhythm-desc">Avances, muestreos<br>e insights de valor</div>
       </div>
-      <div class="cadencia-card magnetic">
-        <div class="cadencia-icon">📊</div>
-        <div class="cadencia-label" style="color:#00A650;">Mensual</div>
-        <div class="cadencia-desc">Resultados, benchmark<br>y ajuste de planes</div>
+      <div class="rhythm-card magnetic">
+        <div class="rhythm-icon">📊</div>
+        <div class="rhythm-label" style="color:#00A650;">Mensual</div>
+        <div class="rhythm-desc">Resultados, benchmark<br>y planes ajustados</div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ====================== SLIDE 6: IMPACTO ====================== -->
-<section class="slide slide-impacto" id="slide-5">
-  <div class="particles" id="particles3"></div>
-  <div class="orb" style="width:450px;height:450px;background:#00A650;top:10%;right:5%;"></div>
-  <div class="orb" style="width:350px;height:350px;background:#FFE600;bottom:10%;left:10%;animation-delay:4s;"></div>
-  <div class="morph-blob" style="background:#3483FA;top:50%;left:30%;"></div>
+<!-- ====================== SLIDE 7: IMPACTO ====================== -->
+<section class="slide" id="slide-6">
+  <div class="mesh-bg"><canvas id="meshCanvas6"></canvas></div>
+  <div class="particles" id="p6"></div>
+  <div class="star-field" id="sf6"></div>
+  <div class="orb" style="width:420px;height:420px;background:#00A650;top:8%;right:5%;"></div>
+  <div class="orb" style="width:320px;height:320px;background:#FFE600;bottom:8%;left:8%;animation-delay:4s;"></div>
+  <div class="aurora"><div class="aurora-stripe" style="top:25%;background:#00A650;animation-delay:0s;"></div><div class="aurora-stripe" style="top:60%;background:#FFE600;animation-delay:5s;"></div></div>
 
-  <h2 class="section-title reveal">El <span style="color:#00A650;">impacto</span> que buscamos 🎯</h2>
-  <p class="section-sub reveal s1">Números que se traducen en cultura, resultados y crecimiento.</p>
+  <h2 class="section-title reveal">Lo que <span style="color:#00A650;">construimos</span> juntos 🎯</h2>
+  <p class="section-sub reveal s1">Personas con propósito generan resultados con significado.</p>
 
-  <div class="impacto-grid">
-    <div class="impacto-card ic1 reveal s1 magnetic">
-      <div class="impacto-icon">👥</div>
-      <div class="impacto-number yellow" data-count="7">0</div>
-      <div class="impacto-label">Equipos alineados</div>
+  <div class="impact-grid">
+    <div class="impact-card ic1 reveal s1 magnetic">
+      <div class="impact-icon">👥</div>
+      <div class="impact-number yellow" data-count="7">0</div>
+      <div class="impact-label">Equipos alineados</div>
     </div>
-    <div class="impacto-card ic2 reveal s2 magnetic">
-      <div class="impacto-icon">🎯</div>
-      <div class="impacto-number blue" data-count="5">0</div>
-      <div class="impacto-label">Métricas lideradas</div>
+    <div class="impact-card ic2 reveal s2 magnetic">
+      <div class="impact-icon">🎯</div>
+      <div class="impact-number blue" data-count="5">0</div>
+      <div class="impact-label">Métricas con propósito</div>
     </div>
-    <div class="impacto-card ic3 reveal s3 magnetic">
-      <div class="impacto-icon">🌟</div>
-      <div class="impacto-number green" data-count="70" data-prefix="+">0</div>
-      <div class="impacto-label">Referentes activos</div>
+    <div class="impact-card ic3 reveal s3 magnetic">
+      <div class="impact-icon">🌟</div>
+      <div class="impact-number green" data-count="70" data-prefix="+">0</div>
+      <div class="impact-label">Futuros líderes</div>
     </div>
-    <div class="impacto-card ic4 reveal s4 magnetic">
-      <div class="impacto-icon">🏆</div>
-      <div class="impacto-number purple" data-count="0" data-symbol="∞">∞</div>
-      <div class="impacto-label">Sin rotación forzada</div>
+    <div class="impact-card ic4 reveal s4 magnetic">
+      <div class="impact-icon">🔥</div>
+      <div class="impact-number purple" data-symbol="∞">∞</div>
+      <div class="impact-label">Sin rotación forzada</div>
     </div>
   </div>
 
-  <div class="beneficios-row reveal s5">
-    <div class="beneficio-item magnetic">
-      <div class="beneficio-emoji">💰</div>
-      <div class="beneficio-title">Peso en el COMO</div>
-      <div class="beneficio-desc">Valor real en la evaluación del referente</div>
+  <div class="benefits-row reveal s5">
+    <div class="benefit magnetic">
+      <div class="benefit-emoji">🧭</div>
+      <div class="benefit-title">Propósito Real</div>
+      <div class="benefit-desc">Referentes que quieren estar, no que les toca</div>
     </div>
-    <div class="beneficio-item magnetic">
-      <div class="beneficio-emoji">📉</div>
-      <div class="beneficio-title">Menos Dispersión</div>
-      <div class="beneficio-desc">Brechas cerradas entre equipos y reps</div>
+    <div class="benefit magnetic">
+      <div class="benefit-emoji">🏗️</div>
+      <div class="benefit-title">Semillero de Líderes</div>
+      <div class="benefit-desc">Hoy referentes, mañana líderes formados</div>
     </div>
-    <div class="beneficio-item magnetic">
-      <div class="beneficio-emoji">🏗️</div>
-      <div class="beneficio-title">Futuros Líderes</div>
-      <div class="beneficio-desc">Semillero real desde la operación</div>
+    <div class="benefit magnetic">
+      <div class="benefit-emoji">📉</div>
+      <div class="benefit-title">Brechas Cerradas</div>
+      <div class="benefit-desc">Lo mejor de un equipo replicado en todos</div>
     </div>
-    <div class="beneficio-item magnetic">
-      <div class="beneficio-emoji">📈</div>
-      <div class="beneficio-title">Métricas Sostenidas</div>
-      <div class="beneficio-desc">Cumplimiento constante, no puntual</div>
+    <div class="benefit magnetic">
+      <div class="benefit-emoji">📈</div>
+      <div class="benefit-title">Métricas Sostenidas</div>
+      <div class="benefit-desc">Cumplimiento por convicción, no por presión</div>
     </div>
   </div>
 </section>
 
-<!-- ====================== SLIDE 7: CIERRE ====================== -->
-<section class="slide slide-cierre" id="slide-6">
-  <div class="particles" id="particles4"></div>
-  <div class="confetti-container" id="confetti2"></div>
-  <div class="floating-hearts" id="hearts2"></div>
+<!-- ====================== SLIDE 8: CIERRE ====================== -->
+<section class="slide" id="slide-7">
+  <div class="mesh-bg"><canvas id="meshCanvas7"></canvas></div>
+  <div class="particles" id="p7"></div>
+  <div class="confetti-box" id="cf7"></div>
+  <div class="floating-hearts" id="h7"></div>
   <div class="glow-ring"></div><div class="glow-ring"></div><div class="glow-ring"></div>
-  <div class="orb" style="width:500px;height:500px;background:#3483FA;top:15%;left:5%;"></div>
-  <div class="orb" style="width:400px;height:400px;background:#FFE600;bottom:10%;right:5%;animation-delay:4s;"></div>
-  <div class="orb" style="width:300px;height:300px;background:#00A650;top:50%;left:60%;animation-delay:8s;"></div>
-  <div class="morph-blob" style="background:#7B61FF;top:20%;right:20%;"></div>
-  <div class="shooting-star" style="top:20%;left:0;animation-delay:1s;"></div>
-  <div class="shooting-star" style="top:55%;left:0;animation-delay:5s;width:140px;"></div>
+  <div class="star-field" id="sf7"></div>
+  <div class="orb" style="width:480px;height:480px;background:#3483FA;top:12%;left:3%;"></div>
+  <div class="orb" style="width:380px;height:380px;background:#FFE600;bottom:8%;right:3%;animation-delay:4s;"></div>
+  <div class="orb" style="width:280px;height:280px;background:#00A650;top:48%;left:55%;animation-delay:8s;"></div>
+  <div class="shooting-star" style="top:22%;left:0;animation-delay:1s;width:130px;"></div>
+  <div class="shooting-star" style="top:58%;left:0;animation-delay:6s;width:150px;"></div>
 
   <div class="cierre-content">
     <span class="cierre-emoji reveal">🚀</span>
-    <h2 class="cierre-title reveal s1">Estandaricemos la<br><span class="cierre-highlight">excelencia</span></h2>
+    <h2 class="cierre-title reveal s1">Que cada referente le encuentre<br><span class="cierre-glow">sentido a lo que lidera</span></h2>
     <p class="cierre-desc reveal s2">
-      Que cada referente se apropie de su métrica, lidere con datos y aporte su granito de arena para que <strong>todo Publicaciones Mature</strong> alcance otro nivel.
+      No es un tablero más. No es un update más.<br>
+      Es la oportunidad de que <strong>alguien elija una métrica porque la quiere hacer suya</strong>, la investigue, la proponga, la lleve al siguiente nivel — y en el camino se convierta en el líder que quiere ser.
     </p>
     <div class="cierre-divider reveal s3"></div>
 
-    <div class="cierre-steps reveal s4">
-      <div class="cierre-step"><div class="step-num">1</div> Validación con líderes</div>
-      <div class="cierre-step"><div class="step-num">2</div> Selección de referentes</div>
-      <div class="cierre-step"><div class="step-num">3</div> Kick-off por métrica</div>
-      <div class="cierre-step"><div class="step-num">4</div> Primer ciclo de planes</div>
+    <div class="next-steps reveal s4">
+      <div class="next-step"><div class="step-num">1</div>Validación con líderes</div>
+      <div class="next-step"><div class="step-num">2</div>Selección de referentes</div>
+      <div class="next-step"><div class="step-num">3</div>Kick-off por métrica</div>
+      <div class="next-step"><div class="step-num">4</div>Primer ciclo de planes</div>
     </div>
 
-    <div class="cierre-author reveal s5">Hecho con <span class="heart-cierre">💛</span> para Publicaciones Mature</div>
-    <p class="cierre-sub reveal s6">REFERENTES DE MÉTRICAS · 2025</p>
+    <div class="cierre-author reveal s5">Hecho con <span class="heart-beat">💛</span> para Publicaciones Mature</div>
+    <p class="cierre-sub reveal s6">REFERENTES CON PROPÓSITO · 2025</p>
   </div>
 </section>
 
+<!-- ==================== JAVASCRIPT ==================== -->
 <script>
-(function() {
-  const COLORES = ['#FFE600','#3483FA','#00A650','#7B61FF','#FF6B35','#F23D4F'];
+(function(){
 
-  function createParticles(id, count) {
-    const c = document.getElementById(id); if (!c) return;
-    for (let i = 0; i < count; i++) {
-      const p = document.createElement('div'); p.className = 'particle';
-      const size = Math.random() * 5 + 2;
-      p.style.cssText = `width:${size}px;height:${size}px;left:${Math.random()*100}%;background:${COLORES[i%COLORES.length]};animation-duration:${Math.random()*22+14}s;animation-delay:${Math.random()*14}s;`;
-      c.appendChild(p);
+// ==================== ANIMATED MESH BACKGROUNDS ====================
+const meshConfigs = [
+  {id:'meshCanvas0', colors:['#3483FA','#7B61FF','#FFE600'], speed:.0004},
+  {id:'meshCanvas1', colors:['#FFE600','#00A650','#3483FA'], speed:.0003},
+  {id:'meshCanvas2', colors:['#F23D4F','#FF6B35','#7B61FF'], speed:.00035},
+  {id:'meshCanvas3', colors:['#00A650','#3483FA','#FFE600'], speed:.0003},
+  {id:'meshCanvas4', colors:['#FFE600','#3483FA','#00A650','#7B61FF'], speed:.00035},
+  {id:'meshCanvas5', colors:['#3483FA','#FFE600','#7B61FF'], speed:.0003},
+  {id:'meshCanvas6', colors:['#00A650','#FFE600','#3483FA'], speed:.00035},
+  {id:'meshCanvas7', colors:['#3483FA','#FFE600','#00A650','#7B61FF'], speed:.0004},
+];
+
+const meshCanvases = [];
+
+meshConfigs.forEach(cfg => {
+  const canvas = document.getElementById(cfg.id);
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const points = cfg.colors.map((c, i) => ({
+    x: Math.random(), y: Math.random(),
+    vx: (Math.random()-.5)*cfg.speed*2,
+    vy: (Math.random()-.5)*cfg.speed*2,
+    color: c, radius: 250 + Math.random()*150
+  }));
+  meshCanvases.push({canvas, ctx, points, cfg});
+});
+
+function hexToRgb(hex) {
+  const r = parseInt(hex.slice(1,3),16);
+  const g = parseInt(hex.slice(3,5),16);
+  const b = parseInt(hex.slice(5,7),16);
+  return {r,g,b};
+}
+
+function resizeMeshCanvases() {
+  meshCanvases.forEach(m => {
+    m.canvas.width = m.canvas.parentElement.offsetWidth;
+    m.canvas.height = m.canvas.parentElement.offsetHeight;
+  });
+}
+
+function drawMesh(m) {
+  const {canvas, ctx, points} = m;
+  const w = canvas.width, h = canvas.height;
+  if (w === 0 || h === 0) return;
+  ctx.clearRect(0,0,w,h);
+  points.forEach(p => {
+    p.x += p.vx; p.y += p.vy;
+    if (p.x < -.2 || p.x > 1.2) p.vx *= -1;
+    if (p.y < -.2 || p.y > 1.2) p.vy *= -1;
+    const rgb = hexToRgb(p.color);
+    const grad = ctx.createRadialGradient(p.x*w, p.y*h, 0, p.x*w, p.y*h, p.radius);
+    grad.addColorStop(0, `rgba(${rgb.r},${rgb.g},${rgb.b},.08)`);
+    grad.addColorStop(1, `rgba(${rgb.r},${rgb.g},${rgb.b},0)`);
+    ctx.fillStyle = grad;
+    ctx.fillRect(0,0,w,h);
+  });
+}
+
+function animateMeshes() {
+  meshCanvases.forEach(drawMesh);
+  requestAnimationFrame(animateMeshes);
+}
+
+resizeMeshCanvases();
+window.addEventListener('resize', resizeMeshCanvases);
+animateMeshes();
+
+// ==================== STAR FIELDS ====================
+function createStars(id, count) {
+  const c = document.getElementById(id); if (!c) return;
+  for (let i = 0; i < count; i++) {
+    const s = document.createElement('div'); s.className = 'star';
+    const size = Math.random()*2+.5;
+    s.style.cssText = `width:${size}px;height:${size}px;left:${Math.random()*100}%;top:${Math.random()*100}%;animation-duration:${Math.random()*4+2}s;animation-delay:${Math.random()*4}s;`;
+    c.appendChild(s);
+  }
+}
+for (let i=0;i<8;i++) createStars('sf'+i, 50);
+
+// ==================== PARTICLES ====================
+function createParticles(id, count) {
+  const c = document.getElementById(id); if (!c) return;
+  const colors = ['#FFE600','#3483FA','#00A650','#7B61FF','#FF6B35','#F23D4F'];
+  for (let i = 0; i < count; i++) {
+    const p = document.createElement('div'); p.className = 'particle';
+    const size = Math.random()*4+2;
+    p.style.cssText = `width:${size}px;height:${size}px;left:${Math.random()*100}%;background:${colors[i%colors.length]};animation-duration:${Math.random()*20+14}s;animation-delay:${Math.random()*14}s;`;
+    c.appendChild(p);
+  }
+}
+createParticles('p0',30);createParticles('p4',22);createParticles('p6',25);createParticles('p7',32);
+
+// ==================== CONFETTI ====================
+function createConfetti(id) {
+  const c = document.getElementById(id); if (!c) return;
+  const colors = ['#FFE600','#3483FA','#00A650','#7B61FF','#FF6B35','#F23D4F','#fff'];
+  for (let i = 0; i < 50; i++) {
+    const el = document.createElement('div'); el.className = 'confetti';
+    const size = Math.random()*7+3; const isCircle = Math.random()>.5;
+    el.style.cssText = `left:${Math.random()*100}%;width:${size}px;height:${isCircle?size:size*2.5}px;background:${colors[i%colors.length]};border-radius:${isCircle?'50%':'2px'};animation-duration:${Math.random()*6+4}s;animation-delay:${Math.random()*12}s;`;
+    c.appendChild(el);
+  }
+}
+createConfetti('cf0');createConfetti('cf7');
+
+// ==================== FLOATING HEARTS ====================
+function createHearts(id) {
+  const c = document.getElementById(id); if (!c) return;
+  const h = ['💛','💙','💚','💜','🧡','✨','⭐','🌟','🚀','🔥','🏆','💡'];
+  for (let i = 0; i < 16; i++) {
+    const el = document.createElement('div'); el.className = 'float-heart';
+    el.textContent = h[i%h.length];
+    el.style.cssText = `left:${Math.random()*100}%;font-size:${Math.random()*14+12}px;animation-duration:${Math.random()*14+8}s;animation-delay:${Math.random()*12}s;`;
+    c.appendChild(el);
+  }
+}
+createHearts('h1');createHearts('h2');createHearts('h7');
+
+// ==================== LIGHT BEAMS ====================
+function createBeams(id) {
+  const c = document.getElementById(id); if (!c) return;
+  for (let i = 0; i < 8; i++) {
+    const b = document.createElement('div'); b.className = 'beam';
+    b.style.cssText = `left:${10+Math.random()*80}%;animation-delay:${Math.random()*8}s;animation-duration:${6+Math.random()*6}s;opacity:.5;`;
+    c.appendChild(b);
+  }
+}
+createBeams('lb1');createBeams('lb5');
+
+// ==================== COUNTERS ====================
+let countersAnimated = false;
+function animateCounters() {
+  if (countersAnimated) return; countersAnimated = true;
+  document.querySelectorAll('.impact-number[data-count]').forEach(el => {
+    const target = parseInt(el.dataset.count);
+    if (el.dataset.symbol) return;
+    const prefix = el.dataset.prefix || '';
+    const dur = 2200; const start = performance.now();
+    function upd(now) {
+      const elapsed = now - start;
+      const p = Math.min(elapsed / dur, 1);
+      const c4 = (2*Math.PI)/3;
+      const e = p===0?0:p===1?1:Math.pow(2,-10*p)*Math.sin((p*10-.75)*c4)+1;
+      el.textContent = prefix + Math.round(target * e);
+      if (p<1) requestAnimationFrame(upd);
+      else el.textContent = prefix + target;
     }
-  }
+    requestAnimationFrame(upd);
+  });
+}
 
-  function createConfetti(id) {
-    const c = document.getElementById(id); if (!c) return;
-    const colors = [...COLORES, '#fff'];
-    for (let i = 0; i < 55; i++) {
-      const el = document.createElement('div'); el.className = 'confetti';
-      const size = Math.random() * 8 + 3; const isCircle = Math.random() > 0.5;
-      el.style.cssText = `left:${Math.random()*100}%;width:${size}px;height:${isCircle?size:size*2.5}px;background:${colors[i%colors.length]};border-radius:${isCircle?'50%':'2px'};animation-duration:${Math.random()*6+4}s;animation-delay:${Math.random()*12}s;`;
-      c.appendChild(el);
+// ==================== REVEAL OBSERVER ====================
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      if (entry.target.closest('#slide-6')) setTimeout(animateCounters, 300);
     }
-  }
-
-  function createHearts(id) {
-    const c = document.getElementById(id); if (!c) return;
-    const hearts = ['💛','💙','💚','💜','🧡','✨','⭐','🌟','🚀','🏆'];
-    for (let i = 0; i < 18; i++) {
-      const h = document.createElement('div'); h.className = 'float-heart';
-      h.textContent = hearts[i % hearts.length];
-      h.style.cssText = `left:${Math.random()*100}%;font-size:${Math.random()*16+12}px;animation-duration:${Math.random()*14+8}s;animation-delay:${Math.random()*12}s;`;
-      c.appendChild(h);
-    }
-  }
-
-  // Counters
-  let countersAnimated = false;
-  function animateCounters() {
-    if (countersAnimated) return; countersAnimated = true;
-    document.querySelectorAll('.impacto-number[data-count]').forEach(el => {
-      const target = parseInt(el.dataset.count);
-      if (el.dataset.symbol) return;
-      const prefix = el.dataset.prefix || '';
-      const duration = 2200; const start = performance.now();
-      function update(now) {
-        const elapsed = now - start;
-        const progress = Math.min(elapsed / duration, 1);
-        const c4 = (2 * Math.PI) / 3;
-        const eased = progress === 0 ? 0 : progress === 1 ? 1 : Math.pow(2, -10 * progress) * Math.sin((progress * 10 - 0.75) * c4) + 1;
-        el.textContent = prefix + Math.round(target * eased);
-        if (progress < 1) requestAnimationFrame(update);
-        else el.textContent = prefix + target;
-      }
-      requestAnimationFrame(update);
-    });
-  }
-
-  // Reveal observer
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        if (entry.target.closest('#slide-5')) setTimeout(animateCounters, 300);
-      }
-    });
-  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-  document.querySelectorAll('.reveal, .reveal-scale').forEach(el => observer.observe(el));
-
-  // Navigation
-  const slides = document.querySelectorAll('.slide');
-  const dots = document.querySelectorAll('.nav-dot');
-
-  function updateNav() {
-    const scrollPos = window.scrollY + window.innerHeight / 2;
-    let current = 0;
-    slides.forEach((s, i) => { if (scrollPos >= s.offsetTop) current = i; });
-    dots.forEach((d, i) => d.classList.toggle('active', i === current));
-    const total = document.body.scrollHeight - window.innerHeight;
-    document.getElementById('progressBar').style.width = (total > 0 ? (window.scrollY / total) * 100 : 0) + '%';
-  }
-
-  dots.forEach(dot => {
-    dot.addEventListener('click', () => {
-      const idx = parseInt(dot.dataset.slide);
-      if (slides[idx]) slides[idx].scrollIntoView({ behavior: 'smooth' });
-    });
   });
+}, {threshold:.12, rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.reveal,.reveal-scale').forEach(el => obs.observe(el));
 
-  document.getElementById('prevBtn').addEventListener('click', () => {
-    const c = Math.round(window.scrollY / window.innerHeight);
-    if (c > 0) slides[c-1].scrollIntoView({ behavior: 'smooth' });
+// ==================== NAVIGATION ====================
+const slides = document.querySelectorAll('.slide');
+const dots = document.querySelectorAll('.nav-dot');
+
+function updateNav() {
+  const sp = window.scrollY + window.innerHeight/2;
+  let cur = 0;
+  slides.forEach((s,i) => { if (sp >= s.offsetTop) cur = i; });
+  dots.forEach((d,i) => d.classList.toggle('active', i===cur));
+  const total = document.body.scrollHeight - window.innerHeight;
+  document.getElementById('progressBar').style.width = (total>0?(window.scrollY/total)*100:0)+'%';
+}
+
+dots.forEach(dot => {
+  dot.addEventListener('click', () => {
+    const idx = parseInt(dot.dataset.slide);
+    if (slides[idx]) slides[idx].scrollIntoView({behavior:'smooth'});
   });
-  document.getElementById('nextBtn').addEventListener('click', () => {
-    const c = Math.round(window.scrollY / window.innerHeight);
-    if (c < slides.length-1) slides[c+1].scrollIntoView({ behavior: 'smooth' });
-  });
+});
 
-  document.addEventListener('keydown', (e) => {
-    const c = Math.round(window.scrollY / window.innerHeight);
-    if (e.key === 'ArrowDown' || e.key === ' ') { e.preventDefault(); if (c < slides.length-1) slides[c+1].scrollIntoView({ behavior: 'smooth' }); }
-    if (e.key === 'ArrowUp') { e.preventDefault(); if (c > 0) slides[c-1].scrollIntoView({ behavior: 'smooth' }); }
-  });
+document.getElementById('prevBtn').addEventListener('click', () => {
+  const c = Math.round(window.scrollY/window.innerHeight);
+  if (c>0) slides[c-1].scrollIntoView({behavior:'smooth'});
+});
+document.getElementById('nextBtn').addEventListener('click', () => {
+  const c = Math.round(window.scrollY/window.innerHeight);
+  if (c<slides.length-1) slides[c+1].scrollIntoView({behavior:'smooth'});
+});
 
-  window.addEventListener('scroll', updateNav, { passive: true });
+document.addEventListener('keydown', e => {
+  const c = Math.round(window.scrollY/window.innerHeight);
+  if (e.key==='ArrowDown'||e.key===' '){e.preventDefault();if(c<slides.length-1)slides[c+1].scrollIntoView({behavior:'smooth'});}
+  if (e.key==='ArrowUp'){e.preventDefault();if(c>0)slides[c-1].scrollIntoView({behavior:'smooth'});}
+});
 
-  // Parallax orbs
-  document.addEventListener('mousemove', (e) => {
-    const x = (e.clientX / window.innerWidth - 0.5) * 20;
-    const y = (e.clientY / window.innerHeight - 0.5) * 20;
-    document.querySelectorAll('.orb').forEach(orb => { orb.style.transform = `translate(${x}px, ${y}px)`; });
-  });
+window.addEventListener('scroll', updateNav, {passive:true});
 
-  // Init
-  createParticles('particles1', 35);
-  createParticles('particles2', 25);
-  createParticles('particles3', 28);
-  createParticles('particles4', 35);
-  createConfetti('confetti1');
-  createConfetti('confetti2');
-  createHearts('hearts1');
-  createHearts('hearts2');
-  updateNav();
+// ==================== PARALLAX ORBS ====================
+document.addEventListener('mousemove', e => {
+  const x = (e.clientX/window.innerWidth-.5)*18;
+  const y = (e.clientY/window.innerHeight-.5)*18;
+  document.querySelectorAll('.orb').forEach(o => {o.style.transform=`translate(${x}px,${y}px)`;});
+});
+
+updateNav();
 })();
 </script>
 </body>
